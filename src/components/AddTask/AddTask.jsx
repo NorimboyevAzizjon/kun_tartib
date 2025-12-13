@@ -1,45 +1,73 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { format } from 'date-fns';
+import { format, addMinutes } from 'date-fns';
+import { uz } from 'date-fns/locale';
 import './AddTask.css';
 
 const AddTask = ({ onAddTask }) => {
   const [task, setTask] = useState({
     title: '',
-    date: new Date().toISOString().split('T')[0],
-    time: '09:00',
+    date: format(new Date(), 'yyyy-MM-dd'),
+    time: format(new Date(), 'HH:mm'),
     category: 'work',
     priority: 'medium',
     description: '',
-    reminder: false
+    reminder: false,
+    reminderTime: 10
   });
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const categories = [
-    { value: 'work', label: '💼 Ish', color: '#667eea' },
-    { value: 'study', label: '📚 O\'qish', color: '#4CAF50' },
-    { value: 'home', label: '🏠 Uy', color: '#FF9800' },
-    { value: 'personal', label: '👤 Shaxsiy', color: '#9C27B0' },
-    { value: 'health', label: '🏃 Sog\'lom', color: '#2196F3' }
+    { value: 'work', label: '💼 Ish', icon: '💼', color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.1)' },
+    { value: 'study', label: '📚 O\'qish', icon: '📚', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
+    { value: 'home', label: '🏠 Uy', icon: '🏠', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+    { value: 'personal', label: '👤 Shaxsiy', icon: '👤', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.1)' },
+    { value: 'health', label: '🏃 Sog\'lom', icon: '🏃', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.1)' }
   ];
 
   const priorities = [
-    { value: 'low', label: '🟢 Past', color: '#00C851' },
-    { value: 'medium', label: '🟡 O\'rta', color: '#FF9800' },
-    { value: 'high', label: '🔴 Yuqori', color: '#ff4444' }
+    { value: 'low', label: '🟢 Past', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
+    { value: 'medium', label: '🟡 O\'rta', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+    { value: 'high', label: '🔴 Yuqori', color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.1)' }
   ];
+
+  const reminderOptions = [
+    { value: 5, label: '5 daqiqa oldin' },
+    { value: 10, label: '10 daqiqa oldin' },
+    { value: 30, label: '30 daqiqa oldin' },
+    { value: 60, label: '1 soat oldin' },
+    { value: 1440, label: '1 kun oldin' }
+  ];
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!task.title.trim()) newErrors.title = 'Vazifa nomini kiriting';
+    if (task.title.length > 100) newErrors.title = 'Nom 100 belgidan oshmasligi kerak';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!task.title.trim()) {
-      alert('Vazifa nomini kiriting!');
-      return;
-    }
+    if (!validateForm()) return;
+
+    const dateTime = new Date(`${task.date}T${task.time}`);
+    const reminderDateTime = task.reminder 
+      ? addMinutes(dateTime, -task.reminderTime)
+      : null;
 
     const newTask = {
-      id: uuidv4(),
-      ...task,
+      id: `task_${uuidv4()}`,
+      title: task.title.trim(),
+      date: task.date,
+      time: task.time,
+      category: task.category,
+      priority: task.priority,
+      description: task.description.trim(),
+      reminder: task.reminder,
+      reminderTime: task.reminder ? task.reminderTime : null,
+      reminderDateTime: reminderDateTime,
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -47,109 +75,151 @@ const AddTask = ({ onAddTask }) => {
 
     onAddTask(newTask);
     
-    // Reset form
-    setTask({
-      title: '',
-      date: new Date().toISOString().split('T')[0],
-      time: '09:00',
-      category: 'work',
-      priority: 'medium',
-      description: '',
-      reminder: false
-    });
-    
-    setIsExpanded(false);
+    // Reset form with animation
+    setTimeout(() => {
+      setTask({
+        title: '',
+        date: format(new Date(), 'yyyy-MM-dd'),
+        time: format(new Date(), 'HH:mm'),
+        category: 'work',
+        priority: 'medium',
+        description: '',
+        reminder: false,
+        reminderTime: 10
+      });
+      setErrors({});
+    }, 300);
   };
 
   const handleQuickAdd = (type) => {
     const quickTasks = {
-      meeting: 'Korxona yig\'ilishi',
-      study: 'Dars tayyorlash',
-      workout: 'Sport mashg\'uloti',
-      shopping: 'Bozorlik qilish'
+      meeting: { title: 'Korxona yig\'ilishi', category: 'work', priority: 'high' },
+      study: { title: 'Dars tayyorlash', category: 'study', priority: 'medium' },
+      workout: { title: 'Sport mashg\'uloti', category: 'health', priority: 'low' },
+      shopping: { title: 'Bozorlik qilish', category: 'home', priority: 'low' }
     };
+
+    const selected = quickTasks[type];
+    const nextHour = format(addMinutes(new Date(), 60), 'HH:mm');
 
     setTask({
       ...task,
-      title: quickTasks[type],
-      time: type === 'workout' ? '18:00' : '10:00'
+      title: selected.title,
+      category: selected.category,
+      priority: selected.priority,
+      time: type === 'workout' ? '18:00' : nextHour
     });
   };
 
+  const handleCategorySelect = (category) => {
+    setTask({ ...task, category });
+  };
+
+  const handlePrioritySelect = (priority) => {
+    setTask({ ...task, priority });
+  };
+
+  const getCurrentCategory = () => {
+    return categories.find(cat => cat.value === task.category);
+  };
+
+  const getCurrentPriority = () => {
+    return priorities.find(prio => prio.value === task.priority);
+  };
+
   return (
-    <div className={`add-task-container ${isExpanded ? 'expanded' : ''}`}>
+    <div className="add-task-container glass-effect expanded">
       <div className="add-task-header">
-        <h3>
-          <span className="header-icon">✨</span>
-          Yangi Vazifa Qo'shish
-        </h3>
-        <button 
-          className="toggle-btn"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? '➖' : '➕'}
-        </button>
+        <div className="header-content">
+          <div className="header-icon-wrapper">
+            <span className="header-icon">✨</span>
+          </div>
+          <div className="header-text">
+            <h3>Yangi Vazifa Qo'shish</h3>
+            <p className="header-subtitle">Kunningizni rejalashtiring</p>
+          </div>
+        </div>
       </div>
 
-      {isExpanded && (
         <form className="add-task-form" onSubmit={handleSubmit}>
-          {/* Quick Add Buttons */}
+          {/* Quick Add Section */}
           <div className="quick-add-section">
-            <h4>⚡ Tezkor qo'shish:</h4>
+            <h4 className="section-title">
+              <span className="section-icon">⚡</span>
+              Tezkor qo'shish
+            </h4>
             <div className="quick-buttons">
-              <button type="button" className="quick-btn meeting" onClick={() => handleQuickAdd('meeting')}>
-                💼 Yig'ilish
-              </button>
-              <button type="button" className="quick-btn study" onClick={() => handleQuickAdd('study')}>
-                📚 Dars
-              </button>
-              <button type="button" className="quick-btn workout" onClick={() => handleQuickAdd('workout')}>
-                🏃 Sport
-              </button>
-              <button type="button" className="quick-btn shopping" onClick={() => handleQuickAdd('shopping')}>
-                🛒 Bozor
-              </button>
+              {[
+                { type: 'meeting', label: 'Yig\'ilish', icon: '💼', color: '#6366f1' },
+                { type: 'study', label: 'Dars', icon: '📚', color: '#10b981' },
+                { type: 'workout', label: 'Sport', icon: '🏃', color: '#3b82f6' },
+                { type: 'shopping', label: 'Bozor', icon: '🛒', color: '#f59e0b' }
+              ].map((item) => (
+                <button
+                  key={item.type}
+                  type="button"
+                  className="quick-btn card-hover"
+                  onClick={() => handleQuickAdd(item.type)}
+                  style={{ '--quick-color': item.color }}
+                >
+                  <span className="quick-icon">{item.icon}</span>
+                  <span className="quick-label">{item.label}</span>
+                </button>
+              ))}
             </div>
           </div>
 
           {/* Task Title */}
           <div className="form-group">
-            <label htmlFor="title">
+            <label htmlFor="title" className="form-label">
               <span className="label-icon">📝</span>
-              Vazifa nomi *
+              Vazifa nomi
+              <span className="required">*</span>
             </label>
             <input
               id="title"
               type="text"
-              placeholder="Masalan: Dars tayyorlash..."
+              placeholder="Masalan: React dasturini yakunlash..."
               value={task.title}
-              onChange={(e) => setTask({...task, title: e.target.value})}
-              className="task-input"
-              required
+              onChange={(e) => {
+                setTask({...task, title: e.target.value});
+                if (errors.title) setErrors({...errors, title: ''});
+              }}
+              className={`task-input ${errors.title ? 'error' : ''}`}
+              maxLength={100}
               autoFocus
             />
+            {errors.title && (
+              <div className="error-message">{errors.title}</div>
+            )}
+            <div className="char-count">
+              {task.title.length}/100
+            </div>
           </div>
 
           {/* Date and Time */}
           <div className="form-row">
             <div className="form-group">
-              <label>
+              <label className="form-label">
                 <span className="label-icon">📅</span>
                 Sana
               </label>
-              <input
-                type="date"
-                value={task.date}
-                onChange={(e) => setTask({...task, date: e.target.value})}
-                min={new Date().toISOString().split('T')[0]}
-              />
-              <div className="hint">
-                Bugun: {format(new Date(), 'dd.MM.yyyy')}
+              <div className="date-input-wrapper">
+                <input
+                  type="date"
+                  value={task.date}
+                  onChange={(e) => setTask({...task, date: e.target.value})}
+                  min={format(new Date(), 'yyyy-MM-dd')}
+                  className="date-input"
+                />
+                <div className="date-hint">
+                  Bugun: {format(new Date(), 'dd MMMM, yyyy', { locale: uz })}
+                </div>
               </div>
             </div>
             
             <div className="form-group">
-              <label>
+              <label className="form-label">
                 <span className="label-icon">⏰</span>
                 Vaqt
               </label>
@@ -157,13 +227,15 @@ const AddTask = ({ onAddTask }) => {
                 type="time"
                 value={task.time}
                 onChange={(e) => setTask({...task, time: e.target.value})}
+                className="time-input"
+                step="300" // 5 minute intervals
               />
             </div>
           </div>
 
           {/* Category Selection */}
           <div className="form-group">
-            <label>
+            <label className="form-label">
               <span className="label-icon">🏷️</span>
               Kategoriya
             </label>
@@ -173,22 +245,29 @@ const AddTask = ({ onAddTask }) => {
                   key={cat.value}
                   type="button"
                   className={`category-btn ${task.category === cat.value ? 'active' : ''}`}
-                  onClick={() => setTask({...task, category: cat.value})}
+                  onClick={() => handleCategorySelect(cat.value)}
                   style={{ 
-                    borderColor: cat.color,
-                    background: task.category === cat.value ? cat.color + '20' : 'white'
+                    '--category-color': cat.color,
+                    '--category-bg': cat.bgColor
                   }}
                 >
-                  <span className="category-icon">{cat.label.split(' ')[0]}</span>
-                  <span className="category-name">{cat.label.split(' ')[1]}</span>
+                  <span className="category-icon">{cat.icon}</span>
+                  <span className="category-label">{cat.label.split(' ')[1]}</span>
                 </button>
               ))}
             </div>
+            {getCurrentCategory() && (
+              <div className="current-selection">
+                Tanlangan: <span style={{ color: getCurrentCategory().color }}>
+                  {getCurrentCategory().label}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Priority Selection */}
           <div className="form-group">
-            <label>
+            <label className="form-label">
               <span className="label-icon">🎯</span>
               Imtiyoz
             </label>
@@ -198,84 +277,120 @@ const AddTask = ({ onAddTask }) => {
                   key={prio.value}
                   type="button"
                   className={`priority-btn ${task.priority === prio.value ? 'active' : ''}`}
-                  onClick={() => setTask({...task, priority: prio.value})}
+                  onClick={() => handlePrioritySelect(prio.value)}
                   style={{ 
-                    borderColor: prio.color,
-                    background: task.priority === prio.value ? prio.color + '20' : 'white',
-                    color: task.priority === prio.value ? prio.color : '#718096'
+                    '--priority-color': prio.color,
+                    '--priority-bg': prio.bgColor
                   }}
                 >
-                  {prio.label}
+                  <span className="priority-icon">{prio.label.split(' ')[0]}</span>
+                  <span className="priority-label">{prio.label.split(' ')[1]}</span>
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Description */}
-          <div className="form-group">
-            <label htmlFor="description">
-              <span className="label-icon">📄</span>
-              Qo'shimcha ma'lumot
-            </label>
-            <textarea
-              id="description"
-              placeholder="Vazifa haqida qo'shimcha ma'lumotlar..."
-              value={task.description}
-              onChange={(e) => setTask({...task, description: e.target.value})}
-              rows="3"
-            />
-          </div>
-
-          {/* Reminder Toggle */}
-          <div className="form-group reminder-group">
-            <label className="reminder-label">
-              <input
-                type="checkbox"
-                checked={task.reminder}
-                onChange={(e) => setTask({...task, reminder: e.target.checked})}
-              />
-              <span className="reminder-icon">🔔</span>
-              <span className="reminder-text">Eslatma qo'shish</span>
-            </label>
-            {task.reminder && (
-              <div className="reminder-options">
-                <select 
-                  value="10"
-                  onChange={(e) => {}}
-                  className="reminder-select"
-                >
-                  <option value="5">5 daqiqa oldin</option>
-                  <option value="10">10 daqiqa oldin</option>
-                  <option value="30">30 daqiqa oldin</option>
-                  <option value="60">1 soat oldin</option>
-                </select>
+            {getCurrentPriority() && (
+              <div className="current-selection">
+                Darajasi: <span style={{ color: getCurrentPriority().color }}>
+                  {getCurrentPriority().label}
+                </span>
               </div>
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Description */}
+          <div className="form-group">
+            <label htmlFor="description" className="form-label">
+              <span className="label-icon">📄</span>
+              Tavsif
+            </label>
+            <textarea
+              id="description"
+              placeholder="Vazifa haqida batafsil ma'lumot..."
+              value={task.description}
+              onChange={(e) => setTask({...task, description: e.target.value})}
+              rows="3"
+              className="description-textarea"
+              maxLength={500}
+            />
+            <div className="char-count">
+              {task.description.length}/500
+            </div>
+          </div>
+
+          {/* Reminder Settings */}
+          <div className="form-group reminder-section">
+            <div className="reminder-header">
+              <label className="reminder-label">
+                <input
+                  type="checkbox"
+                  checked={task.reminder}
+                  onChange={(e) => setTask({...task, reminder: e.target.checked})}
+                  className="reminder-checkbox"
+                />
+                <span className="reminder-icon">🔔</span>
+                <span className="reminder-text">Eslatma qo'shish</span>
+              </label>
+            </div>
+            
+            {task.reminder && (
+              <div className="reminder-options slide-down">
+                <label className="reminder-option-label">
+                  <span className="option-icon">⏱️</span>
+                  Eslatma vaqti:
+                </label>
+                <div className="reminder-buttons">
+                  {reminderOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`reminder-option-btn ${task.reminderTime === option.value ? 'active' : ''}`}
+                      onClick={() => setTask({...task, reminderTime: option.value})}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Form Actions */}
           <div className="form-actions">
-            <button type="button" className="btn-cancel" onClick={() => setIsExpanded(false)}>
+            <button 
+              type="button" 
+              className="btn-cancel"
+              onClick={() => {
+                setTask({
+                  title: '',
+                  date: format(new Date(), 'yyyy-MM-dd'),
+                  time: format(new Date(), 'HH:mm'),
+                  category: 'work',
+                  priority: 'medium',
+                  description: '',
+                  reminder: false,
+                  reminderTime: 10
+                });
+              }}
+            >
+              <span className="btn-icon">✕</span>
               Bekor qilish
             </button>
-            <button type="submit" className="btn-submit">
-              <span className="submit-icon">✅</span>
-              Vazifa Qo'shish
+            <button 
+              type="submit" 
+              className="btn-submit btn-glow"
+              disabled={!task.title.trim()}
+            >
+              <span className="btn-icon">✅</span>
+              {task.title.trim() ? 'Vazifa Qo\'shish' : 'Nom kiriting'}
             </button>
           </div>
         </form>
-      )}
 
-      {/* Quick Add Button (when collapsed) */}
-      {!isExpanded && (
-        <button 
-          className="quick-add-btn"
-          onClick={() => setIsExpanded(true)}
-        >
-          <span className="plus-icon">➕</span>
-          Tezkor qo'shish
-        </button>
-      )}
+      {/* Success Notification (would be triggered on successful add) */}
+      <div className="success-notification hidden">
+        <span className="notification-icon">🎉</span>
+        Vazifa muvaffaqiyatli qo'shildi!
+      </div>
     </div>
   );
 };
