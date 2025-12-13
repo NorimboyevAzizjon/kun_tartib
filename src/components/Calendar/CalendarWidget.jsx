@@ -9,7 +9,6 @@ import {
   isSameDay, 
   startOfWeek,
   endOfWeek,
-  isEqual,
   addMonths,
   subMonths 
 } from 'date-fns';
@@ -28,12 +27,8 @@ const CalendarWidget = ({ tasks = [] }) => {
   // Get all days to display in the calendar grid
   const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
 
-  // Format date to YYYY-MM-DD for consistent comparison
-  const formatDate = (date) => format(date, 'yyyy-MM-dd');
-
   // Get tasks for a specific date
   const getTasksForDate = (date) => {
-    const dateStr = formatDate(date);
     return tasks.filter(task => {
       // More robust comparison using date-fns if task.date is an ISO string
       const taskDate = new Date(task.date);

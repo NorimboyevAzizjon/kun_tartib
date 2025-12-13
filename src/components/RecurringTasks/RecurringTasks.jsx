@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, addDays, addWeeks, addMonths, addYears } from 'date-fns';
-import { uz } from 'date-fns/locale';
+import { format, addDays, addMonths, addYears } from 'date-fns';
 import './RecurringTasks.css';
 
 const RecurringTasks = ({ onAddRecurringTask, tasks = [] }) => {
@@ -52,8 +51,8 @@ const RecurringTasks = ({ onAddRecurringTask, tasks = [] }) => {
     localStorage.setItem('recurring-tasks', JSON.stringify(recurringTasks));
   }, [recurringTasks]);
 
-  // Takroriy vazifalarni generatsiya qilish
-  const generateRecurringTasks = () => {
+  // Takroriy vazifalarni generatsiya qilish (kelajakda ishlatiladi)
+  const _generateRecurringTasks = () => {
     const today = new Date();
     
     recurringTasks.forEach(task => {

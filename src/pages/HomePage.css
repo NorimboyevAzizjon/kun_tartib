@@ -49,6 +49,11 @@
   font-size: 40px;
 }
 
+.home-page .header-icon-svg {
+  font-size: 48px !important;
+  color: white;
+}
+
 .home-page .header-text {
   min-width: 0;
 }
@@ -126,6 +131,28 @@
   justify-content: center;
   flex-shrink: 0;
   font-size: 28px;
+}
+
+.home-page .stat-icon svg {
+  font-size: 1.8rem !important;
+  color: var(--accent-blue);
+}
+
+.home-page .stat-icon svg {
+  font-size: 1.8rem !important;
+  color: var(--accent-blue);
+}
+
+.home-page .stat-card.completed .stat-icon svg {
+  color: var(--accent-green);
+}
+
+.home-page .stat-card.today .stat-icon svg {
+  color: #f59e0b;
+}
+
+.home-page .stat-card.pending .stat-icon svg {
+  color: var(--accent-purple);
 }
 
 .home-page .stat-content {
@@ -214,6 +241,10 @@
   flex-shrink: 0;
 }
 
+.home-page .title-icon svg {
+  color: var(--accent-blue);
+}
+
 .home-page .refresh-btn {
   width: 40px;
   height: 40px;
@@ -224,6 +255,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.home-page .refresh-btn svg {
+  font-size: 1.2rem !important;
+}
+
+.home-page .refresh-btn:hover svg {
+  color: var(--accent-blue);
 }
 
 .home-page .view-tabs {
@@ -265,6 +304,12 @@
 .home-page .tab-icon {
   font-size: 1.2rem;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.home-page .tab-icon svg {
+  font-size: 1.3rem !important;
 }
 
 .home-page .tab-text {
@@ -308,7 +353,7 @@
 
 /* Quick Actions Section */
 .home-page .quick-actions-section {
-  /* No extra padding since parent has it */
+  display: block;
 }
 
 .home-page .actions-header {
@@ -381,7 +426,7 @@
 
 /* Performance Stats Section */
 .home-page .performance-stats-section {
-  /* No extra padding since parent has it */
+  display: block;
 }
 
 .home-page .stats-header {
@@ -468,4 +513,51 @@
 .home-page .metric-sub {
   font-size: 0.75rem;
   color: var(--text-secondary);
+}
+
+/* View Info Messages */
+.home-page .view-info {
+  margin-top: 16px;
+}
+
+.home-page .info-message,
+.home-page .urgent-warning,
+.home-page .overdue-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.home-page .info-message {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--accent-blue);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.home-page .urgent-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.home-page .overdue-warning {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.home-page .info-icon,
+.home-page .warning-icon {
+  display: flex;
+  align-items: center;
+}
+
+.home-page .info-icon svg,
+.home-page .warning-icon svg {
+  font-size: 1.2rem !important;
 }

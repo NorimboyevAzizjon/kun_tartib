@@ -78,6 +78,30 @@
   font-size: 0.9rem;
   color: var(--accent-green);
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.task-summary .stat-badge:hover {
+  background: rgba(16, 185, 129, 0.2);
+  transform: scale(1.05);
+}
+
+.task-summary .stat-badge:active {
+  transform: scale(0.95);
+}
+
+.task-summary .refresh-btn {
+  cursor: pointer;
+}
+
+.task-summary .refresh-btn:hover .badge-icon {
+  animation: spin 0.5s ease;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .task-summary .badge-icon {

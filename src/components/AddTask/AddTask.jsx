@@ -4,6 +4,17 @@ import { format, addMinutes } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import './AddTask.css';
 
+// MUI Icons
+import TitleOutlinedIcon from '@mui/icons-material/TitleOutlined';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
+import PriorityHighOutlinedIcon from '@mui/icons-material/PriorityHighOutlined';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 const AddTask = ({ onAddTask }) => {
   const [task, setTask] = useState({
     title: '',
@@ -91,7 +102,7 @@ const AddTask = ({ onAddTask }) => {
     }, 300);
   };
 
-  const handleQuickAdd = (type) => {
+  const _handleQuickAdd = (type) => {
     const quickTasks = {
       meeting: { title: 'Korxona yig\'ilishi', category: 'work', priority: 'high' },
       study: { title: 'Dars tayyorlash', category: 'study', priority: 'medium' },
@@ -109,6 +120,35 @@ const AddTask = ({ onAddTask }) => {
       priority: selected.priority,
       time: type === 'workout' ? '18:00' : nextHour
     });
+  };
+
+  // Eslatma yoqilganda bildirishnoma ruxsatini so'rash
+  const handleReminderToggle = async (checked) => {
+    if (checked) {
+      // Brauzer bildirishnomalarini tekshirish
+      if ('Notification' in window) {
+        if (Notification.permission === 'default') {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            setTask({ ...task, reminder: true });
+            localStorage.setItem('notifications-enabled', 'true');
+          } else {
+            alert('Eslatmalar ishlashi uchun bildirishnomalariga ruxsat bering!');
+            setTask({ ...task, reminder: false });
+          }
+        } else if (Notification.permission === 'granted') {
+          setTask({ ...task, reminder: true });
+        } else {
+          alert('Bildirishnomalar bloklangan. Brauzer sozlamalaridan yoqing.');
+          setTask({ ...task, reminder: false });
+        }
+      } else {
+        alert('Brauzeringiz bildirishnomalarni qo\'llab-quvvatlamaydi');
+        setTask({ ...task, reminder: false });
+      }
+    } else {
+      setTask({ ...task, reminder: false });
+    }
   };
 
   const handleCategorySelect = (category) => {
@@ -142,37 +182,10 @@ const AddTask = ({ onAddTask }) => {
       </div>
 
         <form className="add-task-form" onSubmit={handleSubmit}>
-          {/* Quick Add Section */}
-          <div className="quick-add-section">
-            <h4 className="section-title">
-              <span className="section-icon">⚡</span>
-              Tezkor qo'shish
-            </h4>
-            <div className="quick-buttons">
-              {[
-                { type: 'meeting', label: 'Yig\'ilish', icon: '💼', color: '#6366f1' },
-                { type: 'study', label: 'Dars', icon: '📚', color: '#10b981' },
-                { type: 'workout', label: 'Sport', icon: '🏃', color: '#3b82f6' },
-                { type: 'shopping', label: 'Bozor', icon: '🛒', color: '#f59e0b' }
-              ].map((item) => (
-                <button
-                  key={item.type}
-                  type="button"
-                  className="quick-btn card-hover"
-                  onClick={() => handleQuickAdd(item.type)}
-                  style={{ '--quick-color': item.color }}
-                >
-                  <span className="quick-icon">{item.icon}</span>
-                  <span className="quick-label">{item.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Task Title */}
           <div className="form-group">
             <label htmlFor="title" className="form-label">
-              <span className="label-icon">📝</span>
+              <TitleOutlinedIcon className="label-icon-svg" />
               Vazifa nomi
               <span className="required">*</span>
             </label>
@@ -201,7 +214,7 @@ const AddTask = ({ onAddTask }) => {
           <div className="form-row">
             <div className="form-group">
               <label className="form-label">
-                <span className="label-icon">📅</span>
+                <CalendarTodayOutlinedIcon className="label-icon-svg" />
                 Sana
               </label>
               <div className="date-input-wrapper">
@@ -220,7 +233,7 @@ const AddTask = ({ onAddTask }) => {
             
             <div className="form-group">
               <label className="form-label">
-                <span className="label-icon">⏰</span>
+                <AccessTimeOutlinedIcon className="label-icon-svg" />
                 Vaqt
               </label>
               <input
@@ -236,7 +249,7 @@ const AddTask = ({ onAddTask }) => {
           {/* Category Selection */}
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">🏷️</span>
+              <CategoryOutlinedIcon className="label-icon-svg" />
               Kategoriya
             </label>
             <div className="category-selector">
@@ -268,7 +281,7 @@ const AddTask = ({ onAddTask }) => {
           {/* Priority Selection */}
           <div className="form-group">
             <label className="form-label">
-              <span className="label-icon">🎯</span>
+              <PriorityHighOutlinedIcon className="label-icon-svg" />
               Imtiyoz
             </label>
             <div className="priority-selector">
@@ -297,26 +310,6 @@ const AddTask = ({ onAddTask }) => {
             )}
           </div>
 
-          {/* Description */}
-          <div className="form-group">
-            <label htmlFor="description" className="form-label">
-              <span className="label-icon">📄</span>
-              Tavsif
-            </label>
-            <textarea
-              id="description"
-              placeholder="Vazifa haqida batafsil ma'lumot..."
-              value={task.description}
-              onChange={(e) => setTask({...task, description: e.target.value})}
-              rows="3"
-              className="description-textarea"
-              maxLength={500}
-            />
-            <div className="char-count">
-              {task.description.length}/500
-            </div>
-          </div>
-
           {/* Reminder Settings */}
           <div className="form-group reminder-section">
             <div className="reminder-header">
@@ -324,7 +317,7 @@ const AddTask = ({ onAddTask }) => {
                 <input
                   type="checkbox"
                   checked={task.reminder}
-                  onChange={(e) => setTask({...task, reminder: e.target.checked})}
+                  onChange={(e) => handleReminderToggle(e.target.checked)}
                   className="reminder-checkbox"
                 />
                 <span className="reminder-icon">🔔</span>

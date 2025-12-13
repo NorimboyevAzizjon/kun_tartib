@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth, isSameWeek, isSameMonth } from 'date-fns';
+import { format, startOfWeek, endOfWeek, isSameWeek, isSameMonth } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import './Goals.css';
 

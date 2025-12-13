@@ -15,6 +15,14 @@ import WeeklyChart from '../components/Charts/WeeklyChart';
 import TaskSummary from '../components/Statistics/TaskSummary';
 import './DashboardPage.css';
 
+// MUI Icons
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+
 const DashboardPage = () => {
   const [tasks, setTasks] = useState([]);
   const [timeRange, setTimeRange] = useState('week');
@@ -24,7 +32,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const loadTasks = () => {
       try {
-        const savedTasks = localStorage.getItem('schedule-tasks');
+        const savedTasks = localStorage.getItem('kun-tartibi-tasks');
         if (savedTasks) {
           const parsedTasks = JSON.parse(savedTasks);
           setTasks(parsedTasks);
@@ -50,7 +58,7 @@ const DashboardPage = () => {
   }, []);
 
   // Calculate statistics based on time range
-  const { stats, filteredTasks, weeklyData, monthlyData } = useMemo(() => {
+  const { stats, filteredTasks } = useMemo(() => {
     const now = new Date();
     let dateFilter = () => true;
 
@@ -58,7 +66,7 @@ const DashboardPage = () => {
       case 'today':
         dateFilter = task => isSameDay(new Date(task.date), now);
         break;
-      case 'week':
+      case 'week': {
         const weekStart = startOfWeek(now, { locale: uz });
         const weekEnd = endOfWeek(now, { locale: uz });
         dateFilter = task => {
@@ -66,7 +74,8 @@ const DashboardPage = () => {
           return taskDate >= weekStart && taskDate <= weekEnd;
         };
         break;
-      case 'month':
+      }
+      case 'month': {
         const monthStart = startOfMonth(now);
         const monthEnd = endOfMonth(now);
         dateFilter = task => {
@@ -74,6 +83,7 @@ const DashboardPage = () => {
           return taskDate >= monthStart && taskDate <= monthEnd;
         };
         break;
+      }
       default:
         break;
     }
@@ -154,10 +164,10 @@ const DashboardPage = () => {
     return { grade: 'D', color: '#ef4444', label: 'Yaxshilash kerak' };
   };
 
-  const performance = getPerformanceGrade(stats.completionRate);
+  const _performance = getPerformanceGrade(stats.completionRate);
 
   // Export data function
-  const handleExportData = () => {
+  const _handleExportData = () => {
     const data = {
       tasks,
       exportDate: new Date().toISOString(),
@@ -180,7 +190,7 @@ const DashboardPage = () => {
   };
 
   // Import data function
-  const handleImportData = (event) => {
+  const _handleImportData = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -195,7 +205,7 @@ const DashboardPage = () => {
         } else {
           alert('Noto\'g\'ri format!');
         }
-      } catch (error) {
+      } catch {
         alert('Faylni o\'qishda xato!');
       }
     };
@@ -203,7 +213,7 @@ const DashboardPage = () => {
   };
 
   // Clear data function
-  const handleClearData = () => {
+  const _handleClearData = () => {
     if (window.confirm('Barcha ma\'lumotlarni o\'chirishni tasdiqlaysizmi?')) {
       localStorage.removeItem('schedule-tasks');
       setTasks([]);
@@ -215,7 +225,7 @@ const DashboardPage = () => {
     return (
       <div className="dashboard-page loading">
         <div className="loader">
-          <div className="loader-icon">📊</div>
+          <div className="loader-icon"><BarChartOutlinedIcon className="loading-svg" /></div>
           <p>Statistikalar yuklanmoqda...</p>
         </div>
       </div>
@@ -228,7 +238,7 @@ const DashboardPage = () => {
       <header className="dashboard-header glass-effect">
         <div className="header-content fade-in">
           <Link to="/" className="header-icon-wrapper icon-link">
-            <span className="header-icon">📊</span>
+            <BarChartOutlinedIcon className="header-icon-svg" />
           </Link>
           <div className="header-text">
             <h1>Statistika Dashboard</h1>
@@ -243,46 +253,30 @@ const DashboardPage = () => {
             className={`range-btn ${timeRange === 'all' ? 'active' : ''}`}
             onClick={() => setTimeRange('all')}
           >
-            <span className="btn-icon">📅</span>
+            <span className="btn-icon"><CalendarMonthOutlinedIcon fontSize="small" /></span>
             <span className="btn-text">Barchasi</span>
           </button>
           <button 
             className={`range-btn ${timeRange === 'month' ? 'active' : ''}`}
             onClick={() => setTimeRange('month')}
           >
-            <span className="btn-icon">📆</span>
+            <span className="btn-icon"><DateRangeOutlinedIcon fontSize="small" /></span>
             <span className="btn-text">Oylik</span>
           </button>
           <button 
             className={`range-btn ${timeRange === 'week' ? 'active' : ''}`}
             onClick={() => setTimeRange('week')}
           >
-            <span className="btn-icon">📋</span>
+            <span className="btn-icon"><AssignmentOutlinedIcon fontSize="small" /></span>
             <span className="btn-text">Haftalik</span>
           </button>
           <button 
             className={`range-btn ${timeRange === 'today' ? 'active' : ''}`}
             onClick={() => setTimeRange('today')}
           >
-            <span className="btn-icon">☀️</span>
+            <span className="btn-icon"><WbSunnyOutlinedIcon fontSize="small" /></span>
             <span className="btn-text">Bugungi</span>
           </button>
-        </div>
-
-        <div className="header-stats fade-in">
-          <div className="stat-tag">
-            <span className="tag-icon">🔄</span>
-            <span className="tag-text">
-              {timeRange === 'all' && 'Barcha vaqt'}
-              {timeRange === 'month' && 'Oxirgi 30 kun'}
-              {timeRange === 'week' && 'Hafta davomida'}
-              {timeRange === 'today' && 'Bugun'}
-            </span>
-          </div>
-          <div className="stat-tag performance-tag" style={{ '--perf-color': performance.color }}>
-            <span className="tag-icon">🏆</span>
-            <span className="tag-text">{performance.grade} - {performance.label}</span>
-          </div>
         </div>
       </header>
 
@@ -296,7 +290,7 @@ const DashboardPage = () => {
         <div className="chart-card full-width card-hover">
           <div className="chart-header">
             <h3 className="chart-title">
-              <span className="chart-icon">📊</span>
+              <span className="chart-icon"><InsightsOutlinedIcon /></span>
               Haftalik Faollik
             </h3>
             <div className="chart-subtitle">

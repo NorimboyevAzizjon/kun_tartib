@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { format, isToday, isThisWeek, startOfWeek, endOfWeek } from 'date-fns';
+import { format, isToday, startOfWeek, endOfWeek } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import './TaskSummary.css';
 
@@ -108,6 +108,11 @@ const TaskSummary = ({ tasks = [] }) => {
   // Get weekly average
   const weeklyAverage = Math.round(stats.weeklyTasks.length / 7) || 0;
 
+  // Refresh function
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="task-summary glass-effect card-hover">
       <div className="summary-header">
@@ -122,10 +127,10 @@ const TaskSummary = ({ tasks = [] }) => {
         </div>
         
         <div className="header-stats">
-          <span className="stat-badge">
+          <button className="stat-badge refresh-btn" onClick={handleRefresh}>
             <span className="badge-icon">🔄</span>
-            Yangilanadi
-          </span>
+            Yangilash
+          </button>
         </div>
       </div>
 

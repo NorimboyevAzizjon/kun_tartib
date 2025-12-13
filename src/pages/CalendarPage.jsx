@@ -4,41 +4,50 @@ import CalendarWidget from '../components/Calendar/CalendarWidget';
 import TaskList from '../components/TaskList/TaskList';
 import './CalendarPage.css';
 
+// MUI Icons
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+
 const CalendarPage = () => {
   const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem('kuntartib-tasks');
+    const savedTasks = localStorage.getItem('kun-tartibi-tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
   });
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [viewMode, setViewMode] = useState('month'); // month, week, day
-  const [filter, setFilter] = useState('all'); // all, completed, pending
+  const [_filter, _setFilter] = useState('all'); // all, completed, pending
 
-  // Filter tasks by selected date
-  const filteredTasks = tasks.filter(task => {
+  // Filter tasks by selected date - using _filter with _
+  const _filteredTasks = tasks.filter(task => {
     if (task.date !== selectedDate) return false;
-    if (filter === 'completed') return task.completed;
-    if (filter === 'pending') return !task.completed;
+    if (_filter === 'completed') return task.completed;
+    if (_filter === 'pending') return !task.completed;
     return true;
   });
 
-  const handleToggleComplete = (taskId) => {
+  const _handleToggleComplete = (taskId) => {
     setTasks(tasks.map(task =>
       task.id === taskId ? { ...task, completed: !task.completed } : task
     ));
   };
 
-  const handleDeleteTask = (taskId) => {
+  const _handleDeleteTask = (taskId) => {
     setTasks(tasks.filter(task => task.id !== taskId));
   };
 
-  const handleEditTask = (taskId, updatedTask) => {
+  const _handleEditTask = (taskId, updatedTask) => {
     setTasks(tasks.map(task =>
       task.id === taskId ? { ...task, ...updatedTask } : task
     ));
   };
 
-  const handleAddTask = (newTask) => {
+  const _handleAddTask = (newTask) => {
     setTasks([...tasks, newTask]);
   };
 
@@ -48,12 +57,11 @@ const CalendarPage = () => {
 
   // Auto-save to localStorage
   useEffect(() => {
-    localStorage.setItem('kuntartib-tasks', JSON.stringify(tasks));
+    localStorage.setItem('kun-tartibi-tasks', JSON.stringify(tasks));
   }, [tasks]);
 
   // Get date statistics
   const getDateStats = () => {
-    const today = new Date().toISOString().split('T')[0];
     const selectedTasks = tasks.filter(task => task.date === selectedDate);
     const total = selectedTasks.length;
     const completed = selectedTasks.filter(t => t.completed).length;
@@ -69,7 +77,7 @@ const CalendarPage = () => {
       {/* Header */}
       <div className="calendar-page-header">
         <h1>
-          <Link to="/" className="header-icon icon-link">📅</Link>
+          <Link to="/" className="header-icon icon-link"><CalendarMonthOutlinedIcon className="header-icon-svg" /></Link>
           Kalendar Rejasi
         </h1>
         <p>Kunlik vazifalaringizni kalendar orqali boshqaring</p>
@@ -79,19 +87,19 @@ const CalendarPage = () => {
             className={`view-btn ${viewMode === 'month' ? 'active' : ''}`}
             onClick={() => setViewMode('month')}
           >
-            📆 Oylik
+            <DateRangeOutlinedIcon fontSize="small" /> Oylik
           </button>
           <button 
             className={`view-btn ${viewMode === 'week' ? 'active' : ''}`}
             onClick={() => setViewMode('week')}
           >
-            📅 Haftalik
+            <EventNoteOutlinedIcon fontSize="small" /> Haftalik
           </button>
           <button 
             className={`view-btn ${viewMode === 'day' ? 'active' : ''}`}
             onClick={() => setViewMode('day')}
           >
-            📅 Kunlik
+            <TodayOutlinedIcon fontSize="small" /> Kunlik
           </button>
         </div>
       </div>
@@ -108,7 +116,7 @@ const CalendarPage = () => {
             
             <div className="calendar-stats">
               <div className="stat-card">
-                <div className="stat-icon">📅</div>
+                <div className="stat-icon"><TodayOutlinedIcon /></div>
                 <div className="stat-content">
                   <div className="stat-label">Tanlangan sana</div>
                   <div className="stat-value">
@@ -123,7 +131,7 @@ const CalendarPage = () => {
               </div>
               
               <div className="stat-card">
-                <div className="stat-icon">📋</div>
+                <div className="stat-icon"><AssignmentOutlinedIcon /></div>
                 <div className="stat-content">
                   <div className="stat-label">Vazifalar soni</div>
                   <div className="stat-value">{stats.total}</div>
@@ -134,7 +142,7 @@ const CalendarPage = () => {
               </div>
               
               <div className="stat-card">
-                <div className="stat-icon">📈</div>
+                <div className="stat-icon"><TrendingUpOutlinedIcon /></div>
                 <div className="stat-content">
                   <div className="stat-label">Progress</div>
                   <div className="stat-value">{stats.completionRate}%</div>
@@ -154,7 +162,7 @@ const CalendarPage = () => {
       {/* Monthly Overview */}
       <div className="monthly-overview">
         <h3>
-          <span className="overview-icon">📊</span>
+          <span className="overview-icon"><InsightsOutlinedIcon /></span>
           Oylik Umumiy Ko'rinish
         </h3>
         

@@ -32,6 +32,11 @@
   vertical-align: middle;
 }
 
+.calendar-page .header-icon-svg {
+  font-size: 2.8rem !important;
+  vertical-align: middle;
+}
+
 .calendar-page .view-controls {
   display: flex;
   gap: 12px;
@@ -50,6 +55,10 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.calendar-page .view-btn svg {
+  font-size: 1.2rem !important;
 }
 
 .calendar-page .view-btn.active {
@@ -128,6 +137,11 @@
   justify-content: center;
   flex-shrink: 0;
   font-size: 1.6rem;
+}
+
+.calendar-page .stat-icon svg {
+  font-size: 1.6rem !important;
+  color: var(--accent-blue);
 }
 
 .calendar-page .stat-content {
@@ -319,6 +333,11 @@
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.calendar-page .monthly-overview h3 svg {
+  font-size: 1.5rem !important;
+  color: var(--accent-purple);
 }
 
 .calendar-page .overview-grid {

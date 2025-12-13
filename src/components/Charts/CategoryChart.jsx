@@ -22,7 +22,7 @@ const CategoryChart = ({ tasks = [] }) => {
   };
 
   // Kategoriyalar statistikasini hisoblaymiz
-  const { categoryStats, filteredCategories, insights } = useMemo(() => {
+  const { _categoryStats, filteredCategories, insights } = useMemo(() => {
     const categories = {
       '💼 Ish': { 
         color: '#6366f1', 
@@ -81,7 +81,7 @@ const CategoryChart = ({ tasks = [] }) => {
 
     // Faqat vazifasi bor kategoriyalarni olamiz
     const filtered = Object.entries(categories)
-      .filter(([_, data]) => data.count > 0)
+      .filter(([, data]) => data.count > 0)
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
 
     // Statistik ma'lumotlar
@@ -90,7 +90,7 @@ const CategoryChart = ({ tasks = [] }) => {
       .sort((a, b) => b[1].count - a[1].count)[0];
     
     const highestCompletion = Object.entries(filtered)
-      .filter(([_, cat]) => cat.count > 0)
+      .filter(([, cat]) => cat.count > 0)
       .sort((a, b) => {
         const rateA = Math.round((a[1].completed / a[1].count) * 100);
         const rateB = Math.round((b[1].completed / b[1].count) * 100);
@@ -179,7 +179,6 @@ const CategoryChart = ({ tasks = [] }) => {
                 const value = dataset.data[i];
                 const total = dataset.data.reduce((a, b) => a + b, 0);
                 const percentage = Math.round((value / total) * 100);
-                const categoryData = filteredCategories[label];
                 
                 return {
                   text: `${label.split(' ')[1]}: ${value} ta (${percentage}%)`,

@@ -1,14 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import './Notifications.css';
 
-const Notifications = ({ tasks = [], onUpdateTask }) => {
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [notificationSettings, setNotificationSettings] = useState({
-    beforeMinutes: 15, // Vazifadan necha daqiqa oldin eslatma
-    sound: true,
-    vibration: true
+// Ovoz chiqarish funksiyasi
+const playNotificationSound = () => {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.5);
+  } catch {
+    // Audio not supported
+  }
+};
+
+const Notifications = ({ tasks = [] }) => {
+  // LocalStorage dan boshlang'ich qiymatlarni olish
+  const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
+    const enabled = localStorage.getItem('notifications-enabled') === 'true';
+    return enabled && 'Notification' in window && Notification.permission === 'granted';
   });
+  
+  const [notificationSettings, setNotificationSettings] = useState(() => {
+    const settings = localStorage.getItem('notification-settings');
+    if (settings) {
+      try {
+        return JSON.parse(settings);
+      } catch {
+        // Invalid JSON
+      }
+    }
+    return { beforeMinutes: 15, sound: true, vibration: true };
+  });
+  
   const [upcomingTasks, setUpcomingTasks] = useState([]);
+  
+  const [notificationHistory, setNotificationHistory] = useState(() => {
+    const history = localStorage.getItem('notification-history');
+    if (history) {
+      try {
+        return JSON.parse(history);
+      } catch {
+        // Invalid JSON
+      }
+    }
+    return [];
+  });
+  
+  const [notifiedTasks, setNotifiedTasks] = useState(new Set());
 
   // Brauzer bildirishnomalarini so'rash
   const requestPermission = async () => {
@@ -25,75 +73,132 @@ const Notifications = ({ tasks = [], onUpdateTask }) => {
   };
 
   // Bildirishnoma ko'rsatish
-  const showNotification = (title, body, icon = '📋') => {
-    if (notificationsEnabled && 'Notification' in window) {
+  const showNotification = (title, body, taskId = null) => {
+    // Tarixga qo'shish
+    const newNotification = {
+      id: Date.now(),
+      title,
+      body,
+      time: new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }),
+      date: new Date().toLocaleDateString('uz-UZ'),
+      read: false
+    };
+    
+    setNotificationHistory(prev => {
+      const updated = [newNotification, ...prev].slice(0, 50); // Max 50 ta
+      localStorage.setItem('notification-history', JSON.stringify(updated));
+      return updated;
+    });
+
+    // Browser notification
+    if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(title, {
         body,
         icon: '/favicon.ico',
         badge: '/favicon.ico',
         vibrate: notificationSettings.vibration ? [200, 100, 200] : [],
-        tag: 'task-reminder'
+        tag: taskId || 'task-reminder',
+        requireInteraction: true
       });
+    }
 
-      if (notificationSettings.sound) {
-        // Ovoz chiqarish
-        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleJ0rGoxmnaSRVz8AAAA=');
-        audio.play().catch(() => {});
-      }
+    // Ovoz
+    if (notificationSettings.sound) {
+      playNotificationSound();
     }
   };
 
   // Yaqinlashayotgan vazifalarni tekshirish
   useEffect(() => {
+    if (!notificationsEnabled) return;
+
     const checkUpcomingTasks = () => {
       const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      
       const upcoming = tasks.filter(task => {
         if (task.completed) return false;
+        if (!task.time) return false;
         
-        const taskDateTime = new Date(`${task.date}T${task.time || '09:00'}`);
+        const taskDate = task.date || todayStr;
+        const taskDateTime = new Date(`${taskDate}T${task.time}`);
         const timeDiff = taskDateTime - now;
         const minutesDiff = Math.floor(timeDiff / (1000 * 60));
         
-        return minutesDiff > 0 && minutesDiff <= notificationSettings.beforeMinutes;
+        return minutesDiff > 0 && minutesDiff <= 60; // 1 soat ichida
       });
 
       setUpcomingTasks(upcoming);
 
-      // Har bir yaqinlashayotgan vazifa uchun bildirishnoma
+      // Eslatma yuborish
       upcoming.forEach(task => {
-        const taskDateTime = new Date(`${task.date}T${task.time || '09:00'}`);
+        const taskDate = task.date || todayStr;
+        const taskDateTime = new Date(`${taskDate}T${task.time}`);
         const timeDiff = taskDateTime - now;
         const minutesDiff = Math.floor(timeDiff / (1000 * 60));
+        const taskKey = `${task.id}-${taskDate}`;
         
-        if (minutesDiff === notificationSettings.beforeMinutes) {
-          showNotification(
-            `⏰ Vazifa yaqinlashmoqda!`,
-            `"${task.title}" - ${minutesDiff} daqiqadan keyin`
-          );
+        // Agar hali eslatilmagan bo'lsa va vaqti kelgan bo'lsa
+        if (minutesDiff <= notificationSettings.beforeMinutes && !notifiedTasks.has(taskKey)) {
+          // Inline notification
+          const newNotification = {
+            id: Date.now(),
+            title: `⏰ Vazifa yaqinlashmoqda!`,
+            body: `"${task.title}" - ${minutesDiff} daqiqadan keyin (${task.time})`,
+            time: new Date().toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' }),
+            date: new Date().toLocaleDateString('uz-UZ'),
+            read: false
+          };
+          
+          setNotificationHistory(prev => {
+            const updated = [newNotification, ...prev].slice(0, 50);
+            localStorage.setItem('notification-history', JSON.stringify(updated));
+            return updated;
+          });
+
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(newNotification.title, {
+              body: newNotification.body,
+              icon: '/favicon.ico',
+              tag: task.id,
+              requireInteraction: true
+            });
+          }
+
+          if (notificationSettings.sound) {
+            playNotificationSound();
+          }
+          
+          setNotifiedTasks(prev => {
+            const newSet = new Set(prev);
+            newSet.add(taskKey);
+            return newSet;
+          });
         }
       });
     };
 
-    // Har daqiqada tekshirish
-    const interval = setInterval(checkUpcomingTasks, 60000);
+    // Har 30 sekundda tekshirish
     checkUpcomingTasks();
+    const interval = setInterval(checkUpcomingTasks, 30000);
 
     return () => clearInterval(interval);
-  }, [tasks, notificationSettings, notificationsEnabled]);
+  }, [tasks, notificationSettings, notificationsEnabled, notifiedTasks]);
 
-  // LocalStorage dan sozlamalarni yuklash
-  useEffect(() => {
-    const enabled = localStorage.getItem('notifications-enabled') === 'true';
-    const settings = localStorage.getItem('notification-settings');
-    
-    if (enabled && 'Notification' in window && Notification.permission === 'granted') {
-      setNotificationsEnabled(true);
-    }
-    
-    if (settings) {
-      setNotificationSettings(JSON.parse(settings));
-    }
-  }, []);
+  // Tarixni tozalash
+  const clearHistory = () => {
+    setNotificationHistory([]);
+    localStorage.removeItem('notification-history');
+  };
+
+  // Bildirishnomani o'qilgan deb belgilash
+  const markAsRead = (id) => {
+    setNotificationHistory(prev => {
+      const updated = prev.map(n => n.id === id ? { ...n, read: true } : n);
+      localStorage.setItem('notification-history', JSON.stringify(updated));
+      return updated;
+    });
+  };
 
   // Sozlamalarni saqlash
   const saveSettings = (newSettings) => {
@@ -125,7 +230,14 @@ const Notifications = ({ tasks = [], onUpdateTask }) => {
           </div>
           <button 
             className={`toggle-btn ${notificationsEnabled ? 'active' : ''}`}
-            onClick={notificationsEnabled ? () => setNotificationsEnabled(false) : requestPermission}
+            onClick={() => {
+              if (notificationsEnabled) {
+                setNotificationsEnabled(false);
+                localStorage.setItem('notifications-enabled', 'false');
+              } else {
+                requestPermission();
+              }
+            }}
           >
             <span className="toggle-slider"></span>
           </button>
@@ -220,6 +332,46 @@ const Notifications = ({ tasks = [], onUpdateTask }) => {
             Test bildirishnoma yuborish
           </button>
         )}
+
+        {/* Bildirishnomalar tarixi */}
+        <div className="notification-history">
+          <div className="history-header">
+            <h4>
+              <span className="section-icon">📜</span>
+              Bildirishnomalar tarixi
+            </h4>
+            {notificationHistory.length > 0 && (
+              <button className="clear-history-btn" onClick={clearHistory}>
+                Tozalash
+              </button>
+            )}
+          </div>
+          
+          {notificationHistory.length === 0 ? (
+            <div className="empty-history">
+              <span className="empty-icon">🔕</span>
+              <p>Hozircha bildirishnomalar yo'q</p>
+            </div>
+          ) : (
+            <div className="history-list">
+              {notificationHistory.map(notification => (
+                <div 
+                  key={notification.id} 
+                  className={`history-item ${notification.read ? 'read' : 'unread'}`}
+                  onClick={() => markAsRead(notification.id)}
+                >
+                  <div className="history-icon">🔔</div>
+                  <div className="history-content">
+                    <span className="history-title">{notification.title}</span>
+                    <span className="history-body">{notification.body}</span>
+                    <span className="history-time">{notification.time} • {notification.date}</span>
+                  </div>
+                  {!notification.read && <span className="unread-dot"></span>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
