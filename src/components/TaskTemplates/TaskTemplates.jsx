@@ -11,12 +11,69 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
+import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
+import CleaningServicesOutlinedIcon from '@mui/icons-material/CleaningServicesOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import NotesOutlinedIcon from '@mui/icons-material/NotesOutlined';
+
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+
+// Icon mapping for templates
+const TEMPLATE_ICONS = {
+  fitness: <FitnessCenterOutlinedIcon />,
+  report: <AssessmentOutlinedIcon />,
+  study: <MenuBookOutlinedIcon />,
+  cleaning: <CleaningServicesOutlinedIcon />,
+  planning: <AssignmentOutlinedIcon />,
+  default: <NotesOutlinedIcon />
+};
+
+// Emoji to icon type mapping (for backwards compatibility with localStorage)
+const EMOJI_TO_ICON_TYPE = {
+  '🏃': 'fitness',
+  '📊': 'report',
+  '📚': 'study',
+  '🧹': 'cleaning',
+  '📋': 'planning',
+  '📝': 'default',
+  '💼': 'report',
+  '🎯': 'planning',
+  '💡': 'default',
+  '⭐': 'default',
+  '🔥': 'fitness'
+};
+
+// Helper function to get icon from template (handles both old emoji and new iconType)
+const getTemplateIcon = (template) => {
+  if (template.iconType && TEMPLATE_ICONS[template.iconType]) {
+    return TEMPLATE_ICONS[template.iconType];
+  }
+  if (template.icon && EMOJI_TO_ICON_TYPE[template.icon]) {
+    return TEMPLATE_ICONS[EMOJI_TO_ICON_TYPE[template.icon]];
+  }
+  return TEMPLATE_ICONS.default;
+};
+
+// Category Icons
+const CATEGORY_ICONS = {
+  work: <WorkOutlineIcon fontSize="small" />,
+  study: <SchoolOutlinedIcon fontSize="small" />,
+  home: <HomeOutlinedIcon fontSize="small" />,
+  personal: <PersonOutlinedIcon fontSize="small" />,
+  health: <FitnessCenterOutlinedIcon fontSize="small" />
+};
 
 const DEFAULT_TEMPLATES = [
   {
     id: 'template_1',
     name: 'Ertalabki mashq',
-    icon: '🏃',
+    iconType: 'fitness',
     category: 'health',
     priority: 'medium',
     time: '07:00',
@@ -30,7 +87,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'template_2',
     name: 'Haftalik hisobot',
-    icon: '📊',
+    iconType: 'report',
     category: 'work',
     priority: 'high',
     time: '10:00',
@@ -45,7 +102,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'template_3',
     name: 'O\'qish sessiyasi',
-    icon: '📚',
+    iconType: 'study',
     category: 'study',
     priority: 'medium',
     time: '19:00',
@@ -59,7 +116,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'template_4',
     name: 'Uy tozalash',
-    icon: '🧹',
+    iconType: 'cleaning',
     category: 'home',
     priority: 'low',
     time: '11:00',
@@ -73,7 +130,7 @@ const DEFAULT_TEMPLATES = [
   {
     id: 'template_5',
     name: 'Kunlik rejalashtirish',
-    icon: '📋',
+    iconType: 'planning',
     category: 'personal',
     priority: 'high',
     time: '08:00',
@@ -87,11 +144,11 @@ const DEFAULT_TEMPLATES = [
 ];
 
 const CATEGORY_CONFIG = {
-  work: { icon: '💼', label: 'Ish', color: '#6366f1' },
-  study: { icon: '📚', label: 'O\'qish', color: '#10b981' },
-  home: { icon: '🏠', label: 'Uy', color: '#f59e0b' },
-  personal: { icon: '👤', label: 'Shaxsiy', color: '#8b5cf6' },
-  health: { icon: '🏃', label: 'Sog\'lom', color: '#3b82f6' }
+  work: { icon: CATEGORY_ICONS.work, label: 'Ish', color: '#6366f1' },
+  study: { icon: CATEGORY_ICONS.study, label: 'O\'qish', color: '#10b981' },
+  home: { icon: CATEGORY_ICONS.home, label: 'Uy', color: '#f59e0b' },
+  personal: { icon: CATEGORY_ICONS.personal, label: 'Shaxsiy', color: '#8b5cf6' },
+  health: { icon: CATEGORY_ICONS.health, label: 'Sog\'lom', color: '#3b82f6' }
 };
 
 const PRIORITY_CONFIG = {
@@ -109,7 +166,7 @@ const TaskTemplates = ({ onUseTemplate }) => {
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
     name: '',
-    icon: '📝',
+    iconType: 'default',
     category: 'work',
     priority: 'medium',
     time: '09:00',
@@ -198,7 +255,7 @@ const TaskTemplates = ({ onUseTemplate }) => {
     setEditingTemplate(null);
     setNewTemplate({
       name: '',
-      icon: '📝',
+      iconType: 'default',
       category: 'work',
       priority: 'medium',
       time: '09:00',
@@ -228,9 +285,14 @@ const TaskTemplates = ({ onUseTemplate }) => {
     });
   };
 
-  const EMOJI_LIST = ['📝', '📋', '📊', '📈', '💼', '💻', '📱', '🎯', '⭐', '🔥', 
-                      '💡', '📚', '✍️', '🎨', '🎬', '🎵', '🏃', '🧘', '🏋️', '🚴',
-                      '🏠', '🧹', '🛒', '👨‍👩‍👧', '💰', '📞', '✈️', '🚗', '🌱', '☕'];
+  const ICON_TYPE_LIST = [
+    { type: 'default', label: 'Standart', icon: TEMPLATE_ICONS.default },
+    { type: 'fitness', label: 'Fitnes', icon: TEMPLATE_ICONS.fitness },
+    { type: 'report', label: 'Hisobot', icon: TEMPLATE_ICONS.report },
+    { type: 'study', label: 'O\'qish', icon: TEMPLATE_ICONS.study },
+    { type: 'cleaning', label: 'Tozalash', icon: TEMPLATE_ICONS.cleaning },
+    { type: 'planning', label: 'Reja', icon: TEMPLATE_ICONS.planning }
+  ];
 
   return (
     <div className="task-templates">
@@ -256,7 +318,9 @@ const TaskTemplates = ({ onUseTemplate }) => {
       <div className="templates-grid">
         {templates.map(template => (
           <div key={template.id} className="template-card">
-            <div className="template-icon">{template.icon}</div>
+            <div className="template-icon" aria-hidden="true">
+              {getTemplateIcon(template)}
+            </div>
             <div className="template-info">
               <h3 className="template-name">{template.name}</h3>
               <div className="template-meta">
@@ -266,11 +330,11 @@ const TaskTemplates = ({ onUseTemplate }) => {
                 >
                   {CATEGORY_CONFIG[template.category].icon} {CATEGORY_CONFIG[template.category].label}
                 </span>
-                <span className="template-time">⏰ {template.time}</span>
+                <span className="template-time"><AccessTimeOutlinedIcon fontSize="inherit" /> {template.time}</span>
               </div>
               {template.subtasks.length > 0 && (
                 <span className="template-subtasks">
-                  📋 {template.subtasks.length} qism vazifa
+                  <AssignmentOutlinedIcon fontSize="inherit" /> {template.subtasks.length} qism vazifa
                 </span>
               )}
             </div>
@@ -328,15 +392,16 @@ const TaskTemplates = ({ onUseTemplate }) => {
               {/* Icon Selector */}
               <div className="form-group">
                 <label>Ikonka</label>
-                <div className="emoji-selector">
-                  {EMOJI_LIST.map(emoji => (
+                <div className="icon-selector">
+                  {ICON_TYPE_LIST.map(item => (
                     <button
-                      key={emoji}
+                      key={item.type}
                       type="button"
-                      className={`emoji-btn ${newTemplate.icon === emoji ? 'active' : ''}`}
-                      onClick={() => setNewTemplate({ ...newTemplate, icon: emoji })}
+                      className={`icon-btn ${newTemplate.iconType === item.type ? 'active' : ''}`}
+                      onClick={() => setNewTemplate({ ...newTemplate, iconType: item.type })}
+                      title={item.label}
                     >
-                      {emoji}
+                      {item.icon}
                     </button>
                   ))}
                 </div>

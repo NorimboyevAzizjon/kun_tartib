@@ -12,14 +12,24 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FullscreenIcon from '@mui/icons-material/Fullscreen';
 import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import GpsFixedOutlinedIcon from '@mui/icons-material/GpsFixedOutlined';
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import DoNotDisturbOnOutlinedIcon from '@mui/icons-material/DoNotDisturbOnOutlined';
+import KeyboardOutlinedIcon from '@mui/icons-material/KeyboardOutlined';
+import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
+import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
+import ForestOutlinedIcon from '@mui/icons-material/ForestOutlined';
+import WavesOutlinedIcon from '@mui/icons-material/WavesOutlined';
+import LocalFireDepartmentOutlinedIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
+import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
 
 const AMBIENT_SOUNDS = [
-  { id: 'none', name: 'Ovoz yo\'q', icon: '🔇' },
-  { id: 'rain', name: 'Yomg\'ir', icon: '🌧️' },
-  { id: 'forest', name: 'O\'rmon', icon: '🌲' },
-  { id: 'ocean', name: 'Okean', icon: '🌊' },
-  { id: 'fire', name: 'Gulxan', icon: '🔥' },
-  { id: 'cafe', name: 'Kafe', icon: '☕' }
+  { id: 'none', name: 'Ovoz yo\'q', icon: <VolumeOffOutlinedIcon fontSize="small" /> },
+  { id: 'rain', name: 'Yomg\'ir', icon: <WaterDropOutlinedIcon fontSize="small" /> },
+  { id: 'forest', name: 'O\'rmon', icon: <ForestOutlinedIcon fontSize="small" /> },
+  { id: 'ocean', name: 'Okean', icon: <WavesOutlinedIcon fontSize="small" /> },
+  { id: 'fire', name: 'Gulxan', icon: <LocalFireDepartmentOutlinedIcon fontSize="small" /> },
+  { id: 'cafe', name: 'Kafe', icon: <LocalCafeOutlinedIcon fontSize="small" /> }
 ];
 
 const FocusMode = ({ tasks = [], onComplete }) => {
@@ -215,19 +225,19 @@ const FocusMode = ({ tasks = [], onComplete }) => {
           
           <div className="focus-features">
             <div className="feature">
-              <span className="feature-icon">🎯</span>
+              <span className="feature-icon" aria-hidden="true"><GpsFixedOutlinedIcon /></span>
               <span>Bitta vazifaga e'tibor</span>
             </div>
             <div className="feature">
-              <span className="feature-icon">⏱️</span>
+              <span className="feature-icon" aria-hidden="true"><TimerOutlinedIcon /></span>
               <span>Vaqt hisobi</span>
             </div>
             <div className="feature">
-              <span className="feature-icon">🔇</span>
+              <span className="feature-icon" aria-hidden="true"><DoNotDisturbOnOutlinedIcon /></span>
               <span>Distraction-free</span>
             </div>
             <div className="feature">
-              <span className="feature-icon">⌨️</span>
+              <span className="feature-icon" aria-hidden="true"><KeyboardOutlinedIcon /></span>
               <span>Keyboard shortcuts</span>
             </div>
           </div>
@@ -239,14 +249,14 @@ const FocusMode = ({ tasks = [], onComplete }) => {
             </button>
           ) : (
             <div className="no-tasks-message">
-              <span>✅</span>
+              <CheckCircleOutlineIcon style={{ fontSize: 48, color: '#10b981' }} />
               <p>Barcha vazifalar bajarilgan!</p>
             </div>
           )}
         </div>
 
         <div className="shortcuts-info">
-          <h4>⌨️ Klaviatura tugmalari:</h4>
+          <h4><KeyboardOutlinedIcon fontSize="small" /> Klaviatura tugmalari:</h4>
           <div className="shortcuts-list">
             <span><kbd>Space</kbd> Play/Pause</span>
             <span><kbd>Enter</kbd> Bajarildi</span>

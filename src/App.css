@@ -20,10 +20,13 @@
   --bg-primary: var(--bg);
   --bg-card: var(--card);
   --bg-secondary: var(--card);
+  --card-bg: var(--card);
 
   --text-primary: var(--text);
   --text-secondary: var(--text-light);
   --text-muted: var(--text-light);
+
+  --border-color: var(--border);
 
   --accent-blue: var(--primary);
   --accent-purple: var(--secondary);
@@ -56,10 +59,13 @@
   --bg-primary: var(--bg);
   --bg-card: var(--card);
   --bg-secondary: var(--card);
+  --card-bg: var(--card);
 
   --text-primary: var(--text);
   --text-secondary: var(--text-light);
   --text-muted: var(--text-light);
+
+  --border-color: var(--border);
 
   --accent-blue: var(--primary);
   --accent-purple: var(--secondary);
@@ -503,12 +509,72 @@ body {
 
 /* Footer */
 .footer {
-  text-align: center;
-  padding: 20px;
-  background: var(--card);
-  border-top: 1px solid var(--border);
-  color: var(--text-light);
+  padding: 16px 30px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
   font-size: 0.9rem;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.copyright-symbol {
+  color: #64748b;
+}
+
+.year-badge {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.brand-name {
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-divider {
+  color: #475569;
+}
+
+.footer-tagline {
+  color: #64748b;
+}
+
+.footer-date {
+  color: #94a3b8;
+}
+
+.footer-time {
+  color: #e2e8f0;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.2);
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
 /* Responsive */

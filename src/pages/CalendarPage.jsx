@@ -12,6 +12,8 @@ import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 
 const CalendarPage = () => {
   const [tasks, setTasks] = useState(() => {
@@ -168,7 +170,7 @@ const CalendarPage = () => {
         
         <div className="overview-grid">
           <div className="overview-card">
-            <div className="overview-icon">📅</div>
+            <div className="overview-icon"><CalendarMonthOutlinedIcon /></div>
             <div className="overview-content">
               <div className="overview-label">Oydagi kunlar</div>
               <div className="overview-value">
@@ -178,7 +180,7 @@ const CalendarPage = () => {
           </div>
           
           <div className="overview-card">
-            <div className="overview-icon">📋</div>
+            <div className="overview-icon"><AssignmentOutlinedIcon /></div>
             <div className="overview-content">
               <div className="overview-label">Oylik vazifalar</div>
               <div className="overview-value">
@@ -193,7 +195,7 @@ const CalendarPage = () => {
           </div>
           
           <div className="overview-card">
-            <div className="overview-icon">✅</div>
+            <div className="overview-icon"><CheckCircleOutlineIcon /></div>
             <div className="overview-content">
               <div className="overview-label">Oylik progress</div>
               <div className="overview-value">
@@ -213,7 +215,7 @@ const CalendarPage = () => {
           </div>
           
           <div className="overview-card">
-            <div className="overview-icon">🔥</div>
+            <div className="overview-icon"><LocalFireDepartmentIcon /></div>
             <div className="overview-content">
               <div className="overview-label">Eng faol kun</div>
               <div className="overview-value">

@@ -482,12 +482,29 @@
   background: var(--card-bg);
 }
 
+.dark .summary-card .card-value {
+  color: #f1f5f9;
+}
+
+.dark .summary-card .card-label {
+  color: #94a3b8;
+}
+
+.dark .chart-section h2 {
+  color: #f1f5f9;
+}
+
 .dark .week-selector {
   background: var(--card-bg);
 }
 
+.dark .week-selector .week-label {
+  color: #f1f5f9;
+}
+
 .dark .nav-btn {
   background: var(--bg-secondary);
+  color: #f1f5f9;
 }
 
 .dark .highlight-card {

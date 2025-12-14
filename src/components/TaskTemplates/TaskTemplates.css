@@ -531,12 +531,47 @@
   background: var(--card-bg);
 }
 
+.dark .template-name {
+  color: #f1f5f9;
+}
+
+.dark .template-meta,
+.dark .template-time,
+.dark .template-subtasks {
+  color: #94a3b8;
+}
+
+.dark .templates-header h1 {
+  color: #f1f5f9;
+}
+
+.dark .templates-header p {
+  color: #94a3b8;
+}
+
+.dark .modal-content h2 {
+  color: #f1f5f9;
+}
+
+.dark .modal-content label {
+  color: #e2e8f0;
+}
+
+.dark .modal-content input,
+.dark .modal-content textarea,
+.dark .modal-content select {
+  background: var(--bg-secondary);
+  color: #f1f5f9;
+  border-color: #374151;
+}
+
 .dark .template-icon,
 .dark .emoji-btn,
 .dark .category-btn,
 .dark .priority-btn,
 .dark .cancel-btn {
   background: var(--bg-secondary);
+  color: #f1f5f9;
 }
 
 /* Responsive */

@@ -5,6 +5,7 @@ import { uz } from 'date-fns/locale';
 import './AddTask.css';
 
 // MUI Icons
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import TitleOutlinedIcon from '@mui/icons-material/TitleOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
@@ -14,6 +15,15 @@ import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsAc
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CelebrationOutlinedIcon from '@mui/icons-material/CelebrationOutlined';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
+import RemoveOutlinedIcon from '@mui/icons-material/RemoveOutlined';
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 
 const AddTask = ({ onAddTask }) => {
   const [task, setTask] = useState({
@@ -30,17 +40,17 @@ const AddTask = ({ onAddTask }) => {
   const [errors, setErrors] = useState({});
 
   const categories = [
-    { value: 'work', label: '💼 Ish', icon: '💼', color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.1)' },
-    { value: 'study', label: '📚 O\'qish', icon: '📚', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
-    { value: 'home', label: '🏠 Uy', icon: '🏠', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
-    { value: 'personal', label: '👤 Shaxsiy', icon: '👤', color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.1)' },
-    { value: 'health', label: '🏃 Sog\'lom', icon: '🏃', color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.1)' }
+    { value: 'work', label: 'Ish', icon: <WorkOutlineIcon fontSize="small" />, color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.1)' },
+    { value: 'study', label: 'O\'qish', icon: <SchoolOutlinedIcon fontSize="small" />, color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
+    { value: 'home', label: 'Uy', icon: <HomeOutlinedIcon fontSize="small" />, color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+    { value: 'personal', label: 'Shaxsiy', icon: <PersonOutlinedIcon fontSize="small" />, color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.1)' },
+    { value: 'health', label: 'Sog\'lom', icon: <FitnessCenterOutlinedIcon fontSize="small" />, color: '#3b82f6', bgColor: 'rgba(59, 130, 246, 0.1)' }
   ];
 
   const priorities = [
-    { value: 'low', label: '🟢 Past', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
-    { value: 'medium', label: '🟡 O\'rta', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
-    { value: 'high', label: '🔴 Yuqori', color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.1)' }
+    { value: 'low', label: 'Past', icon: <ArrowDownwardOutlinedIcon fontSize="small" />, color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.1)' },
+    { value: 'medium', label: 'O\'rta', icon: <RemoveOutlinedIcon fontSize="small" />, color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.1)' },
+    { value: 'high', label: 'Yuqori', icon: <ArrowUpwardOutlinedIcon fontSize="small" />, color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.1)' }
   ];
 
   const reminderOptions = [
@@ -172,7 +182,7 @@ const AddTask = ({ onAddTask }) => {
       <div className="add-task-header">
         <div className="header-content">
           <div className="header-icon-wrapper">
-            <span className="header-icon">✨</span>
+                <span className="header-icon" aria-hidden="true"><AutoAwesomeOutlinedIcon /></span>
           </div>
           <div className="header-text">
             <h3>Yangi Vazifa Qo'shish</h3>
@@ -265,7 +275,7 @@ const AddTask = ({ onAddTask }) => {
                   }}
                 >
                   <span className="category-icon">{cat.icon}</span>
-                  <span className="category-label">{cat.label.split(' ')[1]}</span>
+                  <span className="category-label">{cat.label}</span>
                 </button>
               ))}
             </div>
@@ -296,8 +306,8 @@ const AddTask = ({ onAddTask }) => {
                     '--priority-bg': prio.bgColor
                   }}
                 >
-                  <span className="priority-icon">{prio.label.split(' ')[0]}</span>
-                  <span className="priority-label">{prio.label.split(' ')[1]}</span>
+                  <span className="priority-icon">{prio.icon}</span>
+                  <span className="priority-label">{prio.label}</span>
                 </button>
               ))}
             </div>
@@ -320,7 +330,7 @@ const AddTask = ({ onAddTask }) => {
                   onChange={(e) => handleReminderToggle(e.target.checked)}
                   className="reminder-checkbox"
                 />
-                <span className="reminder-icon">🔔</span>
+                <span className="reminder-icon" aria-hidden="true"><NotificationsActiveOutlinedIcon fontSize="small" /></span>
                 <span className="reminder-text">Eslatma qo'shish</span>
               </label>
             </div>
@@ -328,7 +338,7 @@ const AddTask = ({ onAddTask }) => {
             {task.reminder && (
               <div className="reminder-options slide-down">
                 <label className="reminder-option-label">
-                  <span className="option-icon">⏱️</span>
+                  <span className="option-icon" aria-hidden="true"><TimerOutlinedIcon fontSize="small" /></span>
                   Eslatma vaqti:
                 </label>
                 <div className="reminder-buttons">
@@ -365,7 +375,7 @@ const AddTask = ({ onAddTask }) => {
                 });
               }}
             >
-              <span className="btn-icon">✕</span>
+              <span className="btn-icon" aria-hidden="true"><CloseIcon fontSize="small" /></span>
               Bekor qilish
             </button>
             <button 
@@ -373,7 +383,7 @@ const AddTask = ({ onAddTask }) => {
               className="btn-submit btn-glow"
               disabled={!task.title.trim()}
             >
-              <span className="btn-icon">✅</span>
+              <span className="btn-icon" aria-hidden="true"><CheckCircleOutlineIcon fontSize="small" /></span>
               {task.title.trim() ? 'Vazifa Qo\'shish' : 'Nom kiriting'}
             </button>
           </div>
@@ -381,7 +391,7 @@ const AddTask = ({ onAddTask }) => {
 
       {/* Success Notification (would be triggered on successful add) */}
       <div className="success-notification hidden">
-        <span className="notification-icon">🎉</span>
+        <span className="notification-icon" aria-hidden="true"><CelebrationOutlinedIcon fontSize="small" /></span>
         Vazifa muvaffaqiyatli qo'shildi!
       </div>
     </div>

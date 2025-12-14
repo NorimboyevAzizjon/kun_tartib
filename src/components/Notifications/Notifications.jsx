@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Notifications.css';
 
+// MUI Icons
+import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
+import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+import ScienceOutlinedIcon from '@mui/icons-material/ScienceOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 // Ovoz chiqarish funksiyasi
 const playNotificationSound = () => {
   try {
@@ -65,7 +72,7 @@ const Notifications = ({ tasks = [] }) => {
       if (permission === 'granted') {
         setNotificationsEnabled(true);
         localStorage.setItem('notifications-enabled', 'true');
-        showNotification('Bildirishnomalar yoqildi! ✅', 'Endi vazifalar haqida eslatmalar olasiz.');
+        showNotification('Bildirishnomalar yoqildi!', 'Endi vazifalar haqida eslatmalar olasiz.');
       }
     } else {
       alert('Brauzeringiz bildirishnomalarni qo\'llab-quvvatlamaydi');
@@ -210,7 +217,7 @@ const Notifications = ({ tasks = [] }) => {
     <div className="notifications-container glass-effect">
       <div className="notifications-header">
         <h3>
-          <span className="header-icon">🔔</span>
+          <span className="header-icon" aria-hidden="true"><NotificationsOutlinedIcon /></span>
           Bildirishnomalar
         </h3>
         <p className="header-subtitle">Vazifalar haqida eslatmalar oling</p>
@@ -220,7 +227,7 @@ const Notifications = ({ tasks = [] }) => {
         {/* Yoqish/O'chirish */}
         <div className="notification-toggle">
           <div className="toggle-info">
-            <span className="toggle-icon">🔔</span>
+            <span className="toggle-icon" aria-hidden="true"><NotificationsOutlinedIcon /></span>
             <div className="toggle-text">
               <span className="toggle-label">Bildirishnomalar</span>
               <span className="toggle-status">
@@ -326,9 +333,9 @@ const Notifications = ({ tasks = [] }) => {
         {notificationsEnabled && (
           <button 
             className="test-notification-btn"
-            onClick={() => showNotification('Test bildirishnoma 🔔', 'Bildirishnomalar ishlayapti!')}
+            onClick={() => showNotification('Test bildirishnoma', 'Bildirishnomalar ishlayapti!')}
           >
-            <span className="btn-icon">🧪</span>
+            <span className="btn-icon" aria-hidden="true"><ScienceOutlinedIcon fontSize="small" /></span>
             Test bildirishnoma yuborish
           </button>
         )}
@@ -337,7 +344,7 @@ const Notifications = ({ tasks = [] }) => {
         <div className="notification-history">
           <div className="history-header">
             <h4>
-              <span className="section-icon">📜</span>
+              <span className="section-icon" aria-hidden="true"><HistoryOutlinedIcon fontSize="small" /></span>
               Bildirishnomalar tarixi
             </h4>
             {notificationHistory.length > 0 && (
@@ -349,7 +356,7 @@ const Notifications = ({ tasks = [] }) => {
           
           {notificationHistory.length === 0 ? (
             <div className="empty-history">
-              <span className="empty-icon">🔕</span>
+              <span className="empty-icon" aria-hidden="true"><NotificationsOffOutlinedIcon /></span>
               <p>Hozircha bildirishnomalar yo'q</p>
             </div>
           ) : (
@@ -360,7 +367,7 @@ const Notifications = ({ tasks = [] }) => {
                   className={`history-item ${notification.read ? 'read' : 'unread'}`}
                   onClick={() => markAsRead(notification.id)}
                 >
-                  <div className="history-icon">🔔</div>
+                  <div className="history-icon" aria-hidden="true"><NotificationsOutlinedIcon fontSize="small" /></div>
                   <div className="history-content">
                     <span className="history-title">{notification.title}</span>
                     <span className="history-body">{notification.body}</span>

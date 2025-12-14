@@ -10,6 +10,29 @@ import {
 import { uz } from 'date-fns/locale';
 import './TaskList.css';
 
+// MUI Icons
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import NotesOutlinedIcon from '@mui/icons-material/NotesOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import LocalFireDepartmentOutlinedIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
+import BoltOutlinedIcon from '@mui/icons-material/BoltOutlined';
+import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
+import HourglassBottomOutlinedIcon from '@mui/icons-material/HourglassBottomOutlined';
+import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+
 const TaskList = ({ 
   tasks = [], 
   onToggleComplete, 
@@ -75,17 +98,17 @@ const TaskList = ({
 
   // Other helper functions
   const _getStatusIcon = (task) => {
-    if (task.completed) return { icon: '✅', label: 'Bajarilgan' };
+    if (task.completed) return { icon: <CheckCircleOutlineIcon fontSize="small" />, label: 'Bajarilgan' };
     
     const taskDateTime = new Date(`${task.date}T${task.time}`);
     const hoursDiff = differenceInHours(taskDateTime, new Date());
     
-    if (isPast(taskDateTime)) return { icon: '⚠️', label: 'Muddati o\'tgan' };
-    if (hoursDiff < 2) return { icon: '🔥', label: 'Shoshilinch (2 soat)' };
-    if (hoursDiff < 4) return { icon: '⚡', label: 'Juda muhim' };
-    if (isToday(taskDateTime)) return { icon: '📌', label: 'Bugun' };
-    if (isTomorrow(taskDateTime)) return { icon: '⏳', label: 'Ertaga' };
-    return { icon: '📅', label: 'Kelgusi' };
+    if (isPast(taskDateTime)) return { icon: <WarningAmberOutlinedIcon fontSize="small" />, label: 'Muddati o\'tgan' };
+    if (hoursDiff < 2) return { icon: <LocalFireDepartmentOutlinedIcon fontSize="small" />, label: 'Shoshilinch (2 soat)' };
+    if (hoursDiff < 4) return { icon: <BoltOutlinedIcon fontSize="small" />, label: 'Juda muhim' };
+    if (isToday(taskDateTime)) return { icon: <TodayOutlinedIcon fontSize="small" />, label: 'Bugun' };
+    if (isTomorrow(taskDateTime)) return { icon: <HourglassBottomOutlinedIcon fontSize="small" />, label: 'Ertaga' };
+    return { icon: <DateRangeOutlinedIcon fontSize="small" />, label: 'Kelgusi' };
   };
 
   const getPriorityColor = (priority) => {
@@ -99,13 +122,13 @@ const TaskList = ({
 
   const getCategoryIcon = (category) => {
     const icons = {
-      work: { icon: '💼', label: 'Ish' },
-      study: { icon: '📚', label: 'O\'qish' },
-      home: { icon: '🏠', label: 'Uy' },
-      personal: { icon: '👤', label: 'Shaxsiy' },
-      health: { icon: '🏃', label: 'Sog\'lom' }
+      work: { icon: <WorkOutlineIcon fontSize="small" />, label: 'Ish' },
+      study: { icon: <SchoolOutlinedIcon fontSize="small" />, label: 'O\'qish' },
+      home: { icon: <HomeOutlinedIcon fontSize="small" />, label: 'Uy' },
+      personal: { icon: <PersonOutlinedIcon fontSize="small" />, label: 'Shaxsiy' },
+      health: { icon: <FitnessCenterOutlinedIcon fontSize="small" />, label: 'Sog\'lom' }
     };
-    return icons[category] || { icon: '📝', label: 'Boshqa' };
+    return icons[category] || { icon: <NotesOutlinedIcon fontSize="small" />, label: 'Boshqa' };
   };
 
   const formatDateDisplay = (dateString) => {
@@ -157,7 +180,7 @@ const TaskList = ({
       <div className="task-list-header">
         <div className="header-content">
           <div className="header-icon-wrapper">
-            <span className="header-icon">📋</span>
+            <span className="header-icon" aria-hidden="true"><AssignmentOutlinedIcon /></span>
           </div>
           <div className="header-text">
             <h3>Vazifalar Ro'yxati</h3>
@@ -176,7 +199,7 @@ const TaskList = ({
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
-            <span className="search-icon">🔍</span>
+            <span className="search-icon" aria-hidden="true"><SearchOutlinedIcon fontSize="small" /></span>
           </div>
         </div>
       </div>
@@ -216,17 +239,21 @@ const TaskList = ({
                       <h4 className={`task-title ${task.completed ? 'strikethrough' : ''}`}>
                         {task.title}
                       </h4>
-                      {isUrgentTask && <span className="urgent-badge">⚠️ SHOSHILINCH</span>}
+                      {isUrgentTask && (
+                        <span className="urgent-badge">
+                          <WarningAmberOutlinedIcon fontSize="small" /> SHOSHILINCH
+                        </span>
+                      )}
                     </div>
                     
                     {/* Meta info */}
                     <div className="task-meta-row">
                       <span className="meta-item">
-                        <span className="meta-icon">⏰</span>
+                        <span className="meta-icon" aria-hidden="true"><AccessTimeOutlinedIcon fontSize="small" /></span>
                         {task.time}
                       </span>
                       <span className="meta-item">
-                        <span className="meta-icon">📅</span>
+                        <span className="meta-icon" aria-hidden="true"><EventOutlinedIcon fontSize="small" /></span>
                         {formatDateDisplay(task.date)}
                       </span>
                       <span className="meta-item category">
@@ -252,7 +279,7 @@ const TaskList = ({
                         onClick={(e) => handleEdit(e, task.id, task)}
                         title="Tahrirlash"
                       >
-                        ✏️ Tahrirlash
+                        <EditOutlinedIcon fontSize="small" /> Tahrirlash
                       </button>
                     )}
                     <button 
@@ -260,7 +287,7 @@ const TaskList = ({
                       onClick={(e) => handleDelete(e, task.id)}
                       title="O'chirish"
                     >
-                      🗑️ O'chirish
+                      <DeleteOutlineIcon fontSize="small" /> O'chirish
                     </button>
                   </div>
                 </div>
@@ -268,7 +295,7 @@ const TaskList = ({
                 {/* Description if exists */}
                 {task.description && (
                   <div className="task-description">
-                    <span className="desc-icon">📄</span>
+                    <span className="desc-icon" aria-hidden="true"><DescriptionOutlinedIcon fontSize="small" /></span>
                     <span className="desc-text">{task.description}</span>
                   </div>
                 )}
@@ -277,7 +304,7 @@ const TaskList = ({
           })
         ) : (
           <div className="empty-tasks fade-in">
-            <div className="empty-icon">📝</div>
+            <div className="empty-icon" aria-hidden="true"><NotesOutlinedIcon /></div>
             <div className="empty-content">
               <h3>Vazifalar topilmadi</h3>
               <p>
@@ -286,7 +313,7 @@ const TaskList = ({
                   : filter === 'completed' 
                   ? 'Hozircha bajarilgan vazifa yo\'q'
                   : filter === 'pending'
-                  ? 'Barcha vazifalar bajarilgan! 🎉'
+                  ? 'Barcha vazifalar bajarilgan!'
                   : filter === 'urgent'
                   ? 'Shoshilinch vazifalar yo\'q'
                   : 'Hozircha vazifalar yo\'q'
@@ -297,7 +324,7 @@ const TaskList = ({
                   className="clear-search-btn"
                   onClick={() => setSearchQuery('')}
                 >
-                  🔍 Qidiruvni tozalash
+                  <ClearOutlinedIcon fontSize="small" /> Qidiruvni tozalash
                 </button>
               )}
             </div>

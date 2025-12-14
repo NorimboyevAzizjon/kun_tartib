@@ -15,6 +15,14 @@ import {
 import { uz } from 'date-fns/locale';
 import './Calendar.css';
 
+// MUI Icons
+import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined';
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HourglassBottomOutlinedIcon from '@mui/icons-material/HourglassBottomOutlined';
+import NotesOutlinedIcon from '@mui/icons-material/NotesOutlined';
+
 const CalendarWidget = ({ tasks = [] }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -75,7 +83,7 @@ const CalendarWidget = ({ tasks = [] }) => {
       {/* Calendar Header */}
       <div className="calendar-header">
         <button className="nav-btn prev btn-glow" onClick={prevMonth} aria-label="Oldingi oy">
-          <span className="nav-icon">◀️</span>
+          <span className="nav-icon" aria-hidden="true"><ArrowBackIosNewOutlinedIcon fontSize="small" /></span>
         </button>
         
         <div className="current-month">
@@ -84,16 +92,16 @@ const CalendarWidget = ({ tasks = [] }) => {
           </h3>
           <div className="month-stats">
             <span className="stat-item">
-              📅 {tasks.filter(t => isSameMonth(new Date(t.date), currentDate)).length} ta
+              <EventOutlinedIcon fontSize="small" /> {tasks.filter(t => isSameMonth(new Date(t.date), currentDate)).length} ta
             </span>
             <span className="stat-item">
-              ✅ {tasks.filter(t => t.completed && isSameMonth(new Date(t.date), currentDate)).length} ta
+              <CheckCircleOutlineIcon fontSize="small" /> {tasks.filter(t => t.completed && isSameMonth(new Date(t.date), currentDate)).length} ta
             </span>
           </div>
         </div>
         
         <button className="nav-btn next btn-glow" onClick={nextMonth} aria-label="Keyingi oy">
-          <span className="nav-icon">▶️</span>
+          <span className="nav-icon" aria-hidden="true"><ArrowForwardIosOutlinedIcon fontSize="small" /></span>
         </button>
       </div>
 
@@ -143,7 +151,7 @@ const CalendarWidget = ({ tasks = [] }) => {
                         className={`task-indicator ${task.completed ? 'completed' : 'pending'}`}
                         title={`${task.title} - ${task.time}`}
                       >
-                        {task.completed ? '✅' : '⏳'}
+                        {task.completed ? <CheckCircleOutlineIcon fontSize="inherit" /> : <HourglassBottomOutlinedIcon fontSize="inherit" />}
                       </span>
                     ))}
                     {dayTasks.length > 3 && (
@@ -171,7 +179,7 @@ const CalendarWidget = ({ tasks = [] }) => {
 
               {dayTasks.length === 0 && isCurrentMonth && (
                 <div className="no-tasks">
-                  <span className="empty-icon">📝</span>
+                  <span className="empty-icon" aria-hidden="true"><NotesOutlinedIcon fontSize="small" /></span>
                 </div>
               )}
             </div>

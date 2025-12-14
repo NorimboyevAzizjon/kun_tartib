@@ -11,6 +11,8 @@ import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 const SettingsPage = () => {
   const { user, updateProfile } = useAuth();
@@ -47,7 +49,7 @@ const SettingsPage = () => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        setMessage('❌ Rasm hajmi 2MB dan oshmasin');
+        setMessage({ type: 'error', text: 'Rasm hajmi 2MB dan oshmasin' });
         return;
       }
 
@@ -89,14 +91,14 @@ const SettingsPage = () => {
         await updateProfile(updatedData);
       }
 
-      setMessage('✅ Profil saqlandi!');
+      setMessage({ type: 'success', text: 'Profil saqlandi!' });
       
       // Sahifani yangilash
       setTimeout(() => {
         window.location.reload();
       }, 1000);
     } catch (error) {
-      setMessage('❌ Xatolik: ' + error.message);
+      setMessage({ type: 'error', text: 'Xatolik: ' + error.message });
     } finally {
       setSaving(false);
     }
@@ -176,8 +178,9 @@ const SettingsPage = () => {
 
           {/* Saqlash tugmasi */}
           {message && (
-            <div className={`save-message ${message.includes('✅') ? 'success' : 'error'}`}>
-              {message}
+            <div className={`save-message ${message.type}`}>
+              {message.type === 'success' ? <CheckCircleOutlineIcon fontSize="small" /> : <ErrorOutlineIcon fontSize="small" />}
+              {message.text}
             </div>
           )}
 

@@ -120,7 +120,16 @@ const MainLayout = ({ children }) => {
   });
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date());
   const { isAuthenticated } = useAuth();
+
+  // Real-time clock
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -237,7 +246,32 @@ const MainLayout = ({ children }) => {
       </main>
 
       <footer className="footer">
-        <p>© 2025 KunTartib | Vaqtingizni boshqaring</p>
+        <div className="footer-content">
+          <div className="footer-left">
+            <span className="copyright-symbol">©</span>
+            <span className="year-badge">2025</span>
+            <span className="brand-name">KunTartib</span>
+            <span className="footer-divider">|</span>
+            <span className="footer-tagline">Vaqtingizni boshqaring</span>
+          </div>
+          <div className="footer-right">
+            <span className="footer-date">
+              {currentTime.toLocaleDateString('uz-UZ', { 
+                day: '2-digit', 
+                month: 'long', 
+                year: 'numeric' 
+              })}
+            </span>
+            <span className="footer-divider">|</span>
+            <span className="footer-time">
+              {currentTime.toLocaleTimeString('uz-UZ', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+              })}
+            </span>
+          </div>
+        </div>
       </footer>
     </div>
   );

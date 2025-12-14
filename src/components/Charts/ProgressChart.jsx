@@ -3,6 +3,23 @@ import { format, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from 'da
 import { uz } from 'date-fns/locale';
 import './WeeklyChart.css';
 
+// MUI Icons
+import TrendingUpOutlinedIcon from '@mui/icons-material/TrendingUpOutlined';
+import TrendingDownOutlinedIcon from '@mui/icons-material/TrendingDownOutlined';
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import EqualizerOutlinedIcon from '@mui/icons-material/EqualizerOutlined';
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HourglassBottomOutlinedIcon from '@mui/icons-material/HourglassBottomOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import LocalFireDepartmentOutlinedIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
+import LightbulbOutlinedIcon from '@mui/icons-material/LightbulbOutlined';
+import GpsFixedOutlinedIcon from '@mui/icons-material/GpsFixedOutlined';
+import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
+
 const ProgressChart = ({ tasks = [] }) => {
   // Haftalik progress statistikasini hisoblash
   const { weeklyProgress, stats } = useMemo(() => {
@@ -75,11 +92,11 @@ const ProgressChart = ({ tasks = [] }) => {
 
   // Efficiency darajasini aniqlash
   const getEfficiencyLevel = (percentage) => {
-    if (percentage >= 90) return { level: 'Ajoyib', icon: '🏆', color: '#10b981' };
-    if (percentage >= 70) return { level: 'Yaxshi', icon: '✨', color: '#34d399' };
-    if (percentage >= 50) return { level: 'Qoniqarli', icon: '👍', color: '#fbbf24' };
-    if (percentage >= 30) return { level: 'O\'rtacha', icon: '📊', color: '#f59e0b' };
-    return { level: 'Yaxshilash kerak', icon: '📈', color: '#f97316' };
+    if (percentage >= 90) return { level: 'Ajoyib', icon: <EmojiEventsOutlinedIcon fontSize="small" />, color: '#10b981' };
+    if (percentage >= 70) return { level: 'Yaxshi', icon: <AutoAwesomeOutlinedIcon fontSize="small" />, color: '#34d399' };
+    if (percentage >= 50) return { level: 'Qoniqarli', icon: <ThumbUpAltOutlinedIcon fontSize="small" />, color: '#fbbf24' };
+    if (percentage >= 30) return { level: 'O\'rtacha', icon: <EqualizerOutlinedIcon fontSize="small" />, color: '#f59e0b' };
+    return { level: 'Yaxshilash kerak', icon: <TrendingUpOutlinedIcon fontSize="small" />, color: '#f97316' };
   };
 
   const overallEfficiency = getEfficiencyLevel(stats.overallEfficiency);
@@ -90,7 +107,7 @@ const ProgressChart = ({ tasks = [] }) => {
       <div className="chart-header">
         <div className="header-content">
           <div className="header-icon-wrapper">
-            <span className="header-icon">📈</span>
+            <span className="header-icon" aria-hidden="true"><TrendingUpOutlinedIcon /></span>
           </div>
           <div className="header-text">
             <h3 className="chart-title">Progress Monitoring</h3>
@@ -118,7 +135,7 @@ const ProgressChart = ({ tasks = [] }) => {
       <div className="progress-bars-section">
         <div className="section-header">
           <h4 className="section-title">
-            <span className="section-icon">📅</span>
+            <span className="section-icon" aria-hidden="true"><EventOutlinedIcon fontSize="small" /></span>
             Haftalik Progress
           </h4>
           <p className="section-subtitle">
@@ -163,15 +180,15 @@ const ProgressChart = ({ tasks = [] }) => {
                 <div className="bar-footer">
                   <div className="day-stats">
                     <div className="stat-item">
-                      <span className="stat-icon">📋</span>
+                      <span className="stat-icon" aria-hidden="true"><AssignmentOutlinedIcon fontSize="inherit" /></span>
                       <span className="stat-label">{day.total} ta</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-icon">✅</span>
+                      <span className="stat-icon" aria-hidden="true"><CheckCircleOutlineIcon fontSize="inherit" /></span>
                       <span className="stat-label success">{day.completed} ta</span>
                     </div>
                     <div className="stat-item">
-                      <span className="stat-icon">⏳</span>
+                      <span className="stat-icon" aria-hidden="true"><HourglassBottomOutlinedIcon fontSize="inherit" /></span>
                       <span className="stat-label warning">{day.pending} ta</span>
                     </div>
                   </div>
@@ -190,7 +207,7 @@ const ProgressChart = ({ tasks = [] }) => {
       <div className="stats-summary">
         <div className="summary-header">
           <h4 className="summary-title">
-            <span className="summary-icon">📊</span>
+            <span className="summary-icon" aria-hidden="true"><InsightsOutlinedIcon fontSize="small" /></span>
             Statistik Xulosa
           </h4>
         </div>
@@ -198,7 +215,7 @@ const ProgressChart = ({ tasks = [] }) => {
         <div className="summary-grid">
           <div className="summary-card total-tasks card-hover">
             <div className="summary-icon">
-              <span className="icon-emoji">📋</span>
+              <span className="icon-emoji" aria-hidden="true"><AssignmentOutlinedIcon /></span>
             </div>
             <div className="summary-content">
               <div className="summary-label">Jami Vazifalar</div>
@@ -209,7 +226,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="summary-card completed-tasks card-hover">
             <div className="summary-icon">
-              <span className="icon-emoji">✅</span>
+              <span className="icon-emoji" aria-hidden="true"><CheckCircleOutlineIcon /></span>
             </div>
             <div className="summary-content">
               <div className="summary-label">Bajarilgan</div>
@@ -225,7 +242,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="summary-card average-progress card-hover">
             <div className="summary-icon">
-              <span className="icon-emoji">📈</span>
+              <span className="icon-emoji" aria-hidden="true"><TrendingUpOutlinedIcon /></span>
             </div>
             <div className="summary-content">
               <div className="summary-label">O'rtacha Progress</div>
@@ -236,7 +253,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="summary-card most-productive card-hover">
             <div className="summary-icon">
-              <span className="icon-emoji">🔥</span>
+              <span className="icon-emoji" aria-hidden="true"><LocalFireDepartmentOutlinedIcon /></span>
             </div>
             <div className="summary-content">
               <div className="summary-label">Eng Samarali Kun</div>
@@ -255,7 +272,7 @@ const ProgressChart = ({ tasks = [] }) => {
       <div className="insights-section">
         <div className="insights-header">
           <h4 className="insights-title">
-            <span className="insights-icon">💡</span>
+            <span className="insights-icon" aria-hidden="true"><LightbulbOutlinedIcon fontSize="small" /></span>
             Tahlil va Tavsiyalar
           </h4>
         </div>
@@ -263,7 +280,7 @@ const ProgressChart = ({ tasks = [] }) => {
         <div className="insights-grid">
           <div className="insight-card performance card-hover">
             <div className="insight-icon">
-              <span className="icon-emoji">🏆</span>
+              <span className="icon-emoji" aria-hidden="true"><EmojiEventsOutlinedIcon /></span>
             </div>
             <div className="insight-content">
               <div className="insight-title">Umumiy Samaradorlik</div>
@@ -281,7 +298,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="insight-card trend card-hover">
             <div className="insight-icon">
-              <span className="icon-emoji">📊</span>
+              <span className="icon-emoji" aria-hidden="true"><InsightsOutlinedIcon /></span>
             </div>
             <div className="insight-content">
               <div className="insight-title">Progress Trendi</div>
@@ -291,8 +308,8 @@ const ProgressChart = ({ tasks = [] }) => {
               <div className="insight-sub">
                 {weeklyProgress[weeklyProgress.length - 1]?.completionRate > 
                  weeklyProgress[0]?.completionRate 
-                  ? "Progress o'smoqda 📈"    // "" ichiga oldik
-                  : "Progress pasaymoqda 📉"   // "" ichiga oldik
+                  ? <>Progress o'smoqda <TrendingUpOutlinedIcon fontSize="inherit" /></>
+                  : <>Progress pasaymoqda <TrendingDownOutlinedIcon fontSize="inherit" /></>
                 }
               </div>
             </div>
@@ -300,7 +317,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="insight-card recommendation card-hover">
             <div className="insight-icon">
-              <span className="icon-emoji">🎯</span>
+              <span className="icon-emoji" aria-hidden="true"><GpsFixedOutlinedIcon /></span>
             </div>
             <div className="insight-content">
               <div className="insight-title">Tavsiya</div>
@@ -321,7 +338,7 @@ const ProgressChart = ({ tasks = [] }) => {
           
           <div className="insight-card prediction card-hover">
             <div className="insight-icon">
-              <span className="icon-emoji">🔮</span>
+              <span className="icon-emoji" aria-hidden="true"><AutoGraphOutlinedIcon /></span>
             </div>
             <div className="insight-content">
               <div className="insight-title">Bashorat</div>

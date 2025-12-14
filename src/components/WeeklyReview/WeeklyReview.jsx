@@ -23,6 +23,15 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import DownloadIcon from '@mui/icons-material/Download';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
+import NotesOutlinedIcon from '@mui/icons-material/NotesOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import EventOutlinedIcon from '@mui/icons-material/EventOutlined';
+import CelebrationOutlinedIcon from '@mui/icons-material/CelebrationOutlined';
 
 const WeeklyReview = ({ tasks = [] }) => {
   const [selectedWeek, setSelectedWeek] = useState(new Date());
@@ -133,13 +142,13 @@ const WeeklyReview = ({ tasks = [] }) => {
 
   const getCategoryIcon = (category) => {
     const icons = {
-      work: '💼',
-      study: '📚',
-      home: '🏠',
-      personal: '👤',
-      health: '🏃'
+      work: <WorkOutlineIcon fontSize="small" />,
+      study: <SchoolOutlinedIcon fontSize="small" />,
+      home: <HomeOutlinedIcon fontSize="small" />,
+      personal: <PersonOutlinedIcon fontSize="small" />,
+      health: <FitnessCenterOutlinedIcon fontSize="small" />
     };
-    return icons[category] || '📝';
+    return icons[category] || <NotesOutlinedIcon fontSize="small" />;
   };
 
   const getCategoryLabel = (category) => {
@@ -268,7 +277,7 @@ ${format(new Date(), 'dd.MM.yyyy HH:mm')}
       {/* Summary Cards */}
       <div className="summary-cards">
         <div className="summary-card total">
-          <div className="card-icon">📊</div>
+          <div className="card-icon" aria-hidden="true"><InsightsOutlinedIcon /></div>
           <div className="card-content">
             <span className="card-value">{weekData.total}</span>
             <span className="card-label">Jami vazifalar</span>
@@ -320,7 +329,7 @@ ${format(new Date(), 'dd.MM.yyyy HH:mm')}
 
       {/* Daily Chart */}
       <div className="chart-section">
-        <h2>📅 Kunlik statistika</h2>
+        <h2><EventOutlinedIcon fontSize="small" /> Kunlik statistika</h2>
         <div className="daily-chart">
           {weekData.dailyStats.map((day, index) => (
             <div key={index} className="day-bar">
@@ -411,7 +420,7 @@ ${format(new Date(), 'dd.MM.yyyy HH:mm')}
       {weekData.mostProductiveDay && weekData.mostProductiveDay.completed > 0 && (
         <div className="highlight-section">
           <div className="highlight-card">
-            <span className="highlight-icon">🏆</span>
+            <span className="highlight-icon" aria-hidden="true"><EmojiEventsOutlinedIcon /></span>
             <div className="highlight-content">
               <h3>Eng samarali kun</h3>
               <p>{format(weekData.mostProductiveDay.date, 'EEEE, dd MMMM', { locale: uz })}</p>
@@ -425,22 +434,22 @@ ${format(new Date(), 'dd.MM.yyyy HH:mm')}
       <div className="motivation-section">
         {weekData.completionRate >= 80 ? (
           <div className="motivation excellent">
-            <span className="motivation-icon">🎉</span>
+            <span className="motivation-icon" aria-hidden="true"><CelebrationOutlinedIcon /></span>
             <p>Ajoyib hafta! Siz {weekData.completionRate}% vazifalarni bajardingiz. Shu ruhda davom eting!</p>
           </div>
         ) : weekData.completionRate >= 50 ? (
           <div className="motivation good">
-            <span className="motivation-icon">💪</span>
+            <span className="motivation-icon" aria-hidden="true"><FitnessCenterOutlinedIcon /></span>
             <p>Yaxshi ish! {weekData.completionRate}% bajarilish - yomon emas. Keyingi hafta yana yaxshiroq bo'ladi!</p>
           </div>
         ) : weekData.total > 0 ? (
           <div className="motivation improve">
-            <span className="motivation-icon">🌱</span>
+            <span className="motivation-icon" aria-hidden="true"><TrendingUpIcon /></span>
             <p>Har bir qadam muhim! Keyingi hafta yanada ko'proq vazifalarni bajaring.</p>
           </div>
         ) : (
           <div className="motivation empty">
-            <span className="motivation-icon">📝</span>
+            <span className="motivation-icon" aria-hidden="true"><NotesOutlinedIcon /></span>
             <p>Bu hafta vazifalar yo'q. Yangi hafta uchun rejalashtiring!</p>
           </div>
         )}

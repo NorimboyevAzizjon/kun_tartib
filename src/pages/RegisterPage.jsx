@@ -3,6 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
 
+// MUI Icons
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import CloudOutlinedIcon from '@mui/icons-material/CloudOutlined';
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
+import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
+
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { register, loading, error } = useAuth();
@@ -62,21 +75,21 @@ const RegisterPage = () => {
         {/* Left Side - Branding */}
         <div className="auth-branding">
           <div className="brand-content">
-            <div className="brand-logo">📅</div>
+            <div className="brand-logo"><CalendarMonthOutlinedIcon style={{ fontSize: 64 }} /></div>
             <h1>KunTartib</h1>
             <p>Yangi hisob yarating va samarali ishni boshlang</p>
             
             <div className="brand-features">
               <div className="feature-item">
-                <span className="feature-icon">🔒</span>
+                <span className="feature-icon"><LockOutlinedIcon /></span>
                 <span>Xavfsiz va ishonchli</span>
               </div>
               <div className="feature-item">
-                <span className="feature-icon">☁️</span>
+                <span className="feature-icon"><CloudOutlinedIcon /></span>
                 <span>Cloud sync</span>
               </div>
               <div className="feature-item">
-                <span className="feature-icon">📱</span>
+                <span className="feature-icon"><DevicesOutlinedIcon /></span>
                 <span>Har qanday qurilmada</span>
               </div>
             </div>
@@ -93,7 +106,7 @@ const RegisterPage = () => {
 
             {(formError || error) && (
               <div className="auth-error">
-                <span className="error-icon">⚠️</span>
+                <span className="error-icon"><WarningAmberOutlinedIcon fontSize="small" /></span>
                 {formError || error}
               </div>
             )}
@@ -101,7 +114,7 @@ const RegisterPage = () => {
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="form-group">
                 <label htmlFor="name">
-                  <span className="label-icon">👤</span>
+                  <span className="label-icon"><PersonOutlinedIcon fontSize="small" /></span>
                   Ismingiz
                 </label>
                 <input
@@ -117,7 +130,7 @@ const RegisterPage = () => {
 
               <div className="form-group">
                 <label htmlFor="email">
-                  <span className="label-icon">📧</span>
+                  <span className="label-icon"><EmailOutlinedIcon fontSize="small" /></span>
                   Email
                 </label>
                 <input
@@ -133,7 +146,7 @@ const RegisterPage = () => {
 
               <div className="form-group">
                 <label htmlFor="password">
-                  <span className="label-icon">🔒</span>
+                  <span className="label-icon"><LockOutlinedIcon fontSize="small" /></span>
                   Parol
                 </label>
                 <div className="password-input">
@@ -151,14 +164,14 @@ const RegisterPage = () => {
                     className="password-toggle"
                     onClick={() => setShowPassword(!showPassword)}
                   >
-                    {showPassword ? '🙈' : '👁️'}
+                    {showPassword ? <VisibilityOffOutlinedIcon fontSize="small" /> : <VisibilityOutlinedIcon fontSize="small" />}
                   </button>
                 </div>
               </div>
 
               <div className="form-group">
                 <label htmlFor="confirmPassword">
-                  <span className="label-icon">🔐</span>
+                  <span className="label-icon"><LockOpenOutlinedIcon fontSize="small" /></span>
                   Parolni tasdiqlang
                 </label>
                 <input
@@ -184,7 +197,7 @@ const RegisterPage = () => {
                   </>
                 ) : (
                   <>
-                    <span>✨</span>
+                    <AutoAwesomeOutlinedIcon fontSize="small" />
                     Ro'yxatdan o'tish
                   </>
                 )}
