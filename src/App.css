@@ -484,7 +484,8 @@ body {
   gap: 6px;
   height: 48px;
   overflow-x: auto;
-  scrollbar-width: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
 .nav-secondary-container::-webkit-scrollbar {

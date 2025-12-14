@@ -1,0 +1,247 @@
+/* Draggable Task List Styles */
+
+.draggable-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.draggable-task {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--card-bg, white);
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  transition: all 0.2s;
+}
+
+.draggable-task:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
+}
+
+.draggable-task.completed {
+  opacity: 0.7;
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.draggable-task.dragging {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border-color: #6366f1;
+}
+
+.draggable-task.overdue {
+  border-left: 3px solid #ef4444;
+}
+
+/* Drag Handle */
+.drag-handle {
+  cursor: grab;
+  color: var(--text-secondary, #94a3b8);
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.drag-handle:hover {
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Checkbox */
+.task-checkbox {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary, #94a3b8);
+  transition: all 0.2s;
+}
+
+.task-checkbox:hover {
+  color: #10b981;
+  transform: scale(1.1);
+}
+
+.task-checkbox .checked {
+  color: #10b981;
+}
+
+/* Task Content */
+.task-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.task-title {
+  font-weight: 500;
+  color: var(--text-primary, #1e293b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-title.strikethrough {
+  text-decoration: line-through;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.task-priority {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Task Meta */
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #64748b);
+}
+
+.meta-item.tags {
+  color: #8b5cf6;
+}
+
+.meta-item.time-spent {
+  color: #3b82f6;
+}
+
+/* Task Actions */
+.task-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.draggable-task:hover .task-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.action-btn.edit {
+  color: #6366f1;
+}
+
+.action-btn.edit:hover {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.action-btn.archive {
+  color: #f59e0b;
+}
+
+.action-btn.archive:hover {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.action-btn.delete {
+  color: #ef4444;
+}
+
+.action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Task Preview (Drag Overlay) */
+.task-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--card-bg, white);
+  border-radius: 12px;
+  border: 2px solid #6366f1;
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.3);
+  color: var(--text-primary, #1e293b);
+  font-weight: 500;
+}
+
+/* Empty State */
+.empty-draggable-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: var(--text-secondary, #64748b);
+}
+
+.empty-draggable-list p {
+  margin-top: 0.5rem;
+}
+
+/* Dark Mode */
+.dark .draggable-task {
+  background: var(--card-bg);
+}
+
+.dark .draggable-task.completed {
+  background: var(--bg-secondary);
+}
+
+.dark .task-preview {
+  background: var(--card-bg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .draggable-task {
+    flex-wrap: wrap;
+  }
+  
+  .task-actions {
+    opacity: 1;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-color, #e2e8f0);
+  }
+  
+  .task-content {
+    flex: 1 1 calc(100% - 80px);
+  }
+}

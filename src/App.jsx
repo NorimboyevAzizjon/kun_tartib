@@ -18,6 +18,10 @@ import TemplatesPage from './pages/TemplatesPage';
 import WeeklyReviewPage from './pages/WeeklyReviewPage';
 import NotesPage from './pages/NotesPage';
 import GamificationPage from './pages/GamificationPage';
+// Yangi qo'shilgan sahifalar
+import StatsPage from './pages/StatsPage';
+import ArchivePage from './pages/ArchivePage';
+import TagsPage from './pages/TagsPage';
 import './App.css';
 
 // MUI Icons
@@ -42,6 +46,9 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
 import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
+import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
+import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
+import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
 
 // Navigation Link Komponenti
 const NavLink = ({ to, children, icon }) => {
@@ -218,6 +225,9 @@ const MainLayout = ({ children }) => {
             <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
             <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
+            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
+            <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
+            <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
           </div>
         </div>
@@ -235,6 +245,9 @@ const MainLayout = ({ children }) => {
             <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
             <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
+            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
+            <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
+            <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
           </div>
@@ -320,6 +333,15 @@ function App() {
             } />
             <Route path="/achievements" element={
               <ProtectedRoute><GamificationPage /></ProtectedRoute>
+            } />
+            <Route path="/advanced-stats" element={
+              <ProtectedRoute><StatsPage /></ProtectedRoute>
+            } />
+            <Route path="/archive" element={
+              <ProtectedRoute><ArchivePage /></ProtectedRoute>
+            } />
+            <Route path="/tags" element={
+              <ProtectedRoute><TagsPage /></ProtectedRoute>
             } />
             <Route path="/notifications" element={
               <ProtectedRoute><NotificationsPage /></ProtectedRoute>
