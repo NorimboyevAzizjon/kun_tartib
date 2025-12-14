@@ -235,19 +235,14 @@ const TaskList = ({
 
                   {/* Task Info */}
                   <div className="task-info">
-                    <div className="task-title-row">
-                      <h4 className={`task-title ${task.completed ? 'strikethrough' : ''}`}>
-                        {task.title}
-                      </h4>
-                      {isUrgentTask && (
-                        <span className="urgent-badge">
-                          <WarningAmberOutlinedIcon fontSize="small" /> SHOSHILINCH
-                        </span>
-                      )}
+                    {/* Kategoriya va task nomi bir qatorda */}
+                    <div className="tasklist-header-row">
+                      <span className="tasklist-category-label">
+                        {category.icon} {category.label}
+                      </span>
                     </div>
-                    
-                    {/* Meta info */}
                     <div className="task-meta-row">
+                      <span className="meta-item task-title-badge">{task.title}</span>
                       <span className="meta-item">
                         <span className="meta-icon" aria-hidden="true"><AccessTimeOutlinedIcon fontSize="small" /></span>
                         {task.time}
@@ -269,27 +264,27 @@ const TaskList = ({
                         {task.priority === 'low' && 'Past'}
                       </span>
                     </div>
+                    <div className="task-actions">
+                      {onEdit && (
+                        <button 
+                          className="action-btn edit-btn"
+                          onClick={(e) => handleEdit(e, task.id, task)}
+                          title="Tahrirlash"
+                        >
+                          <EditOutlinedIcon fontSize="small" /> 
+                        </button>
+                      )}
+                      <button 
+                        className="action-btn delete-btn"
+                        onClick={(e) => handleDelete(e, task.id)}
+                        title="O'chirish"
+                      >
+                        <DeleteOutlineIcon fontSize="small" /> 
+                      </button>
+                    </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="task-actions">
-                    {onEdit && (
-                      <button 
-                        className="action-btn edit-btn"
-                        onClick={(e) => handleEdit(e, task.id, task)}
-                        title="Tahrirlash"
-                      >
-                        <EditOutlinedIcon fontSize="small" /> Tahrirlash
-                      </button>
-                    )}
-                    <button 
-                      className="action-btn delete-btn"
-                      onClick={(e) => handleDelete(e, task.id)}
-                      title="O'chirish"
-                    >
-                      <DeleteOutlineIcon fontSize="small" /> O'chirish
-                    </button>
-                  </div>
+                  {/* Actions removed: duplicate */}
                 </div>
 
                 {/* Description if exists */}
