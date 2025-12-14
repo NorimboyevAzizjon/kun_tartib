@@ -11,6 +11,13 @@ import NotificationsPage from './pages/NotificationsPage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+// Yangi sahifalar
+import PomodoroPage from './pages/PomodoroPage';
+import FocusPage from './pages/FocusPage';
+import TemplatesPage from './pages/TemplatesPage';
+import WeeklyReviewPage from './pages/WeeklyReviewPage';
+import NotesPage from './pages/NotesPage';
+import GamificationPage from './pages/GamificationPage';
 import './App.css';
 
 // MUI Icons
@@ -28,6 +35,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import EventNoteIcon from '@mui/icons-material/EventNote';
+// Yangi ikonkalar
+import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import CenterFocusStrongOutlinedIcon from '@mui/icons-material/CenterFocusStrongOutlined';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import AssessmentOutlinedIcon from '@mui/icons-material/AssessmentOutlined';
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
+import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 
 // Navigation Link Komponenti
 const NavLink = ({ to, children, icon }) => {
@@ -161,9 +175,8 @@ const MainLayout = ({ children }) => {
             <NavLink to="/" icon={<AssignmentOutlinedIcon fontSize="small" />}>Vazifalar</NavLink>
             <NavLink to="/dashboard" icon={<BarChartOutlinedIcon fontSize="small" />}>Statistika</NavLink>
             <NavLink to="/calendar" icon={<CalendarMonthOutlinedIcon fontSize="small" />}>Kalendar</NavLink>
-            <NavLink to="/recurring" icon={<RepeatOutlinedIcon fontSize="small" />}>Takroriy</NavLink>
+            <NavLink to="/pomodoro" icon={<TimerOutlinedIcon fontSize="small" />}>Pomodoro</NavLink>
             <NavLink to="/goals" icon={<FlagOutlinedIcon fontSize="small" />}>Maqsadlar</NavLink>
-            <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
           </div>
 
           <div className="nav-actions">
@@ -187,13 +200,32 @@ const MainLayout = ({ children }) => {
           </div>
         </div>
 
+        {/* Ikkinchi qator - qo'shimcha sahifalar */}
+        <div className="nav-secondary">
+          <div className="nav-secondary-container">
+            <NavLink to="/focus" icon={<CenterFocusStrongOutlinedIcon fontSize="small" />}>Focus Mode</NavLink>
+            <NavLink to="/recurring" icon={<RepeatOutlinedIcon fontSize="small" />}>Takroriy</NavLink>
+            <NavLink to="/templates" icon={<BookmarkBorderOutlinedIcon fontSize="small" />}>Shablonlar</NavLink>
+            <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
+            <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
+            <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
+            <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
+          </div>
+        </div>
+
         {isMobileMenuOpen && (
           <div className="mobile-menu">
             <NavLink to="/" icon={<AssignmentOutlinedIcon fontSize="small" />}>Vazifalar</NavLink>
             <NavLink to="/dashboard" icon={<BarChartOutlinedIcon fontSize="small" />}>Statistika</NavLink>
             <NavLink to="/calendar" icon={<CalendarMonthOutlinedIcon fontSize="small" />}>Kalendar</NavLink>
+            <NavLink to="/pomodoro" icon={<TimerOutlinedIcon fontSize="small" />}>Pomodoro</NavLink>
+            <NavLink to="/focus" icon={<CenterFocusStrongOutlinedIcon fontSize="small" />}>Focus Mode</NavLink>
             <NavLink to="/recurring" icon={<RepeatOutlinedIcon fontSize="small" />}>Takroriy</NavLink>
             <NavLink to="/goals" icon={<FlagOutlinedIcon fontSize="small" />}>Maqsadlar</NavLink>
+            <NavLink to="/templates" icon={<BookmarkBorderOutlinedIcon fontSize="small" />}>Shablonlar</NavLink>
+            <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
+            <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
+            <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
             <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
           </div>
@@ -231,11 +263,29 @@ function App() {
             <Route path="/calendar" element={
               <ProtectedRoute><CalendarPage /></ProtectedRoute>
             } />
+            <Route path="/pomodoro" element={
+              <ProtectedRoute><PomodoroPage /></ProtectedRoute>
+            } />
+            <Route path="/focus" element={
+              <ProtectedRoute><FocusPage /></ProtectedRoute>
+            } />
             <Route path="/recurring" element={
               <ProtectedRoute><RecurringPage /></ProtectedRoute>
             } />
             <Route path="/goals" element={
               <ProtectedRoute><GoalsPage /></ProtectedRoute>
+            } />
+            <Route path="/templates" element={
+              <ProtectedRoute><TemplatesPage /></ProtectedRoute>
+            } />
+            <Route path="/weekly-review" element={
+              <ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>
+            } />
+            <Route path="/notes" element={
+              <ProtectedRoute><NotesPage /></ProtectedRoute>
+            } />
+            <Route path="/achievements" element={
+              <ProtectedRoute><GamificationPage /></ProtectedRoute>
             } />
             <Route path="/notifications" element={
               <ProtectedRoute><NotificationsPage /></ProtectedRoute>

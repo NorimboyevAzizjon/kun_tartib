@@ -1,0 +1,5 @@
+/* Pomodoro Page */
+.pomodoro-page {
+  min-height: calc(100vh - 140px);
+  padding: 0;
+}

@@ -1,0 +1,4 @@
+/* Notes Page */
+.notes-page {
+  min-height: calc(100vh - 140px);
+}

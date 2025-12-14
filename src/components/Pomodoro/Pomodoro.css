@@ -345,3 +345,60 @@
     font-size: 1.4rem;
   }
 }
+/* Dark Mode */
+[data-theme="dark"] .pomodoro-container {
+  background: var(--card);
+}
+
+[data-theme="dark"] .pomodoro-header h2 {
+  color: var(--text);
+}
+
+[data-theme="dark"] .sound-btn,
+[data-theme="dark"] .settings-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .mode-tab {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .timer-text .time {
+  color: var(--text);
+}
+
+[data-theme="dark"] .timer-label {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .pomodoro-stats .stat-card {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .stat-value {
+  color: var(--text);
+}
+
+[data-theme="dark"] .stat-label {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .settings-modal {
+  background: var(--card);
+}
+
+[data-theme="dark"] .modal-header h3 {
+  color: var(--text);
+}
+
+[data-theme="dark"] .setting-item label {
+  color: var(--text);
+}
+
+[data-theme="dark"] .setting-item input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border);
+  color: var(--text);
+}

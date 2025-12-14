@@ -1,0 +1,4 @@
+/* Focus Page */
+.focus-page {
+  min-height: calc(100vh - 140px);
+}

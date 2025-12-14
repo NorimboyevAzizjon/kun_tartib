@@ -452,3 +452,54 @@
     grid-template-columns: 1fr;
   }
 }
+/* Dark Mode */
+[data-theme="dark"] .goals-container {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .goals-header h3,
+[data-theme="dark"] .goal-title,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .goals-tips h4 {
+  color: var(--text);
+}
+
+[data-theme="dark"] .goals-header .header-subtitle,
+[data-theme="dark"] .goal-description,
+[data-theme="dark"] .empty-state .empty-hint,
+[data-theme="dark"] .goal-deadline,
+[data-theme="dark"] .goals-tips li {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .goal-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .add-goal-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .add-goal-form input,
+[data-theme="dark"] .add-goal-form select,
+[data-theme="dark"] .add-goal-form textarea {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] .add-goal-form label {
+  color: var(--text);
+}
+
+[data-theme="dark"] .goal-progress-bar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .goals-tips {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}

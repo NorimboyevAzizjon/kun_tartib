@@ -1,0 +1,4 @@
+/* Weekly Review Page */
+.weekly-review-page {
+  min-height: calc(100vh - 140px);
+}

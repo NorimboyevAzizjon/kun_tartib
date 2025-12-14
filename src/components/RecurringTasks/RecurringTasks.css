@@ -319,3 +319,42 @@
     justify-content: flex-end;
   }
 }
+/* Dark Mode */
+[data-theme="dark"] .recurring-tasks-container {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .recurring-header h3,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .recurring-title {
+  color: var(--text);
+}
+
+[data-theme="dark"] .recurring-header .header-subtitle,
+[data-theme="dark"] .empty-state .empty-hint,
+[data-theme="dark"] .recurring-schedule,
+[data-theme="dark"] .recurring-time {
+  color: var(--text-light);
+}
+
+[data-theme="dark"] .recurring-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .add-recurring-form {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .add-recurring-form input,
+[data-theme="dark"] .add-recurring-form select {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+[data-theme="dark"] .add-recurring-form label {
+  color: var(--text);
+}
