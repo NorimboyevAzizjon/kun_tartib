@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Pomodoro from '../components/Pomodoro/Pomodoro';
 import './PomodoroPage.css';
 
 const PomodoroPage = () => {
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
+  const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('kuntartib-tasks');
-    if (saved) {
-      const allTasks = JSON.parse(saved);
-      // Filter only incomplete tasks
-      setTasks(allTasks.filter(t => !t.completed));
-    }
-  }, []);
+    if (!saved) return [];
+    const allTasks = JSON.parse(saved);
+    return allTasks.filter(t => !t.completed);
+  });
 
   const handleComplete = (taskId) => {
     const saved = localStorage.getItem('kuntartib-tasks');

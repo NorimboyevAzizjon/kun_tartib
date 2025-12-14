@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FocusMode from '../components/FocusMode/FocusMode';
 import './FocusPage.css';
 
 const FocusPage = () => {
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
+  const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('kuntartib-tasks');
-    if (saved) {
-      setTasks(JSON.parse(saved));
-    }
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
 
   const handleComplete = (taskId) => {
     const updated = tasks.map(t => 

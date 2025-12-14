@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import WeeklyReview from '../components/WeeklyReview/WeeklyReview';
 import './WeeklyReviewPage.css';
 
 const WeeklyReviewPage = () => {
-  const [tasks, setTasks] = useState([]);
-
-  useEffect(() => {
+  const [tasks] = useState(() => {
     const saved = localStorage.getItem('kuntartib-tasks');
-    if (saved) {
-      setTasks(JSON.parse(saved));
-    }
-  }, []);
+    return saved ? JSON.parse(saved) : [];
+  });
 
   return (
     <div className="weekly-review-page">

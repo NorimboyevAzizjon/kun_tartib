@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { 
   format, 
   startOfWeek, 
@@ -26,8 +26,6 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const WeeklyReview = ({ tasks = [] }) => {
   const [selectedWeek, setSelectedWeek] = useState(new Date());
-  const [weekData, setWeekData] = useState(null);
-  const [previousWeekData, setPreviousWeekData] = useState(null);
 
   const weekStart = startOfWeek(selectedWeek, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(selectedWeek, { weekStartsOn: 1 });
@@ -36,8 +34,7 @@ const WeeklyReview = ({ tasks = [] }) => {
   const prevWeekStart = startOfWeek(subWeeks(selectedWeek, 1), { weekStartsOn: 1 });
   const prevWeekEnd = endOfWeek(subWeeks(selectedWeek, 1), { weekStartsOn: 1 });
 
-  useEffect(() => {
-    // Calculate current week data
+  const weekData = useMemo(() => {
     const currentWeekTasks = tasks.filter(task => {
       const taskDate = parseISO(task.date);
       return isWithinInterval(taskDate, { start: weekStart, end: weekEnd });
@@ -79,7 +76,7 @@ const WeeklyReview = ({ tasks = [] }) => {
       }
     });
 
-    setWeekData({
+    return {
       total: currentWeekTasks.length,
       completed: completed.length,
       incomplete: incomplete.length,
@@ -89,26 +86,28 @@ const WeeklyReview = ({ tasks = [] }) => {
       dailyStats,
       categoryStats,
       priorityStats,
-      mostProductiveDay: dailyStats.reduce((max, day) => 
-        day.completed > max.completed ? day : max, dailyStats[0]),
+      mostProductiveDay: dailyStats.length > 0
+        ? dailyStats.reduce((max, day) => (day.completed > max.completed ? day : max), dailyStats[0])
+        : null,
       tasks: currentWeekTasks
-    });
+    };
+  }, [tasks, weekStart, weekEnd, weekDays]);
 
-    // Calculate previous week data for comparison
+  const previousWeekData = useMemo(() => {
     const prevWeekTasks = tasks.filter(task => {
       const taskDate = parseISO(task.date);
       return isWithinInterval(taskDate, { start: prevWeekStart, end: prevWeekEnd });
     });
 
     const prevCompleted = prevWeekTasks.filter(t => t.completed);
-    setPreviousWeekData({
+    return {
       total: prevWeekTasks.length,
       completed: prevCompleted.length,
       completionRate: prevWeekTasks.length > 0 
         ? Math.round((prevCompleted.length / prevWeekTasks.length) * 100) 
         : 0
-    });
-  }, [selectedWeek, tasks]);
+    };
+  }, [tasks, prevWeekStart, prevWeekEnd]);
 
   const goToPreviousWeek = () => {
     setSelectedWeek(subWeeks(selectedWeek, 1));

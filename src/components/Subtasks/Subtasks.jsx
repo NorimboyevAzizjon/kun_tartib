@@ -21,6 +21,7 @@ const Subtasks = ({
   const [draggedItem, setDraggedItem] = useState(null);
   const inputRef = useRef(null);
   const editInputRef = useRef(null);
+  const idCounterRef = useRef(subtasks.length);
 
   // Focus edit input when editing starts
   useEffect(() => {
@@ -29,16 +30,20 @@ const Subtasks = ({
     }
   }, [editingId]);
 
-  const generateId = () => `subtask_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  useEffect(() => {
+    idCounterRef.current = Math.max(idCounterRef.current, subtasks.length);
+  }, [subtasks.length]);
+
+  const createSubtaskId = () => `subtask_${idCounterRef.current++}`;
 
   const addSubtask = () => {
     if (!newSubtask.trim() || subtasks.length >= maxSubtasks) return;
 
     const newItem = {
-      id: generateId(),
+      id: createSubtaskId(),
       title: newSubtask.trim(),
       completed: false,
-      createdAt: new Date().toISOString()
+      createdAt: null
     };
 
     onChange([...subtasks, newItem]);
@@ -154,7 +159,7 @@ const Subtasks = ({
 
       {/* Subtasks List */}
       <div className="subtasks-list">
-        {subtasks.map((subtask, index) => (
+        {subtasks.map((subtask) => (
           <div
             key={subtask.id}
             className={`subtask-item ${subtask.completed ? 'completed' : ''} ${draggedItem?.id === subtask.id ? 'dragged' : ''}`}

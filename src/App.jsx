@@ -237,7 +237,7 @@ const MainLayout = ({ children }) => {
       </main>
 
       <footer className="footer">
-        <p>© 2024 KunTartib | Vaqtingizni boshqaring</p>
+        <p>© 2025 KunTartib | Vaqtingizni boshqaring</p>
       </footer>
     </div>
   );

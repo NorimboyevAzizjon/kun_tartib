@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Pomodoro.css';
 
 // MUI Icons
@@ -38,31 +38,47 @@ const Pomodoro = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   const intervalRef = useRef(null);
+  const timeLeftRef = useRef(timeLeft);
 
-  // Timer logic
   useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = setInterval(() => {
-        setTimeLeft(prev => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      handleTimerComplete();
+    timeLeftRef.current = timeLeft;
+  }, [timeLeft]);
+
+  const playSound = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Melodiya
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      let time = audioContext.currentTime;
+      
+      notes.forEach((freq, i) => {
+        oscillator.frequency.setValueAtTime(freq, time + i * 0.15);
+      });
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.8);
+    } catch {
+      // Audio not supported
     }
+  }, [soundEnabled]);
 
-    return () => clearInterval(intervalRef.current);
-  }, [isRunning, timeLeft]);
+  const showNotification = useCallback((title, body) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '🍅' });
+    }
+  }, []);
 
-  // Save settings
-  useEffect(() => {
-    localStorage.setItem('pomodoro-settings', JSON.stringify(settings));
-  }, [settings]);
-
-  // Save total pomodoros
-  useEffect(() => {
-    localStorage.setItem('pomodoro-total', totalPomodoros.toString());
-  }, [totalPomodoros]);
-
-  const handleTimerComplete = () => {
+  const handleTimerComplete = useCallback(() => {
     setIsRunning(false);
     playSound();
     
@@ -89,41 +105,42 @@ const Pomodoro = () => {
       setTimeLeft(settings.workTime * 60);
       showNotification('💪 Ishga qaytish vaqti!', `${settings.workTime} daqiqa ishlang`);
     }
-  };
+  }, [mode, playSound, sessionsCompleted, settings, showNotification]);
 
-  const playSound = () => {
-    if (!soundEnabled) return;
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      // Melodiya
-      const notes = [523.25, 659.25, 783.99, 1046.50];
-      let time = audioContext.currentTime;
-      
-      notes.forEach((freq, i) => {
-        oscillator.frequency.setValueAtTime(freq, time + i * 0.15);
-      });
-      
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.8);
-    } catch {
-      // Audio not supported
+  // Timer logic
+  useEffect(() => {
+    if (!isRunning) {
+      clearInterval(intervalRef.current);
+      return;
     }
-  };
 
-  const showNotification = (title, body) => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification(title, { body, icon: '/favicon.ico' });
+    if (timeLeftRef.current <= 0) {
+      return;
     }
-  };
+
+    intervalRef.current = setInterval(() => {
+      const next = timeLeftRef.current - 1;
+      timeLeftRef.current = next;
+      setTimeLeft(next);
+
+      if (next <= 0) {
+        clearInterval(intervalRef.current);
+        handleTimerComplete();
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalRef.current);
+  }, [isRunning, handleTimerComplete]);
+
+  // Save settings
+  useEffect(() => {
+    localStorage.setItem('pomodoro-settings', JSON.stringify(settings));
+  }, [settings]);
+
+  // Save total pomodoros
+  useEffect(() => {
+    localStorage.setItem('pomodoro-total', totalPomodoros.toString());
+  }, [totalPomodoros]);
 
   const toggleTimer = () => {
     setIsRunning(!isRunning);

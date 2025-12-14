@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Notifications from '../components/Notifications/Notifications';
 import './SettingsPage.css';
 
 const NotificationsPage = () => {
   const [tasks, setTasks] = useState(() => {
-    const saved = localStorage.getItem('kun-tartibi-tasks');
+    const saved = localStorage.getItem('kuntartib-tasks') || localStorage.getItem('kun-tartibi-tasks');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -15,7 +15,7 @@ const NotificationsPage = () => {
       t.id === taskId ? { ...t, ...updates } : t
     );
     setTasks(newTasks);
-    localStorage.setItem('kun-tartibi-tasks', JSON.stringify(newTasks));
+    localStorage.setItem('kuntartib-tasks', JSON.stringify(newTasks));
   };
 
   return (

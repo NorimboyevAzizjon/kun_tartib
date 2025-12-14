@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import './FocusMode.css';
 
 // MUI Icons
@@ -36,8 +36,83 @@ const FocusMode = ({ tasks = [], onComplete }) => {
   const intervalRef = useRef(null);
 
   // Filter incomplete tasks
-  const incompleteTasks = tasks.filter(t => !t.completed && !completedInSession.includes(t.id));
+  const incompleteTasks = useMemo(
+    () => tasks.filter(t => !t.completed && !completedInSession.includes(t.id)),
+    [tasks, completedInSession]
+  );
   const currentTask = incompleteTasks[currentTaskIndex] || null;
+
+  const playCompletionSound = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.4);
+    } catch {
+      // Audio not supported
+    }
+  }, [soundEnabled]);
+
+  const showNotification = useCallback((title, body) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/favicon.ico' });
+    }
+  }, []);
+
+  const exitFocusMode = useCallback(() => {
+    setIsActive(false);
+    setIsRunning(false);
+    setIsFullscreen(false);
+    
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    }
+  }, []);
+
+  const handleCompleteTask = useCallback(() => {
+    if (!currentTask) return;
+    
+    setCompletedInSession(prev => [...prev, currentTask.id]);
+    
+    if (onComplete) {
+      onComplete(currentTask.id);
+    }
+    
+    // Add XP
+    const currentXP = parseInt(localStorage.getItem('user-xp') || '0');
+    localStorage.setItem('user-xp', (currentXP + 10).toString());
+    
+    playCompletionSound();
+    
+    // Move to next task or finish
+    if (currentTaskIndex < incompleteTasks.length - 1) {
+      // Don't increment index since array will shift
+    } else {
+      // All tasks completed
+      setTimeout(() => {
+        showNotification('🎉 Barcha vazifalar bajarildi!', 'Ajoyib ish!');
+      }, 500);
+    }
+  }, [currentTask, currentTaskIndex, incompleteTasks.length, onComplete, playCompletionSound, showNotification]);
+
+  const handleNextTask = useCallback(() => {
+    if (currentTaskIndex < incompleteTasks.length - 1) {
+      setCurrentTaskIndex(prev => prev + 1);
+    }
+  }, [currentTaskIndex, incompleteTasks.length]);
 
   // Timer
   useEffect(() => {
@@ -73,7 +148,7 @@ const FocusMode = ({ tasks = [], onComplete }) => {
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isActive, currentTask]);
+  }, [isActive, handleCompleteTask, handleNextTask, exitFocusMode]);
 
   const startFocusMode = () => {
     setIsActive(true);
@@ -88,48 +163,6 @@ const FocusMode = ({ tasks = [], onComplete }) => {
     }
   };
 
-  const exitFocusMode = () => {
-    setIsActive(false);
-    setIsRunning(false);
-    setIsFullscreen(false);
-    
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    }
-  };
-
-  const handleCompleteTask = () => {
-    if (!currentTask) return;
-    
-    setCompletedInSession(prev => [...prev, currentTask.id]);
-    
-    if (onComplete) {
-      onComplete(currentTask.id);
-    }
-    
-    // Add XP
-    const currentXP = parseInt(localStorage.getItem('user-xp') || '0');
-    localStorage.setItem('user-xp', (currentXP + 10).toString());
-    
-    playCompletionSound();
-    
-    // Move to next task or finish
-    if (currentTaskIndex < incompleteTasks.length - 1) {
-      // Don't increment index since array will shift
-    } else {
-      // All tasks completed
-      setTimeout(() => {
-        showNotification('🎉 Barcha vazifalar bajarildi!', 'Ajoyib ish!');
-      }, 500);
-    }
-  };
-
-  const handleNextTask = () => {
-    if (currentTaskIndex < incompleteTasks.length - 1) {
-      setCurrentTaskIndex(prev => prev + 1);
-    }
-  };
-
   const toggleFullscreen = async () => {
     if (!document.fullscreenElement) {
       await containerRef.current?.requestFullscreen();
@@ -137,36 +170,6 @@ const FocusMode = ({ tasks = [], onComplete }) => {
     } else {
       await document.exitFullscreen();
       setIsFullscreen(false);
-    }
-  };
-
-  const playCompletionSound = () => {
-    if (!soundEnabled) return;
-    try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
-      oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
-      oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2);
-      
-      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.4);
-    } catch {
-      // Audio not supported
-    }
-  };
-
-  const showNotification = (title, body) => {
-    if ('Notification' in window && Notification.permission === 'granted') {
-      new Notification(title, { body, icon: '/favicon.ico' });
     }
   };
 

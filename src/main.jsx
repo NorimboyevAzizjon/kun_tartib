@@ -18,7 +18,7 @@ if (import.meta.hot) {
 }
 
 // ✅ Performance monitoring
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   console.log('🚀 Kun Tartibi Dasturi ishga tushdi!');
   console.log('📅 Vite + React 18');
 }

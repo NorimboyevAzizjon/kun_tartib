@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, addMinutes } from 'date-fns';
+import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 import './TaskTemplates.css';
 
@@ -101,7 +101,10 @@ const PRIORITY_CONFIG = {
 };
 
 const TaskTemplates = ({ onUseTemplate }) => {
-  const [templates, setTemplates] = useState([]);
+  const [templates, setTemplates] = useState(() => {
+    const saved = localStorage.getItem('task-templates');
+    return saved ? JSON.parse(saved) : DEFAULT_TEMPLATES;
+  });
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState(null);
   const [newTemplate, setNewTemplate] = useState({
@@ -115,14 +118,10 @@ const TaskTemplates = ({ onUseTemplate }) => {
   });
   const [newSubtask, setNewSubtask] = useState('');
 
-  // Load templates from localStorage
+  // Persist initial defaults once (no setState here)
   useEffect(() => {
     const saved = localStorage.getItem('task-templates');
-    if (saved) {
-      setTemplates(JSON.parse(saved));
-    } else {
-      // Initialize with defaults
-      setTemplates(DEFAULT_TEMPLATES);
+    if (!saved) {
       localStorage.setItem('task-templates', JSON.stringify(DEFAULT_TEMPLATES));
     }
   }, []);
@@ -133,7 +132,7 @@ const TaskTemplates = ({ onUseTemplate }) => {
     localStorage.setItem('task-templates', JSON.stringify(newTemplates));
   };
 
-  const useTemplate = (template) => {
+  const applyTemplate = (template) => {
     const task = {
       id: `task_${uuidv4()}`,
       title: template.name,
@@ -278,7 +277,7 @@ const TaskTemplates = ({ onUseTemplate }) => {
             <div className="template-actions">
               <button 
                 className="use-template-btn"
-                onClick={() => useTemplate(template)}
+                onClick={() => applyTemplate(template)}
                 title="Ishlatish"
               >
                 <ContentCopyIcon />

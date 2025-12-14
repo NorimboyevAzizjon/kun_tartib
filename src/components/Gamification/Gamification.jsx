@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Gamification.css';
 
 // MUI Icons
@@ -59,25 +59,31 @@ const Gamification = ({ tasks = [] }) => {
   });
 
   const [showBadgePopup, setShowBadgePopup] = useState(null);
+  const statsRef = useRef(stats);
+
+  useEffect(() => {
+    statsRef.current = stats;
+  }, [stats]);
 
   // Calculate stats from tasks
   useEffect(() => {
+    const currentStats = statsRef.current;
     const completedTasks = tasks.filter(t => t.completed);
     const today = new Date().toISOString().split('T')[0];
     const totalPomodoros = parseInt(localStorage.getItem('pomodoro-total') || '0');
     
     // Check streak
-    const lastActive = stats.lastActiveDate;
+    const lastActive = currentStats.lastActiveDate;
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = yesterday.toISOString().split('T')[0];
     
-    let newStreak = stats.streak;
+    let newStreak = currentStats.streak;
     if (lastActive === today) {
       // Already active today
     } else if (lastActive === yesterdayStr) {
       // Continue streak
-      newStreak = stats.streak + 1;
+      newStreak = currentStats.streak + 1;
     } else if (lastActive !== today) {
       // Streak broken or first day
       newStreak = completedTasks.some(t => t.updatedAt?.split('T')[0] === today) ? 1 : 0;
@@ -95,34 +101,47 @@ const Gamification = ({ tasks = [] }) => {
     const perfectDay = todayTasks.length > 0 && todayTasks.length === todayCompleted.length;
 
     const newStats = {
-      ...stats,
+      ...currentStats,
       totalCompleted: completedTasks.length,
       streak: newStreak,
-      lastActiveDate: completedTasks.length > 0 ? today : stats.lastActiveDate,
+      lastActiveDate: completedTasks.length > 0 ? today : currentStats.lastActiveDate,
       totalPomodoros,
-      earlyBird: stats.earlyBird || earlyBird,
-      nightOwl: stats.nightOwl || nightOwl,
-      perfectDays: stats.perfectDays + (perfectDay ? 1 : 0)
+      earlyBird: currentStats.earlyBird || earlyBird,
+      nightOwl: currentStats.nightOwl || nightOwl,
+      perfectDays: currentStats.perfectDays + (perfectDay ? 1 : 0)
     };
 
     // Check for new badges
-    const newBadges = [...stats.earnedBadges];
+    const newBadges = [...currentStats.earnedBadges];
+    let xpDelta = 0;
+    let newestBadge = null;
     BADGES.forEach(badge => {
       if (!newBadges.includes(badge.id) && badge.condition(newStats)) {
         newBadges.push(badge.id);
-        setXP(prev => {
-          const newXP = prev + badge.xp;
-          localStorage.setItem('user-xp', newXP.toString());
-          return newXP;
-        });
-        setShowBadgePopup(badge);
-        setTimeout(() => setShowBadgePopup(null), 3000);
+        xpDelta += badge.xp;
+        newestBadge = badge;
       }
     });
 
     newStats.earnedBadges = newBadges;
-    setStats(newStats);
-    localStorage.setItem('gamification-stats', JSON.stringify(newStats));
+    // Move state updates outside the effect body to avoid cascading renders warnings.
+    setTimeout(() => {
+      if (xpDelta > 0) {
+        setXP(prev => {
+          const newXP = prev + xpDelta;
+          localStorage.setItem('user-xp', newXP.toString());
+          return newXP;
+        });
+      }
+
+      if (newestBadge) {
+        setShowBadgePopup(newestBadge);
+        setTimeout(() => setShowBadgePopup(null), 3000);
+      }
+
+      setStats(newStats);
+      localStorage.setItem('gamification-stats', JSON.stringify(newStats));
+    }, 0);
   }, [tasks]);
 
   // Get current level
