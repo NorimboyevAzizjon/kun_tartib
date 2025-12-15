@@ -279,7 +279,7 @@ const TaskList = ({
                         onClick={(e) => handleEdit(e, task.id, task)}
                         title="Tahrirlash"
                       >
-                        <EditOutlinedIcon fontSize="small" /> Tahrirlash
+                        <EditOutlinedIcon fontSize="small" /> 
                       </button>
                     )}
                     <button 
@@ -287,7 +287,7 @@ const TaskList = ({
                       onClick={(e) => handleDelete(e, task.id)}
                       title="O'chirish"
                     >
-                      <DeleteOutlineIcon fontSize="small" /> O'chirish
+                      <DeleteOutlineIcon fontSize="small" /> 
                     </button>
                   </div>
                 </div>
