@@ -1,0 +1,35 @@
+.task-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 18px;
+  cursor: pointer;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-right: 8px;
+}
+.task-btn:last-child {
+  margin-right: 0;
+}
+.task-btn.edit {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+}
+.task-btn.delete {
+  background: linear-gradient(90deg, #ef4444, #f59e42);
+  color: #fff;
+}
+.task-btn:focus {
+  outline: 2px solid var(--accent-blue);
+}
+.task-btn-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.1em;
+}

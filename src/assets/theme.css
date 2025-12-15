@@ -1,0 +1,18 @@
+:root {
+  --bg-primary: #181f2a;
+  --bg-secondary: #1e293b;
+  --text-primary: #e5e7eb;
+  --text-secondary: #a1a1aa;
+  --accent-blue: #6366f1;
+  --accent-purple: #8b5cf6;
+  --border-light: #334155;
+}
+[data-theme='light'] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #fff;
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
+  --accent-blue: #6366f1;
+  --accent-purple: #8b5cf6;
+  --border-light: #e5e7eb;
+}
