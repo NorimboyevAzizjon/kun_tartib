@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -28,6 +28,7 @@ const RegisterPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
+  const nameInputRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -36,6 +37,18 @@ const RegisterPage = () => {
     });
     setFormError('');
   };
+
+  // Xatolik xabari avtomatik o'chiriladi
+  useEffect(() => {
+    if (formError) {
+      const timer = setTimeout(() => setFormError(''), 3000);
+      // Fokus inputga
+      if (nameInputRef.current) {
+        nameInputRef.current.focus();
+      }
+      return () => clearTimeout(timer);
+    }
+  }, [formError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,6 +131,7 @@ const RegisterPage = () => {
                   Ismingiz
                 </label>
                 <input
+                  ref={nameInputRef}
                   type="text"
                   id="name"
                   name="name"

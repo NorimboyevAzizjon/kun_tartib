@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -25,6 +25,7 @@ const LoginPage = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState('');
+  const emailInputRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -33,6 +34,18 @@ const LoginPage = () => {
     });
     setFormError('');
   };
+
+  // Xatolik xabari avtomatik o'chiriladi
+  useEffect(() => {
+    if (formError) {
+      const timer = setTimeout(() => setFormError(''), 3000);
+      // Fokus inputga
+      if (emailInputRef.current) {
+        emailInputRef.current.focus();
+      }
+      return () => clearTimeout(timer);
+    }
+  }, [formError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,6 +113,7 @@ const LoginPage = () => {
                   Email
                 </label>
                 <input
+                  ref={emailInputRef}
                   type="email"
                   id="email"
                   name="email"

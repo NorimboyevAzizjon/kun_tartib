@@ -2,7 +2,7 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 // LocalStorage Mode (Backend ishlamaganda)
-const USE_LOCAL_STORAGE = true; // Backend ulanganda false qiling
+const USE_LOCAL_STORAGE = false; // Backend ulanganda false qiling
 
 // Token olish
 const getToken = () => localStorage.getItem('kuntartib-token');
