@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Badge from './Badge';
+import TaskButton from './TaskButton';
 import { 
   format, 
   parseISO, 
@@ -235,61 +237,42 @@ const TaskList = ({
 
                   {/* Task Info */}
                   <div className="task-info">
-                    <div className="task-title-row">
-                      <h4 className={`task-title ${task.completed ? 'strikethrough' : ''}`}>
-                        {task.title}
-                      </h4>
-                      {isUrgentTask && (
-                        <span className="urgent-badge">
-                          <WarningAmberOutlinedIcon fontSize="small" /> SHOSHILINCH
-                        </span>
-                      )}
+                    {/* Kategoriya va task nomi bir qatorda */}
+                    <div className="tasklist-header-row">
+                      <Badge icon={category.icon} label={category.label} className="tasklist-category-label" />
                     </div>
-                    
-                    {/* Meta info */}
                     <div className="task-meta-row">
-                      <span className="meta-item">
-                        <span className="meta-icon" aria-hidden="true"><AccessTimeOutlinedIcon fontSize="small" /></span>
-                        {task.time}
-                      </span>
-                      <span className="meta-item">
-                        <span className="meta-icon" aria-hidden="true"><EventOutlinedIcon fontSize="small" /></span>
-                        {formatDateDisplay(task.date)}
-                      </span>
-                      <span className="meta-item category">
-                        <span className="meta-icon">{category.icon}</span>
-                        {category.label}
-                      </span>
-                      <span 
-                        className="priority-tag"
-                        style={{ backgroundColor: getPriorityColor(task.priority) }}
-                      >
-                        {task.priority === 'high' && 'Yuqori'}
-                        {task.priority === 'medium' && 'O\'rta'}
-                        {task.priority === 'low' && 'Past'}
-                      </span>
+                      <Badge className="task-title-badge" label={task.title} />
+                      <Badge className="meta-item" icon={<AccessTimeOutlinedIcon fontSize="small" />} label={task.time} />
+                      <Badge className="meta-item" icon={<EventOutlinedIcon fontSize="small" />} label={formatDateDisplay(task.date)} />
+                      <Badge className="meta-item category" icon={category.icon} label={category.label} />
+                      <Badge className="priority-tag" label={
+                        task.priority === 'high' ? 'Yuqori' :
+                        task.priority === 'medium' ? 'O\'rta' :
+                        task.priority === 'low' ? 'Past' : ''
+                      } style={{ backgroundColor: getPriorityColor(task.priority) }} />
+                    </div>
+                    <div className="task-actions">
+                      {onEdit && (
+                        <TaskButton
+                          className="edit"
+                          icon={<EditOutlinedIcon fontSize="small" />}
+                          aria-label="Tahrirlash"
+                          tabIndex={0}
+                          onClick={(e) => handleEdit(e, task.id, task)}
+                        />
+                      )}
+                      <TaskButton
+                        className="delete"
+                        icon={<DeleteOutlineIcon fontSize="small" />}
+                        aria-label="O'chirish"
+                        tabIndex={0}
+                        onClick={(e) => handleDelete(e, task.id)}
+                      />
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  <div className="task-actions">
-                    {onEdit && (
-                      <button 
-                        className="action-btn edit-btn"
-                        onClick={(e) => handleEdit(e, task.id, task)}
-                        title="Tahrirlash"
-                      >
-                        <EditOutlinedIcon fontSize="small" /> Tahrirlash
-                      </button>
-                    )}
-                    <button 
-                      className="action-btn delete-btn"
-                      onClick={(e) => handleDelete(e, task.id)}
-                      title="O'chirish"
-                    >
-                      <DeleteOutlineIcon fontSize="small" /> O'chirish
-                    </button>
-                  </div>
+                  {/* Actions removed: duplicate */}
                 </div>
 
                 {/* Description if exists */}
