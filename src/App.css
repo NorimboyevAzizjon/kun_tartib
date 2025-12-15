@@ -484,7 +484,7 @@ body {
   gap: 6px;
   height: 48px;
   overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
+  /* scrollbar-width: none;  Firefox only, but not supported in Chrome < 121, Safari, Samsung Internet */
   -ms-overflow-style: none; /* IE/Edge */
 }
 

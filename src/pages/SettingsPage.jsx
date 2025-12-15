@@ -51,7 +51,27 @@ const SettingsPage = () => {
 
   // Mavzu sozlamalari
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+
   const [primaryColor, setPrimaryColor] = useState(() => localStorage.getItem('primaryColor') || '#6366f1');
+
+  // Rang variantlari
+  const colorOptions = [
+    { color: '#6366f1', name: 'Indigo' },
+    { color: '#8b5cf6', name: 'Binafsha' },
+    { color: '#ec4899', name: "Pushti" },
+    { color: '#ef4444', name: "Qizil" },
+    { color: '#f97316', name: "To'q sariq" },
+    { color: '#22c55e', name: "Yashil" },
+    { color: '#3b82f6', name: "Ko'k" },
+    { color: '#64748b', name: "Kulrang" }
+  ];
+
+  // Rangni o'zgartirish
+  const handleColorChange = (color) => {
+    setPrimaryColor(color);
+    localStorage.setItem('primaryColor', color);
+    document.documentElement.style.setProperty('--primary-color', color);
+  };
 
   // Bildirishnoma sozlamalari
   const [notificationSettings, setNotificationSettings] = useState(() => {
@@ -75,18 +95,6 @@ const SettingsPage = () => {
     };
   });
 
-  // Rang variantlari
-  const colorOptions = [
-    { color: '#6366f1', name: 'Indigo' },
-    { color: '#8b5cf6', name: 'Binafsha' },
-    { color: '#ec4899', name: "Pushti" },
-    { color: '#ef4444', name: "Qizil" },
-    { color: '#f97316', name: "To'q sariq" },
-    { color: '#22c55e', name: "Yashil" },
-    { color: '#3b82f6', name: "Ko'k" },
-    { color: '#64748b', name: "Kulrang" }
-  ];
-
   // Mavzuni o'zgartirish
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
@@ -94,12 +102,7 @@ const SettingsPage = () => {
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 
-  // Rangni o'zgartirish
-  const handleColorChange = (color) => {
-    setPrimaryColor(color);
-    localStorage.setItem('primaryColor', color);
-    document.documentElement.style.setProperty('--primary-color', color);
-  };
+
 
   // Bildirishnoma sozlamalarini saqlash
   const handleNotificationChange = (key, value) => {

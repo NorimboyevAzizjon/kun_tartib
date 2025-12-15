@@ -187,6 +187,14 @@ const AddTask = ({ onAddTask }) => {
           <div className="header-text">
             <h3>Yangi Vazifa Qo'shish</h3>
             <p className="header-subtitle">Kunningizni rejalashtiring</p>
+            {getCurrentCategory() && (
+              <div className="selected-category-header">
+                <span className="category-icon">{getCurrentCategory().icon}</span>
+                <span className="category-label" style={{color: getCurrentCategory().color}}>
+                  {getCurrentCategory().label}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>

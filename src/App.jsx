@@ -23,6 +23,8 @@ import StatsPage from './pages/StatsPage';
 import ArchivePage from './pages/ArchivePage';
 import TagsPage from './pages/TagsPage';
 import './App.css';
+import './assets/theme.css';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 
 // MUI Icons
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
@@ -177,7 +179,6 @@ const MainLayout = ({ children }) => {
   if (!isAuthenticated) {
     return children;
   }
-
   return (
     <div className="app">
       <nav className="navbar">
@@ -232,107 +233,62 @@ const MainLayout = ({ children }) => {
           </div>
         </div>
 
-        {isMobileMenuOpen && (
-          <div className="mobile-menu">
-            <NavLink to="/" icon={<AssignmentOutlinedIcon fontSize="small" />}>Vazifalar</NavLink>
-            <NavLink to="/dashboard" icon={<BarChartOutlinedIcon fontSize="small" />}>Statistika</NavLink>
-            <NavLink to="/calendar" icon={<CalendarMonthOutlinedIcon fontSize="small" />}>Kalendar</NavLink>
-            <NavLink to="/pomodoro" icon={<TimerOutlinedIcon fontSize="small" />}>Pomodoro</NavLink>
-            <NavLink to="/focus" icon={<CenterFocusStrongOutlinedIcon fontSize="small" />}>Focus Mode</NavLink>
-            <NavLink to="/recurring" icon={<RepeatOutlinedIcon fontSize="small" />}>Takroriy</NavLink>
-            <NavLink to="/goals" icon={<FlagOutlinedIcon fontSize="small" />}>Maqsadlar</NavLink>
-            <NavLink to="/templates" icon={<BookmarkBorderOutlinedIcon fontSize="small" />}>Shablonlar</NavLink>
-            <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
-            <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
-            <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
-            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
-            <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
-            <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
-            <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
-            <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
-          </div>
-        )}
-      </nav>
+                    {isMobileMenuOpen && (
+                      <div className="mobile-menu">
+                        <NavLink to="/" icon={<AssignmentOutlinedIcon fontSize="small" />}>Vazifalar</NavLink>
+                        <NavLink to="/dashboard" icon={<BarChartOutlinedIcon fontSize="small" />}>Statistika</NavLink>
+                        <NavLink to="/calendar" icon={<CalendarMonthOutlinedIcon fontSize="small" />}>Kalendar</NavLink>
+                        <NavLink to="/pomodoro" icon={<TimerOutlinedIcon fontSize="small" />}>Pomodoro</NavLink>
+                        <NavLink to="/focus" icon={<CenterFocusStrongOutlinedIcon fontSize="small" />}>Focus Mode</NavLink>
+                        <NavLink to="/recurring" icon={<RepeatOutlinedIcon fontSize="small" />}>Takroriy</NavLink>
+                        <NavLink to="/goals" icon={<FlagOutlinedIcon fontSize="small" />}>Maqsadlar</NavLink>
+                        <NavLink to="/templates" icon={<BookmarkBorderOutlinedIcon fontSize="small" />}>Shablonlar</NavLink>
+                        <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
+                        <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
+                        <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
+                        <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
+                        <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
+                        <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
+                        <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
+                        <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
+                      </div>
+                    )}
+                  </nav>
 
-      <main className="main-content">
-        {children}
-      </main>
+                  <main className="main-content">
+                    {children}
+                  </main>
 
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-left">
-            <span className="copyright-symbol">©</span>
-            <span className="year-badge">2025</span>
-            <span className="brand-name">KunTartib</span>
-            <span className="footer-divider">|</span>
-            <span className="footer-tagline">Vaqtingizni boshqaring</span>
-          </div>
-          <div className="footer-right">
-            <span className="footer-date">
-              {currentTime.toLocaleDateString('uz-UZ', { 
-                day: '2-digit', 
-                month: 'long', 
-                year: 'numeric' 
-              })}
-            </span>
-            <span className="footer-divider">|</span>
-            <span className="footer-time">
-              {currentTime.toLocaleTimeString('uz-UZ', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                second: '2-digit' 
-              })}
-            </span>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-};
-
-function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <MainLayout>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            
-            {/* Protected routes */}
-            <Route path="/" element={
-              <ProtectedRoute><HomePage /></ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute><DashboardPage /></ProtectedRoute>
-            } />
-            <Route path="/calendar" element={
-              <ProtectedRoute><CalendarPage /></ProtectedRoute>
-            } />
-            <Route path="/pomodoro" element={
-              <ProtectedRoute><PomodoroPage /></ProtectedRoute>
-            } />
-            <Route path="/focus" element={
-              <ProtectedRoute><FocusPage /></ProtectedRoute>
-            } />
-            <Route path="/recurring" element={
-              <ProtectedRoute><RecurringPage /></ProtectedRoute>
-            } />
-            <Route path="/goals" element={
-              <ProtectedRoute><GoalsPage /></ProtectedRoute>
-            } />
-            <Route path="/templates" element={
-              <ProtectedRoute><TemplatesPage /></ProtectedRoute>
-            } />
-            <Route path="/weekly-review" element={
-              <ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>
-            } />
-            <Route path="/notes" element={
-              <ProtectedRoute><NotesPage /></ProtectedRoute>
-            } />
-            <Route path="/achievements" element={
-              <ProtectedRoute><GamificationPage /></ProtectedRoute>
+                  <footer className="footer">
+                    <div className="footer-content">
+                      <div className="footer-left">
+                        <span className="copyright-symbol">©</span>
+                        <span className="year-badge">2025</span>
+                        <span className="brand-name">KunTartib</span>
+                        <span className="footer-divider">|</span>
+                        <span className="footer-tagline">Vaqtingizni boshqaring</span>
+                      </div>
+                      <div className="footer-right">
+                        <span className="footer-date">
+                          {currentTime.toLocaleDateString('uz-UZ', { 
+                            day: '2-digit', 
+                            month: 'long', 
+                            year: 'numeric' 
+                          })}
+                        </span>
+                        <span className="footer-divider">|</span>
+                        <span className="footer-time">
+                          {currentTime.toLocaleTimeString('uz-UZ', { 
+                            hour: '2-digit', 
+                            minute: '2-digit', 
+                            second: '2-digit' 
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  </footer>
+                </div>
+              );
             } />
             <Route path="/advanced-stats" element={
               <ProtectedRoute><StatsPage /></ProtectedRoute>
