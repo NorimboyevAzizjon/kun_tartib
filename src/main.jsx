@@ -22,3 +22,16 @@ if (import.meta.env.DEV) {
   console.log('🚀 Kun Tartibi Dasturi ishga tushdi!');
   console.log('📅 Vite + React 18');
 }
+
+// Service Worker (offline mode) faollashtirish
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(reg => {
+        console.log('✅ Service Worker ro‘yxatdan o‘tdi:', reg.scope);
+      })
+      .catch(err => {
+        console.warn('❌ Service Worker xatosi:', err);
+      });
+  });
+}

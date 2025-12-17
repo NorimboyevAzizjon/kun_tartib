@@ -24,6 +24,7 @@ import ArchivePage from './pages/ArchivePage';
 import TagsPage from './pages/TagsPage';
 import './App.css';
 import Toast from './components/Toast';
+import AssistantAI from './components/AssistantAI';
 // Toast Context for global notification
 const ToastContext = React.createContext({ showToast: () => {} });
 
@@ -352,6 +353,8 @@ function App() {
             </Routes>
             {/* Toast notification at root */}
             <Toast message={show ? toast.message : ''} type={toast.type} onClose={handleToastClose} duration={toast.duration || 3000} />
+            {/* AI Assistant floating widget */}
+            <AssistantAI />
           </MainLayout>
         </Router>
       </ToastContext.Provider>
