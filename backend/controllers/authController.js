@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { validationResult } = require('express-validator');
 
 // Token yaratish
 const generateToken = (id) => {
@@ -13,6 +14,15 @@ const generateToken = (id) => {
 // @access  Public
 exports.register = async (req, res) => {
   try {
+    // express-validator natijasini tekshirish
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: errors.array()[0].msg
+      });
+    }
+
     const { name, email, password } = req.body;
 
     // Email mavjudligini tekshirish
@@ -33,6 +43,13 @@ exports.register = async (req, res) => {
 
     // Token bilan javob
     const token = generateToken(user._id);
+    // JWT ni HttpOnly cookie ga yozish
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 kun
+    });
 
     res.status(201).json({
       success: true,
@@ -41,8 +58,7 @@ exports.register = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        avatar: user.avatar,
-        token
+        avatar: user.avatar
       }
     });
   } catch (error) {
@@ -59,15 +75,16 @@ exports.register = async (req, res) => {
 // @access  Public
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    // Email va parol kiritilganligini tekshirish
-    if (!email || !password) {
+    // express-validator natijasini tekshirish
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
       return res.status(400).json({
         success: false,
-        message: 'Email va parolni kiriting'
+        message: errors.array()[0].msg
       });
     }
+
+    const { email, password } = req.body;
 
     // Foydalanuvchini topish
     const user = await User.findOne({ email }).select('+password');
@@ -89,6 +106,13 @@ exports.login = async (req, res) => {
 
     // Token bilan javob
     const token = generateToken(user._id);
+    // JWT ni HttpOnly cookie ga yozish
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 kun
+    });
 
     res.json({
       success: true,
@@ -97,8 +121,7 @@ exports.login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        avatar: user.avatar,
-        token
+        avatar: user.avatar
       }
     });
   } catch (error) {
