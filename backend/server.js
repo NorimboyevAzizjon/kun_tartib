@@ -22,6 +22,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/goals', require('./routes/goals'));
+app.use('/api/ai', require('./routes/ai'));
 
 // Asosiy route
 app.get('/', (req, res) => {

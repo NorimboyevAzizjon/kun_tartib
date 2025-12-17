@@ -18,11 +18,22 @@ export default function AssistantAI() {
     setMessages(msgs => [...msgs, userMsg]);
     setInput('');
     setLoading(true);
-    // Simulate AI response (replace with real API call if needed)
-    setTimeout(() => {
-      setMessages(msgs => [...msgs, { from: 'ai', text: 'AI javobi: ' + userMsg.text }]);
-      setLoading(false);
-    }, 1200);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg.text })
+      });
+      const data = await res.json();
+      if (data.answer) {
+        setMessages(msgs => [...msgs, { from: 'ai', text: data.answer }]);
+      } else {
+        setMessages(msgs => [...msgs, { from: 'ai', text: 'AI javob bera olmadi.' }]);
+      }
+    } catch (err) {
+      setMessages(msgs => [...msgs, { from: 'ai', text: 'AI server bilan bog‘lanib bo‘lmadi.' }]);
+    }
+    setLoading(false);
   };
 
   // Minimized by default, open only on click
