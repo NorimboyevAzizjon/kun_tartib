@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -23,6 +23,10 @@ import StatsPage from './pages/StatsPage';
 import ArchivePage from './pages/ArchivePage';
 import TagsPage from './pages/TagsPage';
 import './App.css';
+import Toast from './components/Toast';
+// Toast Context for global notification
+const ToastContext = React.createContext({ showToast: () => {} });
+
 
 // MUI Icons
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
@@ -290,71 +294,70 @@ const MainLayout = ({ children }) => {
   );
 };
 
+
 function App() {
+  // Toast state
+  const [toast, setToast] = useState({ message: '', type: 'info' });
+  const [show, setShow] = useState(false);
+
+  // Show toast handler
+  const showToast = useCallback((message, type = 'info', duration = 3000) => {
+    setToast({ message, type, duration });
+    setShow(true);
+  }, []);
+
+  // Listen for custom window event for global toasts
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail && e.detail.message) {
+        showToast(e.detail.message, e.detail.type || 'info', e.detail.duration || 3000);
+      }
+    };
+    window.addEventListener('kuntartib-toast', handler);
+    return () => window.removeEventListener('kuntartib-toast', handler);
+  }, [showToast]);
+
+  // Hide toast
+  const handleToastClose = useCallback(() => {
+    setShow(false);
+  }, []);
+
   return (
     <AuthProvider>
-      <Router>
-        <MainLayout>
-          <Routes>
-            {/* Public routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            
-            {/* Protected routes */}
-            <Route path="/" element={
-              <ProtectedRoute><HomePage /></ProtectedRoute>
-            } />
-            <Route path="/dashboard" element={
-              <ProtectedRoute><DashboardPage /></ProtectedRoute>
-            } />
-            <Route path="/calendar" element={
-              <ProtectedRoute><CalendarPage /></ProtectedRoute>
-            } />
-            <Route path="/pomodoro" element={
-              <ProtectedRoute><PomodoroPage /></ProtectedRoute>
-            } />
-            <Route path="/focus" element={
-              <ProtectedRoute><FocusPage /></ProtectedRoute>
-            } />
-            <Route path="/recurring" element={
-              <ProtectedRoute><RecurringPage /></ProtectedRoute>
-            } />
-            <Route path="/goals" element={
-              <ProtectedRoute><GoalsPage /></ProtectedRoute>
-            } />
-            <Route path="/templates" element={
-              <ProtectedRoute><TemplatesPage /></ProtectedRoute>
-            } />
-            <Route path="/weekly-review" element={
-              <ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>
-            } />
-            <Route path="/notes" element={
-              <ProtectedRoute><NotesPage /></ProtectedRoute>
-            } />
-            <Route path="/achievements" element={
-              <ProtectedRoute><GamificationPage /></ProtectedRoute>
-            } />
-            <Route path="/advanced-stats" element={
-              <ProtectedRoute><StatsPage /></ProtectedRoute>
-            } />
-            <Route path="/archive" element={
-              <ProtectedRoute><ArchivePage /></ProtectedRoute>
-            } />
-            <Route path="/tags" element={
-              <ProtectedRoute><TagsPage /></ProtectedRoute>
-            } />
-            <Route path="/notifications" element={
-              <ProtectedRoute><NotificationsPage /></ProtectedRoute>
-            } />
-            <Route path="/settings" element={
-              <ProtectedRoute><SettingsPage /></ProtectedRoute>
-            } />
-            <Route path="*" element={<LoginPage />} />
-          </Routes>
-        </MainLayout>
-      </Router>
+      <ToastContext.Provider value={{ showToast }}>
+        <Router>
+          <MainLayout>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              {/* Protected routes */}
+              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+              <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+              <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
+              <Route path="/pomodoro" element={<ProtectedRoute><PomodoroPage /></ProtectedRoute>} />
+              <Route path="/focus" element={<ProtectedRoute><FocusPage /></ProtectedRoute>} />
+              <Route path="/recurring" element={<ProtectedRoute><RecurringPage /></ProtectedRoute>} />
+              <Route path="/goals" element={<ProtectedRoute><GoalsPage /></ProtectedRoute>} />
+              <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
+              <Route path="/weekly-review" element={<ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>} />
+              <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
+              <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
+              <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
+              <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
+              <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
+              <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+              <Route path="*" element={<LoginPage />} />
+            </Routes>
+            {/* Toast notification at root */}
+            <Toast message={show ? toast.message : ''} type={toast.type} onClose={handleToastClose} duration={toast.duration || 3000} />
+          </MainLayout>
+        </Router>
+      </ToastContext.Provider>
     </AuthProvider>
   );
 }
 
 export default App;
+export { ToastContext };
