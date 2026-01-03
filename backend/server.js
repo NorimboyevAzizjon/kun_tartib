@@ -40,6 +40,10 @@ app.get('/', (req, res) => {
     }
   });
 });
+      ai: '/api/ai/chat'
+    }
+   });
+  });
 
 // 404 Handler
 app.use((req, res) => {
