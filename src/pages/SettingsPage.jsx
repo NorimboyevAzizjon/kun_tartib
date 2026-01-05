@@ -217,11 +217,42 @@ const SettingsPage = () => {
     setSaving(true);
     setMessage('');
 
+    // Validation
+    if (!profileData.name.trim()) {
+      setMessage({ type: 'error', text: 'Ism bo\'sh bo\'lmasin!' });
+      setSaving(false);
+      return;
+    }
+
+    if (profileData.name.trim().length < 2) {
+      setMessage({ type: 'error', text: 'Ism kamida 2 ta harfdan iborat bo\'lsin!' });
+      setSaving(false);
+      return;
+    }
+
     try {
       const updatedData = {
         ...profileData,
+        name: profileData.name.trim(),
         avatarImage: avatarPreview
       };
+
+      // Backend API'ga yuborish (agar mavjud bo'lsa)
+      const token = localStorage.getItem('token');
+      if (token) {
+        const response = await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updatedData)
+        });
+
+        if (!response.ok) {
+          throw new Error('Backendda xatolik: ' + response.statusText);
+        }
+      }
 
       // LocalStorage'ga saqlash
       const currentUser = JSON.parse(localStorage.getItem('kuntartib-user') || '{}');
@@ -239,14 +270,18 @@ const SettingsPage = () => {
         await updateProfile(updatedData);
       }
 
-      setMessage({ type: 'success', text: 'Profil saqlandi!' });
+      setMessage({ type: 'success', text: 'Profil muvaffaqiyatli saqlandi!' });
       
       // Sahifani yangilash
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 1500);
     } catch (error) {
-      setMessage({ type: 'error', text: 'Xatolik: ' + error.message });
+      console.error('Profil saqlash xatoligi:', error);
+      setMessage({ 
+        type: 'error', 
+        text: error.message || 'Profil saqlanishda xatolik yuz berdi. Qaytadan urinib ko\'ring.' 
+      });
     } finally {
       setSaving(false);
     }
