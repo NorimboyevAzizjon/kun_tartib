@@ -101,7 +101,7 @@ const HomePage = () => {
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification(`⏰ Eslatma: ${task.title}`, {
             body: `Vazifa ${task.reminderTime} daqiqadan keyin boshlanadi!`,
-            icon: '/favicon.ico',
+            icon: '/favicon.svg',
             requireInteraction: true,
             tag: task.id
           });
@@ -152,7 +152,7 @@ const HomePage = () => {
             if ('Notification' in window && Notification.permission === 'granted') {
               new Notification(`⏰ Eslatma: ${reminder.taskTitle}`, {
                 body: `Vazifa tez orada boshlanadi!`,
-                icon: '/favicon.ico',
+                icon: '/favicon.svg',
                 requireInteraction: true,
                 tag: reminder.taskId
               });

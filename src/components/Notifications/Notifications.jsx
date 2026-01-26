@@ -101,8 +101,8 @@ const Notifications = ({ tasks = [] }) => {
     if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(title, {
         body,
-        icon: '/favicon.ico',
-        badge: '/favicon.ico',
+        icon: '/favicon.svg',
+        badge: '/favicon.svg',
         vibrate: notificationSettings.vibration ? [200, 100, 200] : [],
         tag: taskId || 'task-reminder',
         requireInteraction: true
@@ -166,7 +166,7 @@ const Notifications = ({ tasks = [] }) => {
           if ('Notification' in window && Notification.permission === 'granted') {
             new Notification(newNotification.title, {
               body: newNotification.body,
-              icon: '/favicon.ico',
+              icon: '/favicon.svg',
               tag: task.id,
               requireInteraction: true
             });

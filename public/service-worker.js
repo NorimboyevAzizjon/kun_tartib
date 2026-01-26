@@ -5,7 +5,9 @@ const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/favicon.ico',
+  '/favicon.svg',
+  '/icon-192.svg',
+  '/icon-512.svg',
   // Add more static assets or routes as needed
 ];
 
