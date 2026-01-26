@@ -14,37 +14,55 @@ export default function MainLayout() {
 
   return (
     <div className="app">
-      <nav className="main-navbar sticky-navbar">
-        <div className="navbar-content">
-          <div className="navbar-left">
+      <header className="navbar">
+        <div className="nav-container">
+          <a href="/" className="nav-logo" aria-label="KunTartib Home">
+            <span className="logo-icon">🗓️</span>
+            <span className="logo-text">KunTartib</span>
+          </a>
+
+          <nav className="nav-menu" aria-label="Asosiy navigatsiya">
+            {/* Desktop nav links go here */}
+          </nav>
+
+          <div className="nav-actions">
+            <button className="theme-toggle" onClick={toggleTheme} aria-label="Mavzuni o'zgartirish">
+              <span aria-hidden>{theme === 'light' ? '🌙' : '☀️'}</span>
+            </button>
+
+            <button className="notification-btn" aria-label="Bildirishnomalar">
+              🔔
+              <span className="notification-badge">3</span>
+            </button>
+
+            <div className="user-menu">
+              <button className="user-menu-btn" aria-haspopup="true" aria-label="Profil menyusi">
+                <span className="avatar-img small" aria-hidden>👤</span>
+                <span className="user-name">Foydalanuvchi</span>
+              </button>
+            </div>
+
             <button className="hamburger" aria-label="Menyuni ochish" onClick={() => setMobileMenu(m => !m)}>
               <span className="bar"></span>
               <span className="bar"></span>
               <span className="bar"></span>
             </button>
-            <span className="logo-text">KunTartib</span>
-          </div>
-          <div className="navbar-center">
-            {/* Navigatsiya linklari (desktop) */}
-            {/* <NavLink ... /> */}
-          </div>
-          <div className="navbar-right">
-            <button className="theme-toggle-btn" onClick={toggleTheme} title="Mavzuni o'zgartirish">
-              <span className="theme-icon" aria-hidden="true" style={{transition:'all .2s'}}>
-                {theme === 'light' ? '🌙' : '☀️'}
-              </span>
-            </button>
-            {/* UserMenu yoki profil tugmasi joylashadi */}
           </div>
         </div>
-        {/* Mobil menyu */}
-        {mobileMenu && (
-          <div className="mobile-menu">
-            {/* Mobil navigatsiya linklari */}
-            {/* <NavLink ... /> */}
+
+        {/* Mobile menu panel */}
+        <div className={`mobile-panel ${mobileMenu ? 'open' : ''}`} role="dialog" aria-hidden={!mobileMenu}>
+          <div className="mobile-panel-inner">
+            <nav className="mobile-nav">
+              {/* Mobile links */}
+            </nav>
+            <div className="mobile-actions">
+              <button className="btn btn-primary" onClick={toggleTheme}>{theme === 'light' ? 'Dark' : 'Light'}</button>
+            </div>
           </div>
-        )}
-      </nav>
+        </div>
+      </header>
+
       <main className="main-centered">
         <Outlet />
       </main>

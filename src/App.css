@@ -191,6 +191,67 @@ body {
   gap: 15px;
 }
 
+/* Hamburger (mobile) */
+.hamburger {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger .bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-light);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Mobile panel (smooth dropdown for small screens) */
+.mobile-panel {
+  position: fixed;
+  inset: 70px 0 0 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+  transform: translateY(-8px) scaleY(0.98);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 999;
+}
+
+.mobile-panel.open {
+  transform: translateY(0) scaleY(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-panel-inner {
+  max-width: 480px;
+  margin: 12px auto;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+  overflow: hidden;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+}
+
+.mobile-actions {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
 .notification-btn {
   position: relative;
   text-decoration: none;
@@ -468,6 +529,14 @@ body {
   width: 100%;
   margin: 0 auto;
   padding: clamp(12px, 2.5vw, 20px);
+}
+
+/* Centered main wrapper for pages */
+.main-centered {
+  max-width: 1200px;
+  margin: 24px auto;
+  width: 100%;
+  padding: 0 16px;
 }
 
 /* Ikkinchi qator - qo'shimcha navigatsiya */
