@@ -84,6 +84,34 @@
   transition: all 0.3s ease;
 }
 
+.search-container.has-clear .search-input {
+  padding-right: 88px;
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-clear-btn:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  transform: translateY(-50%) scale(1.03);
+}
+
 .search-input:focus {
   outline: none;
   border-color: var(--accent-blue);
@@ -238,6 +266,11 @@
   border: 1px solid var(--border-light);
   position: relative;
   animation: fadeInUp 0.4s ease-out;
+}
+
+.task-card:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 3px;
 }
 
 .task-card:hover {

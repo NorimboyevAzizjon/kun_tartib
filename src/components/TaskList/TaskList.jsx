@@ -40,8 +40,8 @@ const TaskList = ({
   onEdit,
   onTaskSelect 
 }) => {
-  const [filter] = useState('all');
-  const [sortBy] = useState('time');
+  const [filter, setFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('time');
   const [selectedTask, setSelectedTask] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -151,6 +151,13 @@ const TaskList = ({
     if (onTaskSelect) onTaskSelect(task);
   };
 
+  const handleTaskKeyDown = (e, task) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleTaskClick(task);
+    }
+  };
+
   const handleCompleteToggle = (e, taskId) => {
     e.stopPropagation();
     if (onToggleComplete) onToggleComplete(taskId);
@@ -174,6 +181,17 @@ const TaskList = ({
   // Today's tasks
   const todayTasks = tasks.filter(task => isToday(new Date(task.date)));
 
+  const counts = {
+    all: tasks.length,
+    today: tasks.filter(t => isToday(new Date(t.date)) && !t.completed).length,
+    urgent: tasks.filter(t => {
+      const dt = new Date(`${t.date}T${t.time}`);
+      return !t.completed && isUrgent(dt);
+    }).length,
+    pending: tasks.filter(t => !t.completed).length,
+    completed: tasks.filter(t => t.completed).length
+  };
+
   return (
     <div className="task-list-container glass-effect">
       {/* Header Section */}
@@ -191,7 +209,7 @@ const TaskList = ({
         </div>
 
         <div className="header-actions">
-          <div className="search-container">
+          <div className={`search-container ${searchQuery ? 'has-clear' : ''}`}>
             <input
               type="text"
               placeholder="Vazifa qidirish..."
@@ -199,8 +217,51 @@ const TaskList = ({
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
             />
+            {searchQuery && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={() => setSearchQuery('')}
+                aria-label="Qidiruvni tozalash"
+                title="Qidiruvni tozalash"
+              >
+                <ClearOutlinedIcon fontSize="small" />
+              </button>
+            )}
             <span className="search-icon" aria-hidden="true"><SearchOutlinedIcon fontSize="small" /></span>
           </div>
+        </div>
+      </div>
+
+      {/* Controls */}
+      <div className="task-controls">
+        <div className="filters" role="tablist" aria-label="Vazifa filtrlari">
+          <button type="button" className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')} aria-pressed={filter === 'all'}>
+            Barchasi <span className="filter-count">{counts.all}</span>
+          </button>
+          <button type="button" className={`filter-btn ${filter === 'today' ? 'active' : ''}`} onClick={() => setFilter('today')} aria-pressed={filter === 'today'}>
+            Bugun <span className="filter-count">{counts.today}</span>
+          </button>
+          <button type="button" className={`filter-btn ${filter === 'urgent' ? 'active' : ''}`} onClick={() => setFilter('urgent')} aria-pressed={filter === 'urgent'}>
+            Shoshilinch <span className="filter-count">{counts.urgent}</span>
+          </button>
+          <button type="button" className={`filter-btn ${filter === 'pending' ? 'active' : ''}`} onClick={() => setFilter('pending')} aria-pressed={filter === 'pending'}>
+            Kutilmoqda <span className="filter-count">{counts.pending}</span>
+          </button>
+          <button type="button" className={`filter-btn ${filter === 'completed' ? 'active' : ''}`} onClick={() => setFilter('completed')} aria-pressed={filter === 'completed'}>
+            Bajarilgan <span className="filter-count">{counts.completed}</span>
+          </button>
+        </div>
+
+        <div className="sorting">
+          <span className="sort-label">Saralash:</span>
+          <select className="sort-select" value={sortBy} onChange={(e) => setSortBy(e.target.value)} aria-label="Saralash turi">
+            <option value="time">Vaqt bo'yicha</option>
+            <option value="date">Sana bo'yicha</option>
+            <option value="priority">Imtiyoz bo'yicha</option>
+            <option value="category">Kategoriya bo'yicha</option>
+            <option value="urgency">Dolzarblik bo'yicha</option>
+          </select>
         </div>
       </div>
 
@@ -217,6 +278,10 @@ const TaskList = ({
                 key={task.id} 
                 className={`task-card card-hover ${task.completed ? 'completed' : ''} ${isSelected ? 'selected' : ''} ${task.priority} ${isUrgentTask ? 'urgent' : ''}`}
                 onClick={() => handleTaskClick(task)}
+                onKeyDown={(e) => handleTaskKeyDown(e, task)}
+                role="button"
+                tabIndex={0}
+                aria-selected={isSelected}
                 style={{ 
                   '--priority-color': getPriorityColor(task.priority),
                   borderLeft: `4px solid ${getPriorityColor(task.priority)}`
@@ -229,6 +294,8 @@ const TaskList = ({
                     className={`task-checkbox ${task.completed ? 'checked' : ''}`}
                     onClick={(e) => handleCompleteToggle(e, task.id)}
                     title={task.completed ? 'Bekor qilish' : 'Bajarildi deb belgilash'}
+                    type="button"
+                    aria-label={task.completed ? 'Bekor qilish' : 'Bajarildi deb belgilash'}
                   >
                     {task.completed && <span className="check-mark">✓</span>}
                   </button>
@@ -278,6 +345,8 @@ const TaskList = ({
                         className="action-btn edit-btn"
                         onClick={(e) => handleEdit(e, task.id, task)}
                         title="Tahrirlash"
+                        type="button"
+                        aria-label="Tahrirlash"
                       >
                         <EditOutlinedIcon fontSize="small" /> 
                       </button>
@@ -286,6 +355,8 @@ const TaskList = ({
                       className="action-btn delete-btn"
                       onClick={(e) => handleDelete(e, task.id)}
                       title="O'chirish"
+                      type="button"
+                      aria-label="O'chirish"
                     >
                       <DeleteOutlineIcon fontSize="small" /> 
                     </button>

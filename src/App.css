@@ -193,7 +193,7 @@ body {
 
 /* Hamburger (mobile) */
 .hamburger {
-  display: inline-flex;
+  display: none;
   flex-direction: column;
   gap: 4px;
   padding: 8px;
@@ -214,8 +214,12 @@ body {
 /* Mobile panel (smooth dropdown for small screens) */
 .mobile-panel {
   position: fixed;
-  inset: 70px 0 0 0;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: linear-gradient(180deg, rgba(0,0,0,0.02), transparent);
+  backdrop-filter: blur(8px);
   transform: translateY(-8px) scaleY(0.98);
   opacity: 0;
   pointer-events: none;
@@ -664,6 +668,10 @@ body {
   .mobile-menu {
     display: flex;
   }
+
+  .hamburger {
+    display: inline-flex;
+  }
   
   .main-content {
     padding: 12px;
@@ -674,6 +682,7 @@ body {
   .nav-logo { font-size: 1.15rem; }
   .nav-container { padding: 0 12px; height: 64px; }
   .nav-actions { gap: 8px; }
+  .mobile-panel { top: 64px; }
 }
 
 /* Scrollbar */

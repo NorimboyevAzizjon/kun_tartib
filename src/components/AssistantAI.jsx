@@ -30,7 +30,7 @@ export default function AssistantAI() {
       } else {
         setMessages(msgs => [...msgs, { from: 'ai', text: 'AI javob bera olmadi.' }]);
       }
-    } catch (err) {
+    } catch {
       setMessages(msgs => [...msgs, { from: 'ai', text: 'AI server bilan bog‘lanib bo‘lmadi.' }]);
     }
     setLoading(false);

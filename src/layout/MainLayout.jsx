@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 export default function MainLayout() {
   const [theme, setTheme] = useState(() => localStorage.getItem('kuntartib-theme') || 'light');
@@ -10,16 +10,25 @@ export default function MainLayout() {
     localStorage.setItem('kuntartib-theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    if (!mobileMenu) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenu(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [mobileMenu]);
+
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   return (
     <div className="app">
       <header className="navbar">
         <div className="nav-container">
-          <a href="/" className="nav-logo" aria-label="KunTartib Home">
+          <Link to="/" className="nav-logo" aria-label="KunTartib Home">
             <span className="logo-icon">🗓️</span>
             <span className="logo-text">KunTartib</span>
-          </a>
+          </Link>
 
           <nav className="nav-menu" aria-label="Asosiy navigatsiya">
             {/* Desktop nav links go here */}
@@ -30,9 +39,8 @@ export default function MainLayout() {
               <span aria-hidden>{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>
 
-            <button className="notification-btn" aria-label="Bildirishnomalar">
+            <button className="notification-btn" aria-label="Bildirishnomalar" type="button">
               🔔
-              <span className="notification-badge">3</span>
             </button>
 
             <div className="user-menu">
@@ -42,7 +50,7 @@ export default function MainLayout() {
               </button>
             </div>
 
-            <button className="hamburger" aria-label="Menyuni ochish" onClick={() => setMobileMenu(m => !m)}>
+            <button className="hamburger" aria-label="Menyuni ochish" onClick={() => setMobileMenu(m => !m)} type="button">
               <span className="bar"></span>
               <span className="bar"></span>
               <span className="bar"></span>
@@ -51,13 +59,19 @@ export default function MainLayout() {
         </div>
 
         {/* Mobile menu panel */}
-        <div className={`mobile-panel ${mobileMenu ? 'open' : ''}`} role="dialog" aria-hidden={!mobileMenu}>
-          <div className="mobile-panel-inner">
+        <div
+          className={`mobile-panel ${mobileMenu ? 'open' : ''}`}
+          role="dialog"
+          aria-modal="true"
+          aria-hidden={!mobileMenu}
+          onClick={() => setMobileMenu(false)}
+        >
+          <div className="mobile-panel-inner" onClick={(e) => e.stopPropagation()}>
             <nav className="mobile-nav">
               {/* Mobile links */}
             </nav>
             <div className="mobile-actions">
-              <button className="btn btn-primary" onClick={toggleTheme}>{theme === 'light' ? 'Dark' : 'Light'}</button>
+              <button className="btn btn-primary" onClick={toggleTheme} type="button">{theme === 'light' ? 'Dark' : 'Light'}</button>
             </div>
           </div>
         </div>
