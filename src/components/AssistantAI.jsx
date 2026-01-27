@@ -2,8 +2,46 @@ import React, { useState } from 'react';
 import './AssistantAI.css';
 
 const DEFAULT_MESSAGES = [
-  { from: 'ai', text: 'Salom! Men sizga yordam bera olaman. Savolingizni yozing yoki qanday yordam kerakligini so‘rang.' }
+  { from: 'ai', text: 'Salom! Men sizga yordam bera olaman. Savolingizni yozing yoki qanday yordam kerakligini so\'rang.' }
 ];
+
+// Offline AI javoblari (backend ishlamagan holatda)
+const getOfflineResponse = (message) => {
+  const msg = message.toLowerCase();
+  
+  if (msg.includes('salom') || msg.includes('assalom')) {
+    return 'Salom! Sizga qanday yordam bera olaman? Vazifalar, rejalar yoki dastur haqida so\'rang.';
+  }
+  if (msg.includes('vazifa') && (msg.includes('qo\'sh') || msg.includes('yaratish'))) {
+    return 'Yangi vazifa qo\'shish uchun bosh sahifadagi "Yangi Vazifa Qo\'shish" bo\'limidan foydalaning. U yerda vazifa nomi, sanasi, vaqti, kategoriyasi va muhimlik darajasini belgilashingiz mumkin.';
+  }
+  if (msg.includes('vazifa')) {
+    return 'Vazifalar bo\'limida siz barcha vazifalaringizni ko\'rishingiz, tahrirlashingiz va bajarilgan deb belgilashingiz mumkin. Filtrlar yordamida bugungi, shoshilinch yoki bajarilgan vazifalarni ajratib ko\'rishingiz mumkin.';
+  }
+  if (msg.includes('pomodoro') || msg.includes('taymer')) {
+    return 'Pomodoro texnikasi 25 daqiqa ishlash va 5 daqiqa dam olishdan iborat. Pomodoro sahifasiga o\'ting va taymerni boshlang!';
+  }
+  if (msg.includes('statistika') || msg.includes('hisobot')) {
+    return 'Statistika sahifasida haftalik va oylik bajarilgan vazifalaringiz grafiklar ko\'rinishida ko\'rsatiladi.';
+  }
+  if (msg.includes('eslatma') || msg.includes('bildirishnoma')) {
+    return 'Eslatmalar uchun vazifa qo\'shayotganda "Eslatma qo\'shish" tugmasini yoqing va qancha vaqt oldin eslatilishini tanlang.';
+  }
+  if (msg.includes('maqsad') || msg.includes('goal')) {
+    return 'Maqsadlar sahifasida uzoq muddatli maqsadlaringizni belgilashingiz va progress\'ni kuzatishingiz mumkin.';
+  }
+  if (msg.includes('sozlama') || msg.includes('settings')) {
+    return 'Sozlamalar sahifasida mavzuni (light/dark), bildirishnomalarni va boshqa parametrlarni o\'zgartirishingiz mumkin.';
+  }
+  if (msg.includes('yordam') || msg.includes('help')) {
+    return 'Men sizga quyidagilar haqida yordam bera olaman:\n• Vazifalarni boshqarish\n• Pomodoro texnikasi\n• Statistika va hisobotlar\n• Eslatmalar sozlash\n• Maqsadlarni belgilash\n\nNima haqida bilmoqchisiz?';
+  }
+  if (msg.includes('rahmat') || msg.includes('tashakkur')) {
+    return 'Marhamat! Yana savollaringiz bo\'lsa, bemalol yozing. 😊';
+  }
+  
+  return 'Tushundim. Sizga quyidagilar haqida yordam bera olaman: vazifalar, pomodoro, statistika, eslatmalar, maqsadlar yoki dastur sozlamalari. Qaysi biri haqida bilmoqchisiz?';
+};
 
 export default function AssistantAI() {
   const [messages, setMessages] = useState(DEFAULT_MESSAGES);
@@ -16,22 +54,29 @@ export default function AssistantAI() {
     if (!input.trim()) return;
     const userMsg = { from: 'user', text: input };
     setMessages(msgs => [...msgs, userMsg]);
+    const userInput = input;
     setInput('');
     setLoading(true);
+    
     try {
+      // Backend serverga ulanishga harakat qilish
       const res = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg.text })
+        body: JSON.stringify({ message: userInput })
       });
       const data = await res.json();
       if (data.answer) {
         setMessages(msgs => [...msgs, { from: 'ai', text: data.answer }]);
       } else {
-        setMessages(msgs => [...msgs, { from: 'ai', text: 'AI javob bera olmadi.' }]);
+        // Backend javob bermasa, offline rejimda ishlash
+        const offlineAnswer = getOfflineResponse(userInput);
+        setMessages(msgs => [...msgs, { from: 'ai', text: offlineAnswer }]);
       }
     } catch {
-      setMessages(msgs => [...msgs, { from: 'ai', text: 'AI server bilan bog‘lanib bo‘lmadi.' }]);
+      // Server ishlamasa, offline rejimda ishlash
+      const offlineAnswer = getOfflineResponse(userInput);
+      setMessages(msgs => [...msgs, { from: 'ai', text: offlineAnswer }]);
     }
     setLoading(false);
   };
