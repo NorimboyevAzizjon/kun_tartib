@@ -22,6 +22,78 @@
   color: var(--text-primary, #1f2937);
 }
 
+/* AI Analytics Banner */
+.ai-analytics-banner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.ai-analytics-banner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.banner-icon {
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.banner-icon svg {
+  font-size: 28px !important;
+  color: white;
+}
+
+.banner-content {
+  flex: 1;
+}
+
+.banner-content h3 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.banner-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.banner-arrow {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.ai-analytics-banner:hover .banner-arrow {
+  transform: translateX(5px);
+}
+
+.banner-arrow svg {
+  font-size: 20px !important;
+  color: white;
+}
+
 .stats-page-content {
   display: flex;
   flex-direction: column;
@@ -60,5 +132,15 @@
 
   .stats-page-header h1 {
     font-size: 22px;
+  }
+
+  .ai-analytics-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .banner-arrow {
+    display: none;
   }
 }

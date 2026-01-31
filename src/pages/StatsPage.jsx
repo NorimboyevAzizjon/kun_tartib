@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import AdvancedStats from '../components/AdvancedStats/AdvancedStats';
 import StreakCounter from '../components/StreakCounter/StreakCounter';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import './StatsPage.css';
 
 const StatsPage = () => {
@@ -21,6 +24,20 @@ const StatsPage = () => {
         <BarChartIcon />
         <h1>Kengaytirilgan Statistika</h1>
       </div>
+
+      {/* AI Analytics Banner */}
+      <Link to="/ai-analytics" className="ai-analytics-banner">
+        <div className="banner-icon">
+          <PsychologyIcon />
+        </div>
+        <div className="banner-content">
+          <h3>🤖 AI Tahlil va Tavsiyalar</h3>
+          <p>Shaxsiy unumdorligingizni AI yordamida tahlil qiling va tavsiyalar oling</p>
+        </div>
+        <div className="banner-arrow">
+          <ArrowForwardIcon />
+        </div>
+      </Link>
 
       <div className="stats-page-content">
         <div className="streak-section">
