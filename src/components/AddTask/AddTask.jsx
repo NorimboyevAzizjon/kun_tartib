@@ -63,8 +63,43 @@ const AddTask = ({ onAddTask }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!task.title.trim()) newErrors.title = 'Vazifa nomini kiriting';
-    if (task.title.length > 100) newErrors.title = 'Nom 100 belgidan oshmasligi kerak';
+    
+    // Title validatsiyasi
+    if (!task.title.trim()) {
+      newErrors.title = 'Vazifa nomini kiriting';
+    } else if (task.title.length > 200) {
+      newErrors.title = 'Nom 200 belgidan oshmasligi kerak';
+    } else if (task.title.length < 2) {
+      newErrors.title = 'Nom kamida 2 belgi bo\'lishi kerak';
+    }
+
+    // Date validatsiyasi - o'tgan sana bo'lmasligi kerak (bugundan oldin)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(task.date);
+    selectedDate.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+      newErrors.date = 'O\'tgan sanani tanlash mumkin emas';
+    }
+
+    // Time validatsiyasi - agar bugun tanlangan bo'lsa, vaqt o'tgan bo'lmasligi kerak
+    if (task.date === format(new Date(), 'yyyy-MM-dd')) {
+      const now = new Date();
+      const [hours, minutes] = task.time.split(':').map(Number);
+      const taskTime = new Date();
+      taskTime.setHours(hours, minutes, 0, 0);
+      
+      if (taskTime < now) {
+        newErrors.time = 'O\'tgan vaqtni tanlash mumkin emas';
+      }
+    }
+
+    // Description validatsiyasi
+    if (task.description && task.description.length > 1000) {
+      newErrors.description = 'Tavsif 1000 belgidan oshmasligi kerak';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -78,14 +113,17 @@ const AddTask = ({ onAddTask }) => {
       ? addMinutes(dateTime, -task.reminderTime)
       : null;
 
+    // XSS prevention - HTML taglarini olib tashlash
+    const sanitize = (str) => str.replace(/<[^>]*>/g, '').trim();
+
     const newTask = {
       id: `task_${uuidv4()}`,
-      title: task.title.trim(),
+      title: sanitize(task.title),
       date: task.date,
       time: task.time,
       category: task.category,
       priority: task.priority,
-      description: task.description.trim(),
+      description: sanitize(task.description),
       reminder: task.reminder,
       reminderTime: task.reminder ? task.reminderTime : null,
       reminderDateTime: reminderDateTime,

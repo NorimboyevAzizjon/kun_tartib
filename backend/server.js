@@ -26,6 +26,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/goals', require('./routes/goals'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/recurring', require('./routes/recurring'));
 
 // Asosiy route
 app.get('/', (req, res) => {
@@ -36,14 +37,11 @@ app.get('/', (req, res) => {
     endpoints: {
       auth: '/api/auth',
       tasks: '/api/tasks',
-      goals: '/api/goals'
+      goals: '/api/goals',
+      ai: '/api/ai/chat'
     }
   });
 });
-      ai: '/api/ai/chat'
-    }
-   });
-  });
 
 // 404 Handler
 app.use((req, res) => {
