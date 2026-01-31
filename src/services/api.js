@@ -149,7 +149,29 @@ export const authAPI = {
   // Kirish
   login: async (credentials) => {
     if (USE_LOCAL_STORAGE) {
-      // LocalStorage mode
+      // Demo/Admin account - har doim ishlaydi
+      const DEMO_EMAIL = 'norimboyevazizjon29@gmail.com';
+      const DEMO_PASSWORD = 'Azizjon';
+      
+      if (credentials.email.toLowerCase().trim() === DEMO_EMAIL && 
+          credentials.password === DEMO_PASSWORD) {
+        const demoUser = {
+          _id: 'demo_admin_001',
+          name: 'Azizjon Norimboyev',
+          email: DEMO_EMAIL,
+          avatar: '👨‍💻',
+          role: 'admin',
+          createdAt: '2024-01-01T00:00:00.000Z',
+          token: 'demo_token_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+        };
+        
+        localStorage.setItem(STORAGE_KEYS.TOKEN, demoUser.token);
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(demoUser));
+        
+        return { success: true, data: demoUser };
+      }
+      
+      // LocalStorage mode - oddiy foydalanuvchilar
       const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
       const hashedPassword = simpleHash(credentials.password);
       const user = users.find(u => 
