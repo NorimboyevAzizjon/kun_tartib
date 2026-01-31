@@ -15,6 +15,7 @@ import WeeklyReviewPage from '../pages/WeeklyReviewPage';
 import NotesPage from '../pages/NotesPage';
 import GamificationPage from '../pages/GamificationPage';
 import StatsPage from '../pages/StatsPage';
+import AIAnalyticsPage from '../pages/AIAnalyticsPage';
 import ArchivePage from '../pages/ArchivePage';
 import TagsPage from '../pages/TagsPage';
 import NotificationsPage from '../pages/NotificationsPage';
@@ -38,6 +39,7 @@ export default function AppRoutes() {
         <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
         <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
         <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
+        <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
         <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
         <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
