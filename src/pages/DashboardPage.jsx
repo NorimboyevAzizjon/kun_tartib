@@ -22,6 +22,8 @@ import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const DashboardPage = () => {
   const [tasks, setTasks] = useState([]);
@@ -279,6 +281,18 @@ const DashboardPage = () => {
           </button>
         </div>
       </header>
+
+      {/* AI Analytics Link */}
+      <Link to="/ai-analytics" className="ai-analytics-link">
+        <div className="ai-link-icon">
+          <PsychologyIcon />
+        </div>
+        <div className="ai-link-content">
+          <span className="ai-link-title">🤖 AI Tahlil</span>
+          <span className="ai-link-subtitle">Shaxsiy tavsiyalar</span>
+        </div>
+        <ArrowForwardIcon className="ai-link-arrow" />
+      </Link>
 
       {/* Task Summary Widget */}
       <div className="summary-section">
