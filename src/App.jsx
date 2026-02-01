@@ -26,6 +26,7 @@ import TagsPage from './pages/TagsPage';
 import './App.css';
 import Toast from './components/Toast';
 import AssistantAI from './components/AssistantAI';
+import KeyboardShortcuts from './components/KeyboardShortcuts/KeyboardShortcuts';
 // Toast Context for global notification
 const ToastContext = React.createContext({ showToast: () => {} });
 
@@ -360,6 +361,8 @@ function App() {
             <Toast message={show ? toast.message : ''} type={toast.type} onClose={handleToastClose} duration={toast.duration || 3000} />
             {/* AI Assistant floating widget */}
             <AssistantAI />
+            {/* Global Keyboard Shortcuts */}
+            <KeyboardShortcuts />
           </MainLayout>
         </Router>
       </ToastContext.Provider>
