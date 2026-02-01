@@ -1,0 +1,110 @@
+/* Auto Dark Mode Button */
+.auto-dark-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-secondary, #f3f4f6);
+  border: 2px solid var(--border-light, #e5e7eb);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary, #1f2937);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.auto-dark-mode-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auto-dark-mode-btn.mode-light {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border-color: #fbbf24;
+  color: #92400e;
+}
+
+.auto-dark-mode-btn.mode-light:hover {
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+}
+
+.auto-dark-mode-btn.mode-dark {
+  background: linear-gradient(135deg, #1e3a5f, #1e293b);
+  border-color: #3b82f6;
+  color: #93c5fd;
+}
+
+.auto-dark-mode-btn.mode-dark:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.auto-dark-mode-btn.mode-auto {
+  background: linear-gradient(135deg, #ddd6fe, #c4b5fd);
+  border-color: #8b5cf6;
+  color: #5b21b6;
+}
+
+.auto-dark-mode-btn.mode-auto:hover {
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.auto-dark-mode-btn.mode-time {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+  border-color: #ec4899;
+  color: #9d174d;
+}
+
+.auto-dark-mode-btn.mode-time:hover {
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
+}
+
+.mode-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mode-icon svg {
+  font-size: 20px !important;
+}
+
+.mode-label {
+  font-size: 0.85rem;
+}
+
+/* Compact version for navbar */
+.auto-dark-mode-btn.compact {
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.auto-dark-mode-btn.compact .mode-label {
+  display: none;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .auto-dark-mode-btn {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .auto-dark-mode-btn.mode-light {
+  background: linear-gradient(135deg, #78350f, #92400e);
+  border-color: #fbbf24;
+  color: #fef3c7;
+}
+
+[data-theme="dark"] .auto-dark-mode-btn.mode-auto {
+  background: linear-gradient(135deg, #5b21b6, #6d28d9);
+  border-color: #a78bfa;
+  color: #ede9fe;
+}
+
+[data-theme="dark"] .auto-dark-mode-btn.mode-time {
+  background: linear-gradient(135deg, #9d174d, #be185d);
+  border-color: #f472b6;
+  color: #fce7f3;
+}
