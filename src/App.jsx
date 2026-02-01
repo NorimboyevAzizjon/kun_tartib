@@ -20,6 +20,7 @@ import NotesPage from './pages/NotesPage';
 import GamificationPage from './pages/GamificationPage';
 // Yangi qo'shilgan sahifalar
 import StatsPage from './pages/StatsPage';
+import AIAnalyticsPage from './pages/AIAnalyticsPage';
 import ArchivePage from './pages/ArchivePage';
 import TagsPage from './pages/TagsPage';
 import './App.css';
@@ -54,6 +55,7 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
 
 // Navigation Link Komponenti
 const NavLink = ({ to, children, icon }) => {
@@ -230,7 +232,8 @@ const MainLayout = ({ children }) => {
             <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
             <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
-            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
+            <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
+            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
@@ -250,7 +253,8 @@ const MainLayout = ({ children }) => {
             <NavLink to="/weekly-review" icon={<AssessmentOutlinedIcon fontSize="small" />}>Haftalik</NavLink>
             <NavLink to="/notes" icon={<StickyNote2OutlinedIcon fontSize="small" />}>Eslatmalar</NavLink>
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
-            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Tahlil</NavLink>
+            <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
+            <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
@@ -344,6 +348,7 @@ function App() {
               <Route path="/weekly-review" element={<ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>} />
               <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
               <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
+              <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
               <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
               <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
               <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
