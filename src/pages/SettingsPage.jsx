@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { requestNotificationPermission, sendNotification } from '../components/DesktopNotifications/DesktopNotifications';
 import './SettingsPage.css';
 
 // MUI Icons
@@ -839,6 +840,44 @@ const SettingsPage = () => {
                 />
                 <span className="toggle-slider"></span>
               </label>
+            </div>
+
+            {/* Desktop Notifications Permission */}
+            <div className="setting-item desktop-notification-item">
+              <div className="setting-info">
+                <span className="setting-label">
+                  <NotificationsIcon />
+                  Brauzer bildirishnomalari
+                </span>
+                <span className="setting-desc">
+                  {typeof window !== 'undefined' && 'Notification' in window
+                    ? Notification.permission === 'granted'
+                      ? '✓ Ruxsat berilgan'
+                      : Notification.permission === 'denied'
+                        ? '✗ Ruxsat rad etilgan'
+                        : 'Ruxsat so\'rash kerak'
+                    : 'Bu brauzer qo\'llab-quvvatlamaydi'}
+                </span>
+              </div>
+              <button 
+                className="permission-btn"
+                onClick={async () => {
+                  const granted = await requestNotificationPermission();
+                  if (granted) {
+                    sendNotification('KunTartib', {
+                      body: 'Bildirishnomalar muvaffaqiyatli yoqildi! 🎉'
+                    });
+                    setMessage({ type: 'success', text: 'Brauzer bildirishnomalari yoqildi!' });
+                  } else {
+                    setMessage({ type: 'error', text: 'Bildirishnomalar rad etildi yoki qo\'llab-quvvatlanmaydi' });
+                  }
+                }}
+                disabled={typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted'}
+              >
+                {typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted' 
+                  ? 'Yoqilgan ✓' 
+                  : 'Ruxsat so\'rash'}
+              </button>
             </div>
           </div>
         )}
