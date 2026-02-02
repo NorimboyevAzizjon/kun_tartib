@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   format, 
   parseISO, 
@@ -44,6 +44,22 @@ const TaskList = ({
   const [sortBy, setSortBy] = useState('time');
   const [selectedTask, setSelectedTask] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [subtaskInputs, setSubtaskInputs] = useState({});
+  const [activeTimerId, setActiveTimerId] = useState(null);
+  const timerRef = useRef(null);
+  const tasksRef = useRef(tasks);
+
+  useEffect(() => {
+    tasksRef.current = tasks;
+  }, [tasks]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
   // Helper function
   const isUrgent = (date) => {
@@ -171,6 +187,71 @@ const TaskList = ({
   const handleEdit = (e, taskId, task) => {
     e.stopPropagation();
     if (onEdit) onEdit(taskId, task);
+  };
+
+  const handleSubtaskInputChange = (taskId, value) => {
+    setSubtaskInputs(prev => ({ ...prev, [taskId]: value }));
+  };
+
+  const handleAddSubtask = (e, task) => {
+    e.stopPropagation();
+    const input = (subtaskInputs[task.id] || '').trim();
+    if (!input) return;
+    const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+    const newSubtask = {
+      id: `${task.id}_sub_${Date.now()}`,
+      title: input,
+      done: false
+    };
+    if (onEdit) {
+      onEdit(task.id, { subtasks: [...subtasks, newSubtask] });
+    }
+    setSubtaskInputs(prev => ({ ...prev, [task.id]: '' }));
+  };
+
+  const handleToggleSubtask = (e, task, subtaskId) => {
+    e.stopPropagation();
+    const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+    const updated = subtasks.map(st =>
+      st.id === subtaskId ? { ...st, done: !st.done } : st
+    );
+    if (onEdit) {
+      onEdit(task.id, { subtasks: updated });
+    }
+  };
+
+  const handleRemoveSubtask = (e, task, subtaskId) => {
+    e.stopPropagation();
+    const subtasks = Array.isArray(task.subtasks) ? task.subtasks : [];
+    const updated = subtasks.filter(st => st.id !== subtaskId);
+    if (onEdit) {
+      onEdit(task.id, { subtasks: updated });
+    }
+  };
+
+  const handleToggleTimer = (e, task) => {
+    e.stopPropagation();
+    if (activeTimerId === task.id) {
+      setActiveTimerId(null);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      return;
+    }
+
+    setActiveTimerId(task.id);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    timerRef.current = setInterval(() => {
+      if (onEdit) {
+        const latest = tasksRef.current.find(t => t.id === task.id);
+        const current = latest?.timeSpent || 0;
+        onEdit(task.id, { timeSpent: current + 1 });
+      }
+    }, 1000);
   };
 
   // Task completion percentage
@@ -319,6 +400,12 @@ const TaskList = ({
                         <span className="meta-icon" aria-hidden="true"><AccessTimeOutlinedIcon fontSize="small" /></span>
                         {task.time}
                       </span>
+                      {typeof task.timeSpent === 'number' && task.timeSpent > 0 && (
+                        <span className="meta-item time-spent">
+                          <span className="meta-icon" aria-hidden="true">⏱️</span>
+                          {Math.floor(task.timeSpent / 60)}m
+                        </span>
+                      )}
                       <span className="meta-item">
                         <span className="meta-icon" aria-hidden="true"><EventOutlinedIcon fontSize="small" /></span>
                         {formatDateDisplay(task.date)}
@@ -340,6 +427,15 @@ const TaskList = ({
 
                   {/* Actions */}
                   <div className="task-actions">
+                    <button 
+                      className={`action-btn timer-btn ${activeTimerId === task.id ? 'active' : ''}`}
+                      onClick={(e) => handleToggleTimer(e, task)}
+                      title={activeTimerId === task.id ? 'To\'xtatish' : 'Vaqtni boshlash'}
+                      type="button"
+                      aria-label={activeTimerId === task.id ? 'To\'xtatish' : 'Vaqtni boshlash'}
+                    >
+                      {activeTimerId === task.id ? '⏸️' : '⏱️'}
+                    </button>
                     {onEdit && (
                       <button 
                         className="action-btn edit-btn"
@@ -368,6 +464,47 @@ const TaskList = ({
                   <div className="task-description">
                     <span className="desc-icon" aria-hidden="true"><DescriptionOutlinedIcon fontSize="small" /></span>
                     <span className="desc-text">{task.description}</span>
+                  </div>
+                )}
+
+                {isSelected && (
+                  <div className="task-subtasks">
+                    <div className="subtasks-header">
+                      <span>Checklist</span>
+                      <span className="subtask-count">
+                        {(task.subtasks || []).filter(s => s.done).length}/{(task.subtasks || []).length}
+                      </span>
+                    </div>
+                    <div className="subtask-input">
+                      <input
+                        type="text"
+                        placeholder="Subtask qo'shish..."
+                        value={subtaskInputs[task.id] || ''}
+                        onChange={(e) => handleSubtaskInputChange(task.id, e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleAddSubtask(e, task);
+                        }}
+                      />
+                      <button type="button" onClick={(e) => handleAddSubtask(e, task)}>Qo'shish</button>
+                    </div>
+                    <div className="subtask-list">
+                      {(task.subtasks || []).map(subtask => (
+                        <div key={subtask.id} className={`subtask-item ${subtask.done ? 'done' : ''}`}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={subtask.done}
+                              onChange={(e) => handleToggleSubtask(e, task, subtask.id)}
+                            />
+                            <span>{subtask.title}</span>
+                          </label>
+                          <button type="button" onClick={(e) => handleRemoveSubtask(e, task, subtask.id)}>✕</button>
+                        </div>
+                      ))}
+                      {(task.subtasks || []).length === 0 && (
+                        <div className="subtask-empty">Subtask yo'q</div>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

@@ -439,6 +439,105 @@
   color: #ef4444;
 }
 
+.task-actions .timer-btn {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--accent-blue);
+}
+
+.task-actions .timer-btn.active {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.task-meta-row .time-spent {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.task-subtasks {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--border-light);
+}
+
+.subtasks-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.subtask-count {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.subtask-input {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.subtask-input input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-primary);
+}
+
+.subtask-input button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--accent-blue);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.subtask-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subtask-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--bg-primary);
+}
+
+.subtask-item label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.subtask-item.done span {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.subtask-item button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.subtask-empty {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 /* Task Description */
 .task-description {
   display: flex;
