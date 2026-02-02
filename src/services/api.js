@@ -149,11 +149,11 @@ export const authAPI = {
   // Kirish
   login: async (credentials) => {
     if (USE_LOCAL_STORAGE) {
-      // Demo/Admin account - har doim ishlaydi
+      // Demo account - har doim ishlaydi
       const DEMO_EMAIL = 'norimboyevazizjon29@gmail.com';
-      const DEMO_PASSWORD = 'Azizjon';
+      const DEMO_PASSWORD = 'Azizjon1973';
       
-      if (credentials.email.toLowerCase().trim() === DEMO_EMAIL && 
+      if (credentials.email.toLowerCase().trim() === DEMO_EMAIL.toLowerCase() && 
           credentials.password === DEMO_PASSWORD) {
         const demoUser = {
           _id: 'demo_admin_001',
