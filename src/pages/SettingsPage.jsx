@@ -242,6 +242,99 @@ const SettingsPage = () => {
     setMessage({ type: 'success', text: "Ma'lumotlar muvaffaqiyatli eksport qilindi!" });
   };
 
+  // Export tasks to CSV
+  const handleExportCSV = () => {
+    const tasks = JSON.parse(localStorage.getItem('kun-tartibi-tasks') || '[]');
+    const headers = ['Title', 'Date', 'Time', 'Category', 'Priority', 'Completed', 'Description'];
+    const rows = tasks.map(t => [
+      t.title || '',
+      t.date || '',
+      t.time || '',
+      t.category || '',
+      t.priority || '',
+      t.completed ? 'Yes' : 'No',
+      (t.description || '').replace(/\n/g, ' ')
+    ]);
+
+    const escapeCSV = (value) => {
+      const str = String(value ?? '');
+      if (/[",\n]/.test(str)) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const csvContent = [headers, ...rows]
+      .map(row => row.map(escapeCSV).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `kuntartib-tasks-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setMessage({ type: 'success', text: 'CSV fayl yuklab olindi!' });
+  };
+
+  // Export tasks to PDF (print)
+  const handleExportPDF = () => {
+    const tasks = JSON.parse(localStorage.getItem('kun-tartibi-tasks') || '[]');
+    const win = window.open('', '_blank');
+    if (!win) return;
+
+    const rows = tasks.map(t => `
+      <tr>
+        <td>${t.title || ''}</td>
+        <td>${t.date || ''}</td>
+        <td>${t.time || ''}</td>
+        <td>${t.category || ''}</td>
+        <td>${t.priority || ''}</td>
+        <td>${t.completed ? 'Yes' : 'No'}</td>
+      </tr>
+    `).join('');
+
+    win.document.write(`
+      <html>
+        <head>
+          <title>KunTartib - Vazifalar</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            h1 { margin-bottom: 16px; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #ddd; padding: 8px; font-size: 12px; }
+            th { background: #f3f4f6; text-align: left; }
+          </style>
+        </head>
+        <body>
+          <h1>KunTartib - Vazifalar</h1>
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </body>
+      </html>
+    `);
+    win.document.close();
+    win.focus();
+    win.print();
+    win.close();
+  };
+
   // Import data
   const handleImportData = (e) => {
     const file = e.target.files[0];
@@ -1060,6 +1153,18 @@ const SettingsPage = () => {
                 <DownloadIcon />
                 <span>Eksport qilish</span>
                 <small>Barcha ma'lumotlarni JSON fayl sifatida yuklab olish</small>
+              </button>
+
+              <button className="data-btn export-btn" onClick={handleExportCSV}>
+                <DownloadIcon />
+                <span>CSV eksport</span>
+                <small>Vazifalarni CSV formatda yuklab olish</small>
+              </button>
+
+              <button className="data-btn export-btn" onClick={handleExportPDF}>
+                <DownloadIcon />
+                <span>PDF eksport</span>
+                <small>Vazifalarni PDF ko'rinishida chop etish</small>
               </button>
 
               <button className="data-btn import-btn" onClick={() => backupInputRef.current?.click()}>
