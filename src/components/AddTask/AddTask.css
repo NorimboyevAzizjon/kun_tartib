@@ -341,6 +341,16 @@
   padding-bottom: 8px;
 }
 
+.shared-list-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--border-light);
+  background: var(--bg-secondary);
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
 .ai-priority-actions {
   display: flex;
   justify-content: flex-end;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { format, addMinutes } from 'date-fns';
 import { uz } from 'date-fns/locale';
@@ -37,8 +37,23 @@ const AddTask = ({ onAddTask }) => {
     reminder: false,
     reminderTime: 10,
     isRecurring: false,
-    recurrence: 'daily'
+    recurrence: 'daily',
+    sharedListId: ''
   });
+
+  const [sharedLists, setSharedLists] = useState(() => {
+    const saved = localStorage.getItem('shared-lists');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    const onStorage = () => {
+      const saved = localStorage.getItem('shared-lists');
+      setSharedLists(saved ? JSON.parse(saved) : []);
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   const [errors, setErrors] = useState({});
 
@@ -139,6 +154,7 @@ const AddTask = ({ onAddTask }) => {
       isRecurring: task.isRecurring,
       recurrence: task.isRecurring ? task.recurrence : null,
       recurrenceId: task.isRecurring ? `rec_${uuidv4()}` : null,
+      sharedListId: task.sharedListId || null,
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -158,7 +174,8 @@ const AddTask = ({ onAddTask }) => {
         reminder: false,
         reminderTime: 10,
         isRecurring: false,
-        recurrence: 'daily'
+        recurrence: 'daily',
+        sharedListId: ''
       });
       setErrors({});
     }, 300);
@@ -368,6 +385,24 @@ const AddTask = ({ onAddTask }) => {
             )}
           </div>
 
+          {/* Shared List Selection */}
+          <div className="form-group">
+            <label className="form-label">
+              <CategoryOutlinedIcon className="label-icon-svg" />
+              Shared List (ixtiyoriy)
+            </label>
+            <select
+              className="shared-list-select"
+              value={task.sharedListId}
+              onChange={(e) => setTask({ ...task, sharedListId: e.target.value })}
+            >
+              <option value="">Shaxsiy</option>
+              {sharedLists.map(list => (
+                <option key={list.id} value={list.id}>{list.name}</option>
+              ))}
+            </select>
+          </div>
+
           {/* Priority Selection */}
           <div className="form-group">
             <label className="form-label">
@@ -495,7 +530,8 @@ const AddTask = ({ onAddTask }) => {
                   reminder: false,
                   reminderTime: 10,
                   isRecurring: false,
-                  recurrence: 'daily'
+                  recurrence: 'daily',
+                  sharedListId: ''
                 });
               }}
             >
