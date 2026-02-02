@@ -54,6 +54,149 @@
   box-shadow: 0 2px 8px rgba(99,102,241,0.10);
 }
 
+.assistant-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px 0 12px;
+}
+
+.assistant-tool-btn {
+  background: var(--secondary, #23263a);
+  color: #fff;
+  border: 1px solid var(--border-color, #2c2f3a);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.assistant-tool-btn.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.assistant-planner {
+  margin: 8px 12px 0 12px;
+  background: var(--secondary, #23263a);
+  border: 1px solid var(--border-color, #2c2f3a);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.planner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.assistant-planner label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #cbd5f5;
+}
+
+.assistant-planner input,
+.assistant-planner select,
+.assistant-planner textarea {
+  background: #1d2030;
+  border: 1px solid #2c2f3a;
+  color: #fff;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
+.assistant-planner textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.planner-tasks {
+  margin-top: 6px;
+}
+
+.planner-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.planner-actions button {
+  flex: 1;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.planner-actions button.secondary {
+  background: #3b3f55;
+}
+
+.planner-result {
+  margin-top: 10px;
+  background: #1a1d2b;
+  border: 1px solid #2c2f3a;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.plan-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #e2e8f0;
+}
+
+.plan-item {
+  display: grid;
+  grid-template-columns: 56px 1fr 44px;
+  gap: 6px;
+  padding: 6px;
+  background: #23263a;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.plan-time {
+  color: #a5b4fc;
+  font-weight: 600;
+}
+
+.plan-duration {
+  text-align: right;
+  color: #cbd5f5;
+}
+
+.apply-btn {
+  width: 100%;
+  margin-top: 6px;
+  background: #22c55e;
+  border: none;
+  padding: 8px 10px;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.plan-error {
+  color: #fca5a5;
+  font-size: 0.85rem;
+}
+
+.plan-warning {
+  margin-top: 6px;
+  color: #fbbf24;
+  font-size: 0.85rem;
+}
+
 .robot-avatar {
   display: flex;
   align-items: center;
