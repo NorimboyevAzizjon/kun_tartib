@@ -4,6 +4,7 @@ import { format, isToday, startOfWeek, endOfWeek } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import TaskList from '../components/TaskList/TaskList';
 import AddTask from '../components/AddTask/AddTask';
+import TodayPlanWidget from '../components/TodayPlanWidget/TodayPlanWidget';
 import './HomePage.css';
 
 // MUI Icons
@@ -372,6 +373,7 @@ const HomePage = () => {
 
         {/* Right Panel */}
         <div className="right-panel">
+          <TodayPlanWidget tasks={tasks} />
           {/* View Selector */}
           <div className="view-selector glass-effect">
             <div className="selector-header">

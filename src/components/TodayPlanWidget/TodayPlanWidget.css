@@ -1,0 +1,110 @@
+.today-plan-widget {
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border-light, #e5e7eb);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+
+.today-plan-widget .widget-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.today-plan-widget .title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary, #111827);
+}
+
+.today-plan-widget .title h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.today-plan-widget .stats {
+  display: flex;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.today-plan-widget .next-task {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--bg-secondary, #f9fafb);
+  border: 1px dashed var(--border-light, #e5e7eb);
+}
+
+.today-plan-widget .next-task .label {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.today-plan-widget .next-task .task-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.today-plan-widget .next-task .time {
+  font-weight: 600;
+  color: var(--primary, #6366f1);
+}
+
+.today-plan-widget .next-task.empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #10b981;
+}
+
+.today-plan-widget .task-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.today-plan-widget .task-item {
+  display: flex;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--bg-secondary, #f3f4f6);
+  color: var(--text-primary, #111827);
+  font-size: 0.9rem;
+}
+
+.today-plan-widget .task-item .time {
+  font-weight: 600;
+  min-width: 52px;
+}
+
+.today-plan-widget .task-item.completed {
+  opacity: 0.7;
+  text-decoration: line-through;
+}
+
+.today-plan-widget .empty {
+  color: var(--text-secondary, #6b7280);
+  font-size: 0.9rem;
+}
+
+[data-theme="dark"] .today-plan-widget {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .today-plan-widget .task-item {
+  background: #374151;
+  color: #f9fafb;
+}
