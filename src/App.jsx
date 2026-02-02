@@ -23,6 +23,7 @@ import StatsPage from './pages/StatsPage';
 import AIAnalyticsPage from './pages/AIAnalyticsPage';
 import ArchivePage from './pages/ArchivePage';
 import TagsPage from './pages/TagsPage';
+import SharedListsPage from './pages/SharedListsPage';
 import './App.css';
 import Toast from './components/Toast';
 import AssistantAI from './components/AssistantAI';
@@ -57,6 +58,7 @@ import ArchiveOutlinedIcon from '@mui/icons-material/ArchiveOutlined';
 import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
 import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
 
 // Navigation Link Komponenti
 const NavLink = ({ to, children, icon }) => {
@@ -235,6 +237,7 @@ const MainLayout = ({ children }) => {
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
             <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
             <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
+            <NavLink to="/shared-lists" icon={<GroupOutlinedIcon fontSize="small" />}>Shared Lists</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
@@ -256,6 +259,7 @@ const MainLayout = ({ children }) => {
             <NavLink to="/achievements" icon={<EmojiEventsOutlinedIcon fontSize="small" />}>Yutuqlar</NavLink>
             <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
             <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
+            <NavLink to="/shared-lists" icon={<GroupOutlinedIcon fontSize="small" />}>Shared Lists</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
@@ -351,6 +355,7 @@ function App() {
               <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
               <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
               <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
+              <Route path="/shared-lists" element={<ProtectedRoute><SharedListsPage /></ProtectedRoute>} />
               <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
               <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
               <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />

@@ -1,0 +1,163 @@
+.shared-lists-page {
+  padding: clamp(12px, 2.5vw, 20px);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.shared-header {
+  text-align: center;
+  background: var(--gradient-primary);
+  color: white;
+  padding: 24px;
+  border-radius: 18px;
+  margin-bottom: 20px;
+}
+
+.shared-header h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: 2rem;
+}
+
+.shared-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .shared-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.create-card,
+.lists-card,
+.details-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.create-card h3,
+.lists-card h3,
+.details-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.create-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.create-card input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+}
+
+.create-card button {
+  padding: 10px 12px;
+  border: none;
+  border-radius: 10px;
+  background: var(--accent-blue);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  cursor: pointer;
+}
+
+.list-item.active {
+  border-color: var(--accent-blue);
+}
+
+.list-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.list-title {
+  font-weight: 700;
+}
+
+.list-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.list-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.list-actions button {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.details-card .list-summary {
+  margin-bottom: 10px;
+}
+
+.details-card .members {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.task-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-row {
+  display: flex;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--bg-secondary);
+}
+
+.task-row .time {
+  font-weight: 600;
+  color: var(--accent-blue);
+}
+
+.task-row.done {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.empty {
+  color: var(--text-secondary);
+}

@@ -20,6 +20,7 @@ import ArchivePage from '../pages/ArchivePage';
 import TagsPage from '../pages/TagsPage';
 import NotificationsPage from '../pages/NotificationsPage';
 import SettingsPage from '../pages/SettingsPage';
+import SharedListsPage from '../pages/SharedListsPage';
 
 export default function AppRoutes() {
   return (
@@ -40,6 +41,7 @@ export default function AppRoutes() {
         <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
         <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
         <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
+        <Route path="/shared-lists" element={<ProtectedRoute><SharedListsPage /></ProtectedRoute>} />
         <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
         <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
         <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
