@@ -41,6 +41,8 @@ const FocusMode = ({ tasks = [], onComplete }) => {
   const [selectedSound, setSelectedSound] = useState('none');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [completedInSession, setCompletedInSession] = useState([]);
+  const [blockerEnabled, setBlockerEnabled] = useState(true);
+  const [blockerAlert, setBlockerAlert] = useState(false);
 
   const containerRef = useRef(null);
   const intervalRef = useRef(null);
@@ -133,6 +135,25 @@ const FocusMode = ({ tasks = [], onComplete }) => {
     }
     return () => clearInterval(intervalRef.current);
   }, [isRunning, isActive]);
+
+  useEffect(() => {
+    if (!isActive || !blockerEnabled) return;
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        setBlockerAlert(true);
+        setTimeout(() => setBlockerAlert(false), 3000);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    document.body.classList.add('focus-blocker');
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      document.body.classList.remove('focus-blocker');
+    };
+  }, [isActive, blockerEnabled]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -288,6 +309,13 @@ const FocusMode = ({ tasks = [], onComplete }) => {
           >
             {soundEnabled ? <VolumeUpIcon /> : <VolumeOffIcon />}
           </button>
+          <button
+            className={`control-btn ${blockerEnabled ? 'active' : ''}`}
+            onClick={() => setBlockerEnabled(prev => !prev)}
+            title={blockerEnabled ? 'Distraction blocker: yoqilgan' : 'Distraction blocker: o\'chirilgan'}
+          >
+            <DoNotDisturbOnOutlinedIcon />
+          </button>
           <button className="control-btn" onClick={toggleFullscreen}>
             {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
           </button>
@@ -298,6 +326,11 @@ const FocusMode = ({ tasks = [], onComplete }) => {
       </div>
 
       {/* Main Content */}
+      {blockerAlert && (
+        <div className="blocker-banner">
+          Diqqat! Fokus rejimidan chalg'imaslik uchun boshqa oynaga o'tmang.
+        </div>
+      )}
       <div className="focus-content">
         {currentTask ? (
           <>
