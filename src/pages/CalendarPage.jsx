@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CalendarWidget from '../components/Calendar/CalendarWidget';
-import TaskList from '../components/TaskList/TaskList';
+import DraggableTaskList from '../components/DraggableTaskList/DraggableTaskList';
 import './CalendarPage.css';
 
 // MUI Icons
@@ -33,28 +33,33 @@ const CalendarPage = () => {
     return true;
   });
 
-  const _handleToggleComplete = (taskId) => {
-    setTasks(tasks.map(task =>
+  const handleToggleComplete = (taskId) => {
+    setTasks(prev => prev.map(task =>
       task.id === taskId ? { ...task, completed: !task.completed } : task
     ));
   };
 
-  const _handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+  const handleDeleteTask = (taskId) => {
+    setTasks(prev => prev.filter(task => task.id !== taskId));
   };
 
-  const _handleEditTask = (taskId, updatedTask) => {
-    setTasks(tasks.map(task =>
+  const handleEditTask = (taskId, updatedTask) => {
+    setTasks(prev => prev.map(task =>
       task.id === taskId ? { ...task, ...updatedTask } : task
     ));
   };
 
-  const _handleAddTask = (newTask) => {
-    setTasks([...tasks, newTask]);
-  };
-
   const handleDateSelect = (date) => {
     setSelectedDate(date);
+  };
+
+  const selectedDateTasks = tasks.filter(task => task.date === selectedDate);
+
+  const handleReorderTasks = (newOrder) => {
+    setTasks(prev => {
+      const others = prev.filter(t => t.date !== selectedDate);
+      return [...newOrder, ...others];
+    });
   };
 
   // Auto-save to localStorage
@@ -157,6 +162,23 @@ const CalendarPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Right Panel - Drag & Drop Tasks */}
+        <div className="right-panel">
+          <div className="calendar-tasks">
+            <h3>
+              <EventNoteOutlinedIcon /> Tanlangan sana vazifalari
+            </h3>
+            <DraggableTaskList
+              tasks={selectedDateTasks}
+              onReorder={handleReorderTasks}
+              onToggle={handleToggleComplete}
+              onDelete={handleDeleteTask}
+              onEdit={(task) => handleEditTask(task.id, task)}
+              onArchive={() => {}}
+            />
           </div>
         </div>
       </div>
