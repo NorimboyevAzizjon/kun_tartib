@@ -13,6 +13,7 @@ import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import PriorityHighOutlinedIcon from '@mui/icons-material/PriorityHighOutlined';
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
+import RepeatOutlinedIcon from '@mui/icons-material/RepeatOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CelebrationOutlinedIcon from '@mui/icons-material/CelebrationOutlined';
@@ -34,7 +35,9 @@ const AddTask = ({ onAddTask }) => {
     priority: 'medium',
     description: '',
     reminder: false,
-    reminderTime: 10
+    reminderTime: 10,
+    isRecurring: false,
+    recurrence: 'daily'
   });
 
   const [errors, setErrors] = useState({});
@@ -59,6 +62,12 @@ const AddTask = ({ onAddTask }) => {
     { value: 30, label: '30 daqiqa oldin' },
     { value: 60, label: '1 soat oldin' },
     { value: 1440, label: '1 kun oldin' }
+  ];
+
+  const recurrenceOptions = [
+    { value: 'daily', label: 'Har kuni' },
+    { value: 'weekly', label: 'Har hafta' },
+    { value: 'monthly', label: 'Har oy' }
   ];
 
   const validateForm = () => {
@@ -127,6 +136,9 @@ const AddTask = ({ onAddTask }) => {
       reminder: task.reminder,
       reminderTime: task.reminder ? task.reminderTime : null,
       reminderDateTime: reminderDateTime,
+      isRecurring: task.isRecurring,
+      recurrence: task.isRecurring ? task.recurrence : null,
+      recurrenceId: task.isRecurring ? `rec_${uuidv4()}` : null,
       completed: false,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -144,7 +156,9 @@ const AddTask = ({ onAddTask }) => {
         priority: 'medium',
         description: '',
         reminder: false,
-        reminderTime: 10
+        reminderTime: 10,
+        isRecurring: false,
+        recurrence: 'daily'
       });
       setErrors({});
     }, 300);
@@ -213,6 +227,34 @@ const AddTask = ({ onAddTask }) => {
 
   const getCurrentPriority = () => {
     return priorities.find(prio => prio.value === task.priority);
+  };
+
+  const handleAutoPriority = () => {
+    const text = `${task.title} ${task.description}`.toLowerCase();
+    const urgentKeywords = ['shoshil', 'tez', 'darhol', 'asap', 'muhim', 'deadline', 'bugun'];
+    const mediumKeywords = ['ertaga', 'hafta', 'o\'rta', 'review', 'tekshir'];
+
+    let nextPriority = 'low';
+
+    if (urgentKeywords.some(k => text.includes(k))) {
+      nextPriority = 'high';
+    } else if (mediumKeywords.some(k => text.includes(k))) {
+      nextPriority = 'medium';
+    }
+
+    // If task is today and within 4 hours, mark high
+    if (task.date === format(new Date(), 'yyyy-MM-dd')) {
+      const [h, m] = task.time.split(':').map(Number);
+      const now = new Date();
+      const taskTime = new Date();
+      taskTime.setHours(h, m, 0, 0);
+      const hoursDiff = (taskTime - now) / (1000 * 60 * 60);
+      if (hoursDiff > 0 && hoursDiff <= 4) {
+        nextPriority = 'high';
+      }
+    }
+
+    setTask({ ...task, priority: nextPriority });
   };
 
   return (
@@ -332,6 +374,11 @@ const AddTask = ({ onAddTask }) => {
               <PriorityHighOutlinedIcon className="label-icon-svg" />
               Imtiyoz
             </label>
+            <div className="ai-priority-actions">
+              <button type="button" className="ai-priority-btn" onClick={handleAutoPriority}>
+                <AutoAwesomeOutlinedIcon fontSize="small" /> AI baholash
+              </button>
+            </div>
             <div className="priority-selector">
               {priorities.map((prio) => (
                 <button
@@ -395,6 +442,43 @@ const AddTask = ({ onAddTask }) => {
             )}
           </div>
 
+          {/* Recurring Settings */}
+          <div className="form-group reminder-section">
+            <div className="reminder-header">
+              <label className="reminder-label">
+                <input
+                  type="checkbox"
+                  checked={task.isRecurring}
+                  onChange={(e) => setTask({ ...task, isRecurring: e.target.checked })}
+                  className="reminder-checkbox"
+                />
+                <span className="reminder-icon" aria-hidden="true"><RepeatOutlinedIcon fontSize="small" /></span>
+                <span className="reminder-text">Takroriy vazifa</span>
+              </label>
+            </div>
+
+            {task.isRecurring && (
+              <div className="reminder-options slide-down">
+                <label className="reminder-option-label">
+                  <span className="option-icon" aria-hidden="true"><TimerOutlinedIcon fontSize="small" /></span>
+                  Takrorlanish turi:
+                </label>
+                <div className="reminder-buttons">
+                  {recurrenceOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`reminder-option-btn ${task.recurrence === option.value ? 'active' : ''}`}
+                      onClick={() => setTask({ ...task, recurrence: option.value })}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Form Actions */}
           <div className="form-actions">
             <button 
@@ -409,7 +493,9 @@ const AddTask = ({ onAddTask }) => {
                   priority: 'medium',
                   description: '',
                   reminder: false,
-                  reminderTime: 10
+                  reminderTime: 10,
+                  isRecurring: false,
+                  recurrence: 'daily'
                 });
               }}
             >
