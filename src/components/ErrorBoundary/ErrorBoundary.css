@@ -219,3 +219,62 @@
   color: #6b7280;
   border-color: #374151;
 }
+
+/* ✅ New styles for enhanced ErrorBoundary */
+.error-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+.error-id code {
+  font-family: 'Fira Code', monospace;
+  font-weight: 600;
+}
+
+.error-id svg {
+  font-size: 18px !important;
+}
+
+.error-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.error-details-header h3 {
+  margin: 0;
+}
+
+.copy-btn {
+  padding: 6px 12px !important;
+  font-size: 0.8rem !important;
+  background: #e5e7eb !important;
+  color: #374151 !important;
+}
+
+.copy-btn:hover {
+  background: #d1d5db !important;
+}
+
+[data-theme="dark"] .error-id {
+  background: #422006;
+  color: #fcd34d;
+}
+
+[data-theme="dark"] .copy-btn {
+  background: #374151 !important;
+  color: #f9fafb !important;
+}
+
+[data-theme="dark"] .copy-btn:hover {
+  background: #4b5563 !important;
+}
+
