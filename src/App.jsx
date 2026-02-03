@@ -1,29 +1,37 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy, memo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import HomePage from './pages/HomePage';
-import DashboardPage from './pages/DashboardPage';
-import CalendarPage from './pages/CalendarPage';
-import RecurringPage from './pages/RecurringPage';
-import GoalsPage from './pages/GoalsPage';
-import NotificationsPage from './pages/NotificationsPage';
-import SettingsPage from './pages/SettingsPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-// Yangi sahifalar
-import PomodoroPage from './pages/PomodoroPage';
-import FocusPage from './pages/FocusPage';
-import TemplatesPage from './pages/TemplatesPage';
-import WeeklyReviewPage from './pages/WeeklyReviewPage';
-import NotesPage from './pages/NotesPage';
-import GamificationPage from './pages/GamificationPage';
-// Yangi qo'shilgan sahifalar
-import StatsPage from './pages/StatsPage';
-import AIAnalyticsPage from './pages/AIAnalyticsPage';
-import ArchivePage from './pages/ArchivePage';
-import TagsPage from './pages/TagsPage';
-import SharedListsPage from './pages/SharedListsPage';
+
+// ✅ PERFORMANCE: Lazy Loading - sahifalar faqat kerak bo'lganda yuklanadi
+const HomePage = lazy(() => import('./pages/HomePage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const CalendarPage = lazy(() => import('./pages/CalendarPage'));
+const RecurringPage = lazy(() => import('./pages/RecurringPage'));
+const GoalsPage = lazy(() => import('./pages/GoalsPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const PomodoroPage = lazy(() => import('./pages/PomodoroPage'));
+const FocusPage = lazy(() => import('./pages/FocusPage'));
+const TemplatesPage = lazy(() => import('./pages/TemplatesPage'));
+const WeeklyReviewPage = lazy(() => import('./pages/WeeklyReviewPage'));
+const NotesPage = lazy(() => import('./pages/NotesPage'));
+const GamificationPage = lazy(() => import('./pages/GamificationPage'));
+const StatsPage = lazy(() => import('./pages/StatsPage'));
+const AIAnalyticsPage = lazy(() => import('./pages/AIAnalyticsPage'));
+const ArchivePage = lazy(() => import('./pages/ArchivePage'));
+const TagsPage = lazy(() => import('./pages/TagsPage'));
+const SharedListsPage = lazy(() => import('./pages/SharedListsPage'));
+
+// ✅ Loading Spinner komponenti
+const PageLoader = () => (
+  <div className="page-loader" role="status" aria-live="polite">
+    <div className="loader-spinner"></div>
+    <p>Yuklanmoqda...</p>
+  </div>
+);
 import './App.css';
 import Toast from './components/Toast';
 import AssistantAI from './components/AssistantAI';
@@ -337,31 +345,34 @@ function App() {
       <ToastContext.Provider value={{ showToast }}>
         <Router>
           <MainLayout>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              {/* Protected routes */}
-              <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-              <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
-              <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
-              <Route path="/pomodoro" element={<ProtectedRoute><PomodoroPage /></ProtectedRoute>} />
-              <Route path="/focus" element={<ProtectedRoute><FocusPage /></ProtectedRoute>} />
-              <Route path="/recurring" element={<ProtectedRoute><RecurringPage /></ProtectedRoute>} />
-              <Route path="/goals" element={<ProtectedRoute><GoalsPage /></ProtectedRoute>} />
-              <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
-              <Route path="/weekly-review" element={<ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>} />
-              <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
-              <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
-              <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
-              <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
-              <Route path="/shared-lists" element={<ProtectedRoute><SharedListsPage /></ProtectedRoute>} />
-              <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
-              <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
-              <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
-              <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
-              <Route path="*" element={<LoginPage />} />
-            </Routes>
+            {/* ✅ PERFORMANCE: Suspense bilan Lazy Loading */}
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                {/* Protected routes */}
+                <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+                <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
+                <Route path="/pomodoro" element={<ProtectedRoute><PomodoroPage /></ProtectedRoute>} />
+                <Route path="/focus" element={<ProtectedRoute><FocusPage /></ProtectedRoute>} />
+                <Route path="/recurring" element={<ProtectedRoute><RecurringPage /></ProtectedRoute>} />
+                <Route path="/goals" element={<ProtectedRoute><GoalsPage /></ProtectedRoute>} />
+                <Route path="/templates" element={<ProtectedRoute><TemplatesPage /></ProtectedRoute>} />
+                <Route path="/weekly-review" element={<ProtectedRoute><WeeklyReviewPage /></ProtectedRoute>} />
+                <Route path="/notes" element={<ProtectedRoute><NotesPage /></ProtectedRoute>} />
+                <Route path="/achievements" element={<ProtectedRoute><GamificationPage /></ProtectedRoute>} />
+                <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
+                <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
+                <Route path="/shared-lists" element={<ProtectedRoute><SharedListsPage /></ProtectedRoute>} />
+                <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
+                <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
+                <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />
+                <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+                <Route path="*" element={<LoginPage />} />
+              </Routes>
+            </Suspense>
             {/* AI Assistant floating widget */}
             <AssistantAI />
             {/* Global Keyboard Shortcuts */}
