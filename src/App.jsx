@@ -362,8 +362,6 @@ function App() {
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               <Route path="*" element={<LoginPage />} />
             </Routes>
-            {/* Toast notification at root */}
-            <Toast message={show ? toast.message : ''} type={toast.type} onClose={handleToastClose} duration={toast.duration || 3000} />
             {/* AI Assistant floating widget */}
             <AssistantAI />
             {/* Global Keyboard Shortcuts */}
