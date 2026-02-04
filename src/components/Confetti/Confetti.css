@@ -1,0 +1,101 @@
+/* Confetti Container */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Confetti Particle */
+.confetti-particle {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  background: var(--color);
+  opacity: 0;
+  animation: confetti-fall 3s ease-out forwards;
+  animation-delay: var(--delay);
+}
+
+.confetti-particle.square {
+  border-radius: 2px;
+}
+
+.confetti-particle.circle {
+  border-radius: 50%;
+}
+
+.confetti-particle.triangle {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-left: calc(var(--size) / 2) solid transparent;
+  border-right: calc(var(--size) / 2) solid transparent;
+  border-bottom: var(--size) solid var(--color);
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: 
+      translateY(100vh) 
+      translateX(calc(var(--speed-x) * 50px)) 
+      rotate(calc(var(--rotation) + 720deg)) 
+      scale(0.5);
+  }
+}
+
+/* Celebration burst effect */
+.confetti-burst {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  pointer-events: none;
+}
+
+.confetti-burst::before {
+  content: '🎉';
+  font-size: 80px;
+  animation: burst-emoji 1s ease-out forwards;
+}
+
+@keyframes burst-emoji {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+/* Mini confetti for small celebrations */
+.confetti-mini .confetti-particle {
+  animation-duration: 1.5s;
+}
+
+/* Golden confetti for achievements */
+.confetti-golden .confetti-particle {
+  --color: gold !important;
+  box-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+}
