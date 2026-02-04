@@ -1,0 +1,37 @@
+/* Habit Page Styles */
+
+.habit-page {
+  min-height: 100%;
+}
+
+.habit-page .page-header {
+  padding: 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  margin-bottom: 0;
+}
+
+.habit-page .header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.habit-page .header-icon {
+  font-size: 48px !important;
+  opacity: 0.9;
+}
+
+.habit-page .page-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.habit-page .page-header p {
+  margin: 4px 0 0 0;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}

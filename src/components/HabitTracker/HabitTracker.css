@@ -1,0 +1,531 @@
+/* Habit Tracker Styles */
+
+.habit-tracker {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Stats Header */
+.habit-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+  font-size: 32px !important;
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.stat-icon.green {
+  color: #10b981;
+  background: #d1fae5;
+}
+
+.stat-icon.orange {
+  color: #f59e0b;
+  background: #fef3c7;
+}
+
+.stat-icon.purple {
+  color: #8b5cf6;
+  background: #ede9fe;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Habits Container */
+.habits-container {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.habits-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 2px solid #f3f4f6;
+  margin-bottom: 12px;
+  min-width: max-content;
+}
+
+.habit-name-col {
+  width: 200px;
+  min-width: 200px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.days-cols {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.day-col {
+  width: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.day-col.today {
+  background: #667eea;
+  border-radius: 8px;
+  padding: 4px;
+  color: white;
+}
+
+.day-name {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.day-col.today .day-name {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.day-num {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.day-col.today .day-num {
+  color: white;
+}
+
+.streak-col {
+  width: 80px;
+  min-width: 80px;
+  text-align: center;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+/* Habit Row */
+.habit-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+  min-width: max-content;
+}
+
+.habit-row:last-of-type {
+  border-bottom: none;
+}
+
+.habit-info {
+  width: 200px;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.habit-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.habit-name {
+  font-weight: 500;
+  color: #1f2937;
+  flex: 1;
+}
+
+.habit-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.habit-row:hover .habit-actions {
+  opacity: 1;
+}
+
+.habit-actions button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habit-actions button:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+/* Day checks */
+.habit-days {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.day-check {
+  width: 48px;
+  height: 40px;
+  border: 2px solid;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #d1d5db;
+}
+
+.day-check:hover {
+  transform: scale(1.05);
+}
+
+.day-check.completed {
+  color: white;
+}
+
+/* Streak */
+.habit-streak {
+  width: 80px;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+.habit-streak svg.active {
+  color: #f59e0b;
+}
+
+.habit-streak span {
+  color: #374151;
+}
+
+/* No habits */
+.no-habits {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+.no-habits p {
+  margin-bottom: 16px;
+}
+
+.btn-add-first {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-add-first:hover {
+  transform: translateY(-2px);
+}
+
+/* Add habit button */
+.add-habit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.add-habit-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.05);
+}
+
+/* Modal */
+.habit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.habit-modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.habit-modal h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.2rem;
+  color: #1f2937;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.modal-form input {
+  padding: 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.modal-form input:focus {
+  border-color: #667eea;
+}
+
+/* Icon grid */
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  border-color: #667eea;
+  transform: scale(1.05);
+}
+
+.icon-btn.selected {
+  border-color: #667eea;
+  background: #eef2ff;
+}
+
+/* Color grid */
+.color-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.color-btn {
+  width: 36px;
+  height: 36px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-btn:hover {
+  transform: scale(1.1);
+}
+
+.color-btn.selected {
+  border-color: #1f2937;
+  box-shadow: 0 0 0 2px white;
+}
+
+/* Modal actions */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions .btn-save {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-actions .btn-save:hover {
+  opacity: 0.9;
+}
+
+.modal-actions .btn-cancel {
+  padding: 12px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  color: #6b7280;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .stat-card {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .stat-value {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .habits-container {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .habits-header {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .habit-name-col,
+[data-theme="dark"] .day-num,
+[data-theme="dark"] .streak-col {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .habit-row {
+  border-color: #374151;
+}
+
+[data-theme="dark"] .habit-name,
+[data-theme="dark"] .habit-streak span {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .habit-modal {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .habit-modal h3 {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .modal-form label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .modal-form input {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .icon-btn {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .habit-tracker {
+    padding: 12px;
+  }
+  
+  .habit-name-col {
+    width: 140px;
+    min-width: 140px;
+  }
+  
+  .day-check {
+    width: 36px;
+    height: 32px;
+  }
+  
+  .day-col {
+    width: 36px;
+  }
+  
+  .streak-col {
+    width: 60px;
+    min-width: 60px;
+  }
+}
