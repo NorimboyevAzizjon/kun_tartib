@@ -24,6 +24,8 @@ const AIAnalyticsPage = lazy(() => import('./pages/AIAnalyticsPage'));
 const ArchivePage = lazy(() => import('./pages/ArchivePage'));
 const TagsPage = lazy(() => import('./pages/TagsPage'));
 const SharedListsPage = lazy(() => import('./pages/SharedListsPage'));
+const KanbanPage = lazy(() => import('./pages/KanbanPage'));
+const HabitPage = lazy(() => import('./pages/HabitPage'));
 
 // ✅ Loading Spinner komponenti
 const PageLoader = () => (
@@ -67,6 +69,8 @@ import LocalOfferOutlinedIcon from '@mui/icons-material/LocalOfferOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
 import PsychologyOutlinedIcon from '@mui/icons-material/PsychologyOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import ViewKanbanOutlinedIcon from '@mui/icons-material/ViewKanbanOutlined';
+import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 
 // Navigation Link Komponenti
 const NavLink = ({ to, children, icon }) => {
@@ -246,6 +250,8 @@ const MainLayout = ({ children }) => {
             <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
             <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
             <NavLink to="/shared-lists" icon={<GroupOutlinedIcon fontSize="small" />}>Shared Lists</NavLink>
+            <NavLink to="/kanban" icon={<ViewKanbanOutlinedIcon fontSize="small" />}>Kanban</NavLink>
+            <NavLink to="/habits" icon={<FitnessCenterOutlinedIcon fontSize="small" />}>Odatlar</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/settings" icon={<SettingsOutlinedIcon fontSize="small" />}>Sozlamalar</NavLink>
@@ -268,6 +274,8 @@ const MainLayout = ({ children }) => {
             <NavLink to="/ai-analytics" icon={<PsychologyOutlinedIcon fontSize="small" />}>AI Tahlil</NavLink>
             <NavLink to="/advanced-stats" icon={<InsightsOutlinedIcon fontSize="small" />}>Statistika+</NavLink>
             <NavLink to="/shared-lists" icon={<GroupOutlinedIcon fontSize="small" />}>Shared Lists</NavLink>
+            <NavLink to="/kanban" icon={<ViewKanbanOutlinedIcon fontSize="small" />}>Kanban</NavLink>
+            <NavLink to="/habits" icon={<FitnessCenterOutlinedIcon fontSize="small" />}>Odatlar</NavLink>
             <NavLink to="/archive" icon={<ArchiveOutlinedIcon fontSize="small" />}>Arxiv</NavLink>
             <NavLink to="/tags" icon={<LocalOfferOutlinedIcon fontSize="small" />}>Teglar</NavLink>
             <NavLink to="/notifications" icon={<NotificationsOutlinedIcon fontSize="small" />}>Bildirishnomalar</NavLink>
@@ -366,6 +374,8 @@ function App() {
                 <Route path="/ai-analytics" element={<ProtectedRoute><AIAnalyticsPage /></ProtectedRoute>} />
                 <Route path="/advanced-stats" element={<ProtectedRoute><StatsPage /></ProtectedRoute>} />
                 <Route path="/shared-lists" element={<ProtectedRoute><SharedListsPage /></ProtectedRoute>} />
+                <Route path="/kanban" element={<ProtectedRoute><KanbanPage /></ProtectedRoute>} />
+                <Route path="/habits" element={<ProtectedRoute><HabitPage /></ProtectedRoute>} />
                 <Route path="/archive" element={<ProtectedRoute><ArchivePage /></ProtectedRoute>} />
                 <Route path="/tags" element={<ProtectedRoute><TagsPage /></ProtectedRoute>} />
                 <Route path="/notifications" element={<ProtectedRoute><NotificationsPage /></ProtectedRoute>} />

@@ -547,7 +547,7 @@ body {
 .nav-secondary {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
   border-top: 1px solid var(--border);
-  padding: 0 clamp(12px, 2.5vw, 24px);
+  padding: 8px clamp(12px, 2.5vw, 24px);
 }
 
 .nav-secondary-container {
@@ -555,10 +555,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 48px;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  flex-wrap: wrap;
+  min-height: 40px;
 }
 
 .nav-secondary-container::-webkit-scrollbar {
@@ -570,6 +568,7 @@ body {
   padding: 6px 12px;
   white-space: nowrap;
   background: transparent;
+  margin: 2px 0;
 }
 
 .nav-secondary .nav-link:hover {
