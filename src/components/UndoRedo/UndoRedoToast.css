@@ -1,0 +1,136 @@
+/* Undo/Redo Toast */
+.undo-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 9999;
+  animation: slideUp 0.3s ease;
+  min-width: 300px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.undo-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.undo-message {
+  flex: 1;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.undo-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.undo-btn:hover {
+  background: #2563eb;
+}
+
+.close-toast-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.close-toast-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.undo-progress {
+  height: 3px;
+  background: #3b82f6;
+  transition: width 0.05s linear;
+}
+
+/* Undo/Redo Controls */
+.undo-redo-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.ur-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--bg-secondary, #f3f4f6);
+  border-radius: 8px;
+  color: var(--text-primary, #374151);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ur-btn:hover:not(.disabled) {
+  background: var(--primary-color, #3b82f6);
+  color: white;
+}
+
+.ur-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .ur-btn {
+  background: #374151;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .ur-btn:hover:not(.disabled) {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .undo-toast {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    min-width: auto;
+  }
+
+  .undo-message {
+    max-width: 150px;
+  }
+}
