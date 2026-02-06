@@ -191,6 +191,42 @@ body {
   gap: 15px;
 }
 
+/* Search Button */
+.search-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 200px;
+}
+
+.search-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-btn-text {
+  flex: 1;
+  text-align: left;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+.search-shortcut {
+  padding: 2px 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
 /* Hamburger (mobile) */
 .hamburger {
   display: none;
@@ -674,6 +710,21 @@ body {
   
   .main-content {
     padding: 12px;
+  }
+
+  .search-btn {
+    min-width: auto;
+    padding: 8px;
+  }
+
+  .search-btn-text,
+  .search-shortcut {
+    display: none;
+  }
+
+  .search-btn::before {
+    content: "🔍";
+    font-size: 18px;
   }
 }
 

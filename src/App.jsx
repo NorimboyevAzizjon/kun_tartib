@@ -38,6 +38,10 @@ import './App.css';
 import Toast from './components/Toast';
 import AssistantAI from './components/AssistantAI';
 import KeyboardShortcuts from './components/KeyboardShortcuts/KeyboardShortcuts';
+import GlobalSearch from './components/GlobalSearch/GlobalSearch';
+import DataManager from './components/DataManager/DataManager';
+import { ReminderChecker } from './components/TaskReminders/TaskReminders';
+
 // Toast Context for global notification
 const ToastContext = React.createContext({ showToast: () => {} });
 
@@ -150,7 +154,21 @@ const MainLayout = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isDataManagerOpen, setIsDataManagerOpen] = useState(false);
   const { isAuthenticated } = useAuth();
+
+  // Global Search (Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Real-time clock
   useEffect(() => {
@@ -218,6 +236,16 @@ const MainLayout = ({ children }) => {
           </div>
 
           <div className="nav-actions">
+            {/* Search Button */}
+            <button 
+              className="search-btn" 
+              onClick={() => setIsSearchOpen(true)}
+              title="Qidirish (Ctrl+K)"
+            >
+              <span className="search-btn-text">Qidirish...</span>
+              <span className="search-shortcut">Ctrl+K</span>
+            </button>
+
             <Link to="/notifications" className="notification-btn" title="Bildirishnomalar">
               <NotificationsOutlinedIcon />
               {unreadCount > 0 && <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>}
@@ -316,6 +344,15 @@ const MainLayout = ({ children }) => {
           </div>
         </div>
       </footer>
+
+      {/* Global Search Modal */}
+      <GlobalSearch isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      
+      {/* Data Manager Modal */}
+      {isDataManagerOpen && <DataManager onClose={() => setIsDataManagerOpen(false)} />}
+      
+      {/* Task Reminders Checker */}
+      <ReminderChecker />
     </div>
   );
 };
