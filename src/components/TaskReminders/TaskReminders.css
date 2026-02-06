@@ -1,0 +1,222 @@
+/* Task Reminders Styles */
+.task-reminders {
+  padding: 16px;
+  background: var(--card-bg, #fff);
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #e5e7eb);
+}
+
+.reminders-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--text-primary, #1f2937);
+  font-weight: 600;
+}
+
+.reminders-header svg {
+  color: var(--primary-color, #3b82f6);
+}
+
+.add-reminder-btn {
+  margin-left: auto;
+  background: var(--primary-color, #3b82f6);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.add-reminder-btn:hover {
+  background: #2563eb;
+  transform: scale(1.05);
+}
+
+/* Reminder Form */
+.reminder-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.reminder-form input,
+.reminder-form select {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  font-size: 14px;
+  background: var(--card-bg, #fff);
+  color: var(--text-primary, #374151);
+}
+
+.reminder-form input:focus,
+.reminder-form select:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background: var(--primary-color, #3b82f6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.save-btn:hover {
+  background: #2563eb;
+}
+
+/* Reminders List */
+.reminders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.no-reminders {
+  text-align: center;
+  color: var(--text-secondary, #9ca3af);
+  font-size: 14px;
+  padding: 16px;
+}
+
+.reminder-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-secondary, #f9fafb);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.reminder-item:hover {
+  background: var(--primary-light, #eff6ff);
+}
+
+.reminder-item.inactive {
+  opacity: 0.5;
+}
+
+.reminder-item svg:first-child {
+  color: var(--primary-color, #3b82f6);
+}
+
+.reminder-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.reminder-time {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary, #374151);
+}
+
+.reminder-repeat {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.reminder-item button {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: var(--text-secondary, #6b7280);
+  transition: all 0.2s;
+}
+
+.reminder-item button:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary, #374151);
+}
+
+/* Permission States */
+.reminder-permission,
+.reminder-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary, #6b7280);
+}
+
+.reminder-permission svg {
+  font-size: 48px;
+  color: var(--primary-color, #3b82f6);
+}
+
+.reminder-denied svg {
+  font-size: 48px;
+  color: #f59e0b;
+}
+
+.permission-btn {
+  padding: 10px 24px;
+  background: var(--primary-color, #3b82f6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.permission-btn:hover {
+  background: #2563eb;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .reminder-form,
+[data-theme="dark"] .reminder-item {
+  background: #374151;
+}
+
+[data-theme="dark"] .reminder-form input,
+[data-theme="dark"] .reminder-form select {
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .reminder-item {
+    flex-wrap: wrap;
+  }
+
+  .reminder-info {
+    flex: 1 1 100%;
+    order: 2;
+    margin-top: 8px;
+  }
+}
