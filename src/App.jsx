@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy, memo } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -359,30 +359,11 @@ const MainLayout = ({ children }) => {
 
 
 function App() {
-  // Toast state
-  const [toast, setToast] = useState({ message: '', type: 'info' });
-  const [show, setShow] = useState(false);
-
   // Show toast handler
   const showToast = useCallback((message, type = 'info', duration = 3000) => {
-    setToast({ message, type, duration });
-    setShow(true);
-  }, []);
-
-  // Listen for custom window event for global toasts
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.detail && e.detail.message) {
-        showToast(e.detail.message, e.detail.type || 'info', e.detail.duration || 3000);
-      }
-    };
-    window.addEventListener('kuntartib-toast', handler);
-    return () => window.removeEventListener('kuntartib-toast', handler);
-  }, [showToast]);
-
-  // Hide toast
-  const handleToastClose = useCallback(() => {
-    setShow(false);
+    window.dispatchEvent(new CustomEvent('kuntartib-toast', {
+      detail: { message, type, duration }
+    }));
   }, []);
 
   return (

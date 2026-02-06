@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './UndoRedoToast.css';
 
 import UndoIcon from '@mui/icons-material/Undo';
@@ -6,29 +6,37 @@ import RedoIcon from '@mui/icons-material/Redo';
 import CloseIcon from '@mui/icons-material/Close';
 
 const UndoRedoToast = ({ action, onUndo, onClose, duration = 5000 }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [progress, setProgress] = useState(100);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    if (!action) return;
+    if (!action) {
+      setVisible(false);
+      return;
+    }
 
     setVisible(true);
     setProgress(100);
 
     const startTime = Date.now();
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime;
       const remaining = Math.max(0, 100 - (elapsed / duration) * 100);
       setProgress(remaining);
       
       if (remaining === 0) {
-        clearInterval(interval);
+        clearInterval(intervalRef.current);
         setVisible(false);
         onClose?.();
       }
     }, 50);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
   }, [action, duration, onClose]);
 
   const handleUndo = () => {

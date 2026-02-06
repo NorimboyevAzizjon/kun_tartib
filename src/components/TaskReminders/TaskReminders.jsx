@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNotificationPermission, useTaskReminders } from '../../hooks/useReminders';
 import './TaskReminders.css';
 
 // MUI Icons
@@ -9,103 +10,6 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WarningIcon from '@mui/icons-material/Warning';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddAlarmIcon from '@mui/icons-material/AddAlarm';
-
-// Notification permission hook
-export const useNotificationPermission = () => {
-  const [permission, setPermission] = useState('default');
-
-  useEffect(() => {
-    if ('Notification' in window) {
-      setPermission(Notification.permission);
-    }
-  }, []);
-
-  const requestPermission = async () => {
-    if ('Notification' in window) {
-      const result = await Notification.requestPermission();
-      setPermission(result);
-      return result;
-    }
-    return 'denied';
-  };
-
-  return { permission, requestPermission };
-};
-
-// Reminder scheduler
-export const useTaskReminders = () => {
-  const [reminders, setReminders] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem('kun-tartibi-reminders') || '[]');
-    } catch {
-      return [];
-    }
-  });
-
-  // Reminders ni saqlash
-  useEffect(() => {
-    localStorage.setItem('kun-tartibi-reminders', JSON.stringify(reminders));
-  }, [reminders]);
-
-  // Eslatma qo'shish
-  const addReminder = useCallback((taskId, taskTitle, reminderTime, repeatType = 'once') => {
-    const newReminder = {
-      id: `reminder_${Date.now()}`,
-      taskId,
-      taskTitle,
-      reminderTime: new Date(reminderTime).toISOString(),
-      repeatType, // once, daily, weekly
-      active: true,
-      createdAt: new Date().toISOString()
-    };
-
-    setReminders(prev => [...prev, newReminder]);
-    scheduleNotification(newReminder);
-    return newReminder;
-  }, []);
-
-  // Eslatmani o'chirish
-  const removeReminder = useCallback((reminderId) => {
-    setReminders(prev => prev.filter(r => r.id !== reminderId));
-  }, []);
-
-  // Eslatmani to'xtatish/faollashtirish
-  const toggleReminder = useCallback((reminderId) => {
-    setReminders(prev => prev.map(r => 
-      r.id === reminderId ? { ...r, active: !r.active } : r
-    ));
-  }, []);
-
-  // Task uchun eslatmalarni olish
-  const getTaskReminders = useCallback((taskId) => {
-    return reminders.filter(r => r.taskId === taskId);
-  }, [reminders]);
-
-  return { 
-    reminders, 
-    addReminder, 
-    removeReminder, 
-    toggleReminder, 
-    getTaskReminders 
-  };
-};
-
-// Notification yuborish
-const scheduleNotification = (reminder) => {
-  if (!('Notification' in window) || Notification.permission !== 'granted') {
-    return;
-  }
-
-  const now = new Date().getTime();
-  const reminderTime = new Date(reminder.reminderTime).getTime();
-  const delay = reminderTime - now;
-
-  if (delay > 0) {
-    setTimeout(() => {
-      showNotification(reminder);
-    }, delay);
-  }
-};
 
 // Desktop notification ko'rsatish
 const showNotification = (reminder) => {
@@ -118,31 +22,19 @@ const showNotification = (reminder) => {
     icon: '/icon-192.svg',
     badge: '/icon-192.svg',
     tag: reminder.id,
-    requireInteraction: true,
-    vibrate: [200, 100, 200],
-    actions: [
-      { action: 'open', title: 'Ochish' },
-      { action: 'snooze', title: '5 daqiqa keyin' }
-    ]
+    requireInteraction: true
   });
 
   notification.onclick = () => {
     window.focus();
     notification.close();
   };
-
-  // Ovoz
-  try {
-    const audio = new Audio('/notification.mp3');
-    audio.volume = 0.5;
-    audio.play().catch(() => {});
-  } catch (e) {}
 };
 
 // Reminder Manager Component
 const TaskReminders = ({ task, onAddReminder }) => {
   const { permission, requestPermission } = useNotificationPermission();
-  const { reminders, addReminder, removeReminder, toggleReminder, getTaskReminders } = useTaskReminders();
+  const { addReminder, removeReminder, toggleReminder, getTaskReminders } = useTaskReminders();
   const [showForm, setShowForm] = useState(false);
   const [reminderDate, setReminderDate] = useState('');
   const [reminderTime, setReminderTime] = useState('');
@@ -278,7 +170,9 @@ export const ReminderChecker = () => {
             }, diff);
           }
         });
-      } catch (e) {}
+      } catch {
+        // localStorage error
+      }
     };
 
     // Har daqiqada tekshirish

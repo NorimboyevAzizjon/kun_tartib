@@ -115,7 +115,7 @@ const DataManager = ({ onClose }) => {
 
         setImportPreview({ data, preview });
         setStatus({ type: 'info', message: 'Faylni ko\'rib chiqing va import qilish tugmasini bosing' });
-      } catch (error) {
+      } catch {
         setStatus({ type: 'error', message: 'Fayl formati noto\'g\'ri. JSON fayl yuklang.' });
       }
     };

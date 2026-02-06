@@ -47,7 +47,9 @@ const GlobalSearch = ({ isOpen, onClose }) => {
           });
         }
       });
-    } catch (e) {}
+    } catch {
+      // localStorage error
+    }
 
     // Maqsadlarni qidirish
     try {
@@ -65,7 +67,9 @@ const GlobalSearch = ({ isOpen, onClose }) => {
           });
         }
       });
-    } catch (e) {}
+    } catch {
+      // localStorage error
+    }
 
     // Eslatmalarni qidirish
     try {
@@ -83,7 +87,9 @@ const GlobalSearch = ({ isOpen, onClose }) => {
           });
         }
       });
-    } catch (e) {}
+    } catch {
+      // localStorage error
+    }
 
     // Sahifalarni qidirish
     const pages = [
@@ -239,7 +245,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
                   <CheckCircleOutlineIcon />
                   <span>Bajarilgan vazifalar</span>
                 </div>
-                <div className="hint-item" onClick={() => navigate('/goals'); onClose()}>
+                <div className="hint-item" onClick={() => { navigate('/goals'); onClose(); }}>
                   <FlagOutlinedIcon />
                   <span>Maqsadlarim</span>
                 </div>

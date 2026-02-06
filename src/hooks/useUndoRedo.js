@@ -60,8 +60,8 @@ export const useUndoRedo = (initialState, maxHistory = 50) => {
   }, []);
 
   // Undo/Redo imkoniyatini tekshirish
-  const canUndo = positionRef.current > 0;
-  const canRedo = positionRef.current < historyRef.current.length - 1;
+  const getCanUndo = useCallback(() => positionRef.current > 0, []);
+  const getCanRedo = useCallback(() => positionRef.current < historyRef.current.length - 1, []);
 
   // Tarixni tozalash
   const clearHistory = useCallback(() => {
@@ -74,11 +74,11 @@ export const useUndoRedo = (initialState, maxHistory = 50) => {
     setState: pushState,
     undo,
     redo,
-    canUndo,
-    canRedo,
+    canUndo: getCanUndo(),
+    canRedo: getCanRedo(),
     clearHistory,
-    historyLength: historyRef.current.length,
-    currentPosition: positionRef.current
+    getHistoryLength: useCallback(() => historyRef.current.length, []),
+    getCurrentPosition: useCallback(() => positionRef.current, [])
   };
 };
 
