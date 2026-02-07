@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { format, parseISO, isToday, isYesterday, startOfWeek, endOfWeek, differenceInMinutes, getHours, getDay } from 'date-fns';
+import { format, startOfWeek, endOfWeek, getDay } from 'date-fns';
 import { uz } from 'date-fns/locale';
 import './AIAnalytics.css';
 

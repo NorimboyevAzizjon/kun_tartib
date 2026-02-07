@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '../../context/AuthContext';
 
 // ✅ Test utilities
-const renderWithProviders = (component) => {
+const _renderWithProviders = (component) => {
   return render(
     <BrowserRouter>
       <AuthProvider>
@@ -28,7 +28,7 @@ describe('App Tests', () => {
       ];
       
       localStorage.setItem('kun-tartibi-tasks', JSON.stringify(tasks));
-      const saved = JSON.parse(localStorage.getItem('kun-tartibi-tasks'));
+      JSON.parse(localStorage.getItem('kun-tartibi-tasks'));
       
       expect(localStorage.setItem).toHaveBeenCalled();
       expect(localStorage.getItem).toHaveBeenCalledWith('kun-tartibi-tasks');

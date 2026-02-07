@@ -134,12 +134,6 @@ const HabitTracker = () => {
     return streak;
   };
 
-  // Calculate weekly progress
-  const getWeeklyProgress = (habitId) => {
-    const completed = days.filter(day => isCompleted(habitId, day.date)).length;
-    return Math.round((completed / 7) * 100);
-  };
-
   // Get stats
   const getTotalStats = () => {
     const todayStr = new Date().toISOString().split('T')[0];

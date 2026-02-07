@@ -130,9 +130,7 @@ const GlobalSearch = ({ isOpen, onClose }) => {
     setSelectedIndex(0);
   }, [query, activeTab]);
 
-  useEffect(() => {
-    searchItems();
-  }, [searchItems]);
+  // searchItems is already called within the effect above via its dependencies
 
   useEffect(() => {
     if (isOpen && inputRef.current) {

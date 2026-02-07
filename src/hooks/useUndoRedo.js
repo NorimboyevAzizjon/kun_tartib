@@ -1,72 +1,72 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
-// Undo/Redo Hook
+// Undo/Redo Hook - state-based implementation
 export const useUndoRedo = (initialState, maxHistory = 50) => {
   const [state, setState] = useState(initialState);
-  const historyRef = useRef([initialState]);
-  const positionRef = useRef(0);
-  const isUndoRedoRef = useRef(false);
+  const [history, setHistory] = useState([initialState]);
+  const [position, setPosition] = useState(0);
+  const [isUndoRedo, setIsUndoRedo] = useState(false);
 
   // Yangi state qo'shish
   const pushState = useCallback((newState) => {
-    if (isUndoRedoRef.current) {
-      isUndoRedoRef.current = false;
+    if (isUndoRedo) {
+      setIsUndoRedo(false);
       return;
     }
 
-    const history = historyRef.current;
-    const position = positionRef.current;
+    setHistory(prevHistory => {
+      let newHistory = prevHistory;
+      
+      // Agar o'rtada bo'lsak, keyingilarni o'chirish
+      if (position < prevHistory.length - 1) {
+        newHistory = prevHistory.slice(0, position + 1);
+      }
 
-    // Agar o'rtada bo'lsak, keyingilarni o'chirish
-    if (position < history.length - 1) {
-      historyRef.current = history.slice(0, position + 1);
-    }
+      // Yangi state qo'shish
+      newHistory = [...newHistory, newState];
 
-    // Yangi state qo'shish
-    historyRef.current.push(newState);
-
-    // Max history cheklash
-    if (historyRef.current.length > maxHistory) {
-      historyRef.current.shift();
-    } else {
-      positionRef.current++;
-    }
-
+      // Max history cheklash
+      if (newHistory.length > maxHistory) {
+        newHistory = newHistory.slice(1);
+      }
+      
+      return newHistory;
+    });
+    
+    setPosition(prev => Math.min(prev + 1, maxHistory - 1));
     setState(newState);
-  }, [maxHistory]);
+  }, [isUndoRedo, maxHistory, position]);
 
   // Undo
   const undo = useCallback(() => {
-    if (positionRef.current > 0) {
-      positionRef.current--;
-      isUndoRedoRef.current = true;
-      const prevState = historyRef.current[positionRef.current];
+    if (position > 0) {
+      const newPos = position - 1;
+      setPosition(newPos);
+      setIsUndoRedo(true);
+      const prevState = history[newPos];
       setState(prevState);
       return prevState;
     }
     return null;
-  }, []);
+  }, [position, history]);
 
   // Redo
   const redo = useCallback(() => {
-    if (positionRef.current < historyRef.current.length - 1) {
-      positionRef.current++;
-      isUndoRedoRef.current = true;
-      const nextState = historyRef.current[positionRef.current];
+    if (position < history.length - 1) {
+      const newPos = position + 1;
+      setPosition(newPos);
+      setIsUndoRedo(true);
+      const nextState = history[newPos];
       setState(nextState);
       return nextState;
     }
     return null;
-  }, []);
-
-  // Undo/Redo imkoniyatini tekshirish
-  const getCanUndo = useCallback(() => positionRef.current > 0, []);
-  const getCanRedo = useCallback(() => positionRef.current < historyRef.current.length - 1, []);
+  }, [position, history]);
 
   // Tarixni tozalash
   const clearHistory = useCallback(() => {
-    historyRef.current = [state];
-    positionRef.current = 0;
+    setHistory([state]);
+    setPosition(0);
   }, [state]);
 
   return {
@@ -74,60 +74,65 @@ export const useUndoRedo = (initialState, maxHistory = 50) => {
     setState: pushState,
     undo,
     redo,
-    canUndo: getCanUndo(),
-    canRedo: getCanRedo(),
+    canUndo: position > 0,
+    canRedo: position < history.length - 1,
     clearHistory,
-    getHistoryLength: useCallback(() => historyRef.current.length, []),
-    getCurrentPosition: useCallback(() => positionRef.current, [])
+    getHistoryLength: useCallback(() => history.length, [history.length]),
+    getCurrentPosition: useCallback(() => position, [position])
   };
 };
 
 // Task uchun maxsus Undo/Redo
 export const useTaskUndoRedo = () => {
-  const actionsRef = useRef([]);
-  const positionRef = useRef(-1);
+  const [actions, setActions] = useState([]);
+  const [position, setPosition] = useState(-1);
   const maxActions = 30;
 
   // Action qo'shish
   const addAction = useCallback((action) => {
-    const actions = actionsRef.current;
+    setActions(prevActions => {
+      let newActions = prevActions;
+      
+      // Agar o'rtada bo'lsak, keyingilarni o'chirish
+      if (position < prevActions.length - 1) {
+        newActions = prevActions.slice(0, position + 1);
+      }
+
+      newActions = [...newActions, action];
+
+      // Max limit
+      if (newActions.length > maxActions) {
+        newActions = newActions.slice(1);
+      }
+      
+      return newActions;
+    });
     
-    // Agar o'rtada bo'lsak, keyingilarni o'chirish
-    if (positionRef.current < actions.length - 1) {
-      actionsRef.current = actions.slice(0, positionRef.current + 1);
-    }
-
-    actionsRef.current.push(action);
-
-    // Max limit
-    if (actionsRef.current.length > maxActions) {
-      actionsRef.current.shift();
-    } else {
-      positionRef.current++;
-    }
-  }, []);
+    setPosition(prev => Math.min(prev + 1, maxActions - 1));
+  }, [position]);
 
   // Undo - oxirgi amalni bekor qilish
   const undo = useCallback(() => {
-    if (positionRef.current >= 0) {
-      const action = actionsRef.current[positionRef.current];
-      positionRef.current--;
+    if (position >= 0) {
+      const action = actions[position];
+      setPosition(prev => prev - 1);
       return action;
     }
     return null;
-  }, []);
+  }, [position, actions]);
 
   // Redo - bekor qilingan amalni qaytarish
   const redo = useCallback(() => {
-    if (positionRef.current < actionsRef.current.length - 1) {
-      positionRef.current++;
-      return actionsRef.current[positionRef.current];
+    if (position < actions.length - 1) {
+      const newPos = position + 1;
+      setPosition(newPos);
+      return actions[newPos];
     }
     return null;
-  }, []);
+  }, [position, actions]);
 
-  const canUndo = positionRef.current >= 0;
-  const canRedo = positionRef.current < actionsRef.current.length - 1;
+  const canUndo = position >= 0;
+  const canRedo = position < actions.length - 1;
 
   return { addAction, undo, redo, canUndo, canRedo };
 };

@@ -6,14 +6,20 @@ import RedoIcon from '@mui/icons-material/Redo';
 import CloseIcon from '@mui/icons-material/Close';
 
 const UndoRedoToast = ({ action, onUndo, onClose, duration = 5000 }) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(!!action);
   const [progress, setProgress] = useState(100);
   const intervalRef = useRef(null);
 
   useEffect(() => {
+    // Clear previous interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
     if (!action) {
-      setVisible(false);
-      return;
+      // Use timeout to avoid synchronous setState warning
+      const timeout = setTimeout(() => setVisible(false), 0);
+      return () => clearTimeout(timeout);
     }
 
     setVisible(true);

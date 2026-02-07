@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* global clients */
 // service-worker.js
 
 const CACHE_NAME = 'kuntartib-cache-v2';
@@ -98,7 +100,7 @@ self.addEventListener('push', event => {
   if (event.data) {
     try {
       data = event.data.json();
-    } catch (e) {
+    } catch {
       data.body = event.data.text();
     }
   }
