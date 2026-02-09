@@ -24,6 +24,8 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Allow setState in effects for search/timer patterns
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
 ])
