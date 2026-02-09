@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 /* global clients */
 // service-worker.js
 
