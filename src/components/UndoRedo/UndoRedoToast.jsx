@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './UndoRedoToast.css';
 
 import UndoIcon from '@mui/icons-material/Undo';
@@ -6,25 +6,21 @@ import RedoIcon from '@mui/icons-material/Redo';
 import CloseIcon from '@mui/icons-material/Close';
 
 const UndoRedoToast = ({ action, onUndo, onClose, duration = 5000 }) => {
-  const [visible, setVisible] = useState(!!action);
   const [progress, setProgress] = useState(100);
   const intervalRef = useRef(null);
+  const actionIdRef = useRef(null);
 
-  useEffect(() => {
-    // Clear previous interval
+  const clearTimer = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
+      intervalRef.current = null;
     }
-    
-    if (!action) {
-      // Use timeout to avoid synchronous setState warning
-      const timeout = setTimeout(() => setVisible(false), 0);
-      return () => clearTimeout(timeout);
-    }
+  }, []);
 
-    setVisible(true);
+  const startTimer = useCallback(() => {
+    clearTimer();
     setProgress(100);
-
+    
     const startTime = Date.now();
     intervalRef.current = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -32,26 +28,39 @@ const UndoRedoToast = ({ action, onUndo, onClose, duration = 5000 }) => {
       setProgress(remaining);
       
       if (remaining === 0) {
-        clearInterval(intervalRef.current);
-        setVisible(false);
+        clearTimer();
         onClose?.();
       }
     }, 50);
+  }, [duration, onClose, clearTimer]);
 
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, [action, duration, onClose]);
+  // Start timer when action changes
+  useEffect(() => {
+    const currentId = action?.id || action?.data?.id || JSON.stringify(action);
+    
+    if (action && currentId !== actionIdRef.current) {
+      actionIdRef.current = currentId;
+      startTimer();
+    } else if (!action) {
+      actionIdRef.current = null;
+      clearTimer();
+    }
 
-  const handleUndo = () => {
+    return clearTimer;
+  }, [action, startTimer, clearTimer]);
+
+  const handleUndo = useCallback(() => {
+    clearTimer();
     onUndo?.();
-    setVisible(false);
     onClose?.();
-  };
+  }, [onUndo, onClose, clearTimer]);
 
-  if (!visible || !action) return null;
+  const handleClose = useCallback(() => {
+    clearTimer();
+    onClose?.();
+  }, [onClose, clearTimer]);
+
+  if (!action) return null;
 
   const getMessage = () => {
     switch (action.type) {
@@ -76,7 +85,7 @@ const UndoRedoToast = ({ action, onUndo, onClose, duration = 5000 }) => {
           <UndoIcon fontSize="small" />
           Bekor qilish
         </button>
-        <button className="close-toast-btn" onClick={() => { setVisible(false); onClose?.(); }}>
+        <button className="close-toast-btn" onClick={handleClose}>
           <CloseIcon fontSize="small" />
         </button>
       </div>

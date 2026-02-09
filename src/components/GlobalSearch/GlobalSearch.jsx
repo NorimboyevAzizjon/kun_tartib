@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GlobalSearch.css';
 
@@ -20,14 +20,18 @@ const GlobalSearch = ({ isOpen, onClose }) => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  // Qidiruv natijalari
-  const searchItems = useCallback(() => {
-    if (!query.trim()) {
-      setResults([]);
+  // Qidiruv natijalarini yangilash
+  useEffect(() => {
+    // Early exit to avoid setState
+    const searchQuery = query.trim().toLowerCase();
+    if (!searchQuery) {
+      if (results.length > 0) {
+        // Only update if needed
+        const timer = setTimeout(() => setResults([]), 0);
+        return () => clearTimeout(timer);
+      }
       return;
     }
-
-    const searchQuery = query.toLowerCase();
     const allResults = [];
 
     // Vazifalarni qidirish
@@ -129,8 +133,6 @@ const GlobalSearch = ({ isOpen, onClose }) => {
     setResults(filtered.slice(0, 20));
     setSelectedIndex(0);
   }, [query, activeTab]);
-
-  // searchItems is already called within the effect above via its dependencies
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
