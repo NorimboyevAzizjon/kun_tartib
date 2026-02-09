@@ -38,6 +38,13 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import FormatSizeIcon from '@mui/icons-material/FormatSize';
 import TranslateIcon from '@mui/icons-material/Translate';
 
+// Font size map - outside component to avoid re-renders
+const FONT_SIZE_MAP = {
+  small: '14px',
+  medium: '16px',
+  large: '18px'
+};
+
 const SettingsPage = () => {
   const { user, logout, updateProfile } = useAuth();
   const navigate = useNavigate();
@@ -146,9 +153,9 @@ const SettingsPage = () => {
     document.documentElement.setAttribute('data-theme', theme);
     document.documentElement.style.setProperty('--primary-color', primaryColor);
     
-    const fontSizeValue = fontSizeOptions.find(f => f.value === fontSize)?.size || '16px';
+    const fontSizeValue = FONT_SIZE_MAP[fontSize] || '16px';
     document.documentElement.style.setProperty('--base-font-size', fontSizeValue);
-  }, []);
+  }, [theme, primaryColor, fontSize]);
 
   // Auto-hide message
   useEffect(() => {

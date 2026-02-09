@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { format, isToday, startOfWeek, endOfWeek } from 'date-fns';
 import { uz } from 'date-fns/locale';
@@ -22,29 +22,15 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const HomePage = () => {
-  const [tasks, setTasks] = useState(() => {
-    try {
-      const savedTasks = localStorage.getItem('kun-tartibi-tasks');
-      return savedTasks ? JSON.parse(savedTasks) : [];
-    } catch (error) {
-      console.error('Vazifalarni yuklashda xato:', error);
-      return [];
-    }
-  });
-
-  const [activeView, setActiveView] = useState('today');
-  const recurringGeneratedRef = useRef(false);
-
-  useEffect(() => {
-    if (recurringGeneratedRef.current) return;
-    recurringGeneratedRef.current = true;
-
+  // Generate recurring tasks during initialization
+  const generateRecurringTasks = (savedTasks) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    let updatedTasks = [...tasks];
+    let updatedTasks = [...savedTasks];
+    let hasChanges = false;
 
-    tasks.forEach((task) => {
+    savedTasks.forEach((task) => {
       if (!task.isRecurring || !task.recurrence || !task.recurrenceId) return;
 
       let nextDate = new Date(task.date);
@@ -66,6 +52,7 @@ const HomePage = () => {
       const exists = updatedTasks.some(t => t.recurrenceId === task.recurrenceId && t.date === nextDateStr);
 
       if (!exists && nextDate >= today) {
+        hasChanges = true;
         updatedTasks.unshift({
           ...task,
           id: `task_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
@@ -77,10 +64,21 @@ const HomePage = () => {
       }
     });
 
-    if (updatedTasks.length !== tasks.length) {
-      setTasks(updatedTasks);
+    return hasChanges ? updatedTasks : savedTasks;
+  };
+
+  const [tasks, setTasks] = useState(() => {
+    try {
+      const savedTasks = localStorage.getItem('kun-tartibi-tasks');
+      const parsed = savedTasks ? JSON.parse(savedTasks) : [];
+      return generateRecurringTasks(parsed);
+    } catch (error) {
+      console.error('Vazifalarni yuklashda xato:', error);
+      return [];
     }
-  }, [tasks]);
+  });
+
+  const [activeView, setActiveView] = useState('today');
 
   // Stats hisoblash
   const stats = React.useMemo(() => {
